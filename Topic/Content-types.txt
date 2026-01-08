@@ -1,0 +1,111 @@
+Content Types (MIME Types) in Web API - Content-Type tells the server what format the data is in, and Accept tells the server what format the client wants back. Content Types = data format identifiers
+
+1️⃣ What is a Content Type?
+A content type (MIME type) is a string sent in HTTP headers:
+Content-Type: application/json
+
+It tells:
+-- How to read the request body
+-- How to format the response body
+
+
+2️⃣ Common Content Types
+🔹 JSON (Most Common)
+application/json
+
+-- Default for REST APIs
+-- Lightweight and fast
+
+Example:
+{
+  "name": "Ahmed",
+  "age": 20
+}
+
+🔹 XML
+application/xml
+-- Used in legacy systems
+
+🔹 Form Data
+application/x-www-form-urlencoded
+-- HTML form submissions
+
+Example:
+name=Ahmed&age=20
+
+
+🔹 Multipart Form Data
+multipart/form-data
+
+-- Used for file uploads
+Content-Type: multipart/form-data; boundary=...
+
+
+🔹 Plain Text
+text/plain
+
+🔹 HTML
+text/html
+
+
+
+
+
+3️⃣ Request vs Response Content Types
+
+Request
+POST /api/students
+Content-Type: application/json
+
+Response
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+4️⃣ Accept Header (Content Negotiation)
+Accept: application/json
+
+Client says:
+“I want JSON back”
+Server chooses the best format it supports.
+
+
+
+5️⃣ Content Types in ASP.NET Core
+Controller Example
+
+[HttpPost]
+[Consumes("application/json")]
+[Produces("application/json")]
+public IActionResult Create(Student student)
+{
+    return Ok(student);
+}
+
+6️⃣ Model Binding Based on Content Type
+| Content-Type                        | Binding Source |
+| ----------------------------------- | -------------- |
+| `application/json`                  | Body → Model   |
+| `application/x-www-form-urlencoded` | Form           |
+| `multipart/form-data`               | Files + Form   |
+| `text/plain`                        | Raw text       |
+
+
+7️⃣ File Upload Example
+[HttpPost("upload")]
+public IActionResult Upload(IFormFile file)
+{
+    return Ok(file.FileName);
+}
+
+Request:
+Content-Type: multipart/form-data
+
+
+
+
+8️⃣ Best Practices
+-- Use application/json for APIs
+-- Always set Content-Type
+-- Use Accept header properly
+-- Validate content types in controllers
+-- Avoid XML unless required

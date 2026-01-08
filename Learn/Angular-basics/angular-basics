@@ -1,0 +1,33 @@
+1️⃣2️⃣ Angular Basics
+
+🔹 Components - UI Blocks
+
+🔹 Services - Call Web API
+
+🔹 Routing - Navigation
+
+ERP Example:
+Dashboard
+Sales page
+Reports page
+
+
+
+
+1️⃣3️⃣ Angular + Web API
+🔹 HTTP Client
+this.http.get('/api/products')
+
+🔹 Interceptors
+Attach JWT token automatically
+
+1️⃣4️⃣ UI for ERP
+
+Tables
+Filters
+Charts
+Dashboards
+
+Use:
+Angular Material
+PrimeNG

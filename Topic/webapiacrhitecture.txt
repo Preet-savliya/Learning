@@ -1,0 +1,163 @@
+Web API Architecture - A Web API (Application Programming Interface) is a way for clients (like web apps, mobile apps, or other services) to communicate with your server over HTTP. In modern .NET apps, this is usually implemented with ASP.NET Core Web API.
+
+1. Core Principles
+
+1. Stateless Communication
+-- Each HTTP request is independent
+-- Server does not store client state between requests
+
+2. Resources
+-- Everything is treated as a resource (e.g., student, orders)
+-- Accessed via URLs (endpoints)
+
+3. HTTP Methods
+| Method | Purpose               |
+| ------ | --------------------- |
+| GET    | Retrieve data         |
+| POST   | Create new data       |
+| PUT    | Update existing data  |
+| PATCH  | Partially update data |
+| DELETE | Remove data           |
+
+
+4. Data Format
+-- Usually JSON, sometimes XML
+
+
+
+2. Layered Architecture
+-- A typical Web API project uses layered architecture for separation of concerns:
+Client (Browser, App)
+       |
+   Controllers
+       |
+   Services / Business Logic
+       |
+   Repository / Data Access (EF Core)
+       |
+   Database (SQL, NoSQL)
+
+Layer Breakdown
+1. Controller Layer
+-- Handles HTTP request
+-- Maps routes to actions
+-- Returns responses ( ok(), NotFound(), etc.)
+
+
+[ApiController]
+[Route("api/[controller]")]
+public class StudentsController : ControllerBase
+{
+    private readonly IStudentService _service;
+
+    public StudentsController(IStudentService service)
+    {
+        _service = service;
+    }
+
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        var students = _service.GetAllStudents();
+        return Ok(students);
+    }
+}
+
+
+2. Service / Business Logic Layer
+-- Contains rules, validation, calculations
+-- Keeps controllers thin
+
+public class StudentService : IStudentService
+{
+    private readonly IStudentRepository _repo;
+
+    public StudentService(IStudentRepository repo)
+    {
+        _repo = repo;
+    }
+
+    public IEnumerable<Student> GetAllStudents() => _repo.GetAll();
+}
+
+
+
+3. Repository / Data Access Layer
+-- Interacts with EF Core or database
+-- Isolates DB code from business logic
+
+public class StudentRepository : IStudentRepository
+{
+    private readonly SchoolContext _context;
+
+    public StudentRepository(SchoolContext context)
+    {
+        _context = context;
+    }
+
+    public IEnumerable<Student> GetAll() => _context.Students.ToList();
+}
+
+
+4. Database Layer
+-- Stores data (SQL Server, PostgreSQL, MySQL, MongoDB, etc.)
+-- EF Core acts as ORM to map entities to tables
+
+
+
+
+
+
+
+
+3. Key Features of Web API
+-- Routing: Maps URLs to controller actions ([Route], [HttpGet])
+-- Model Binding & Validation: Automatically maps JSON to C# objects
+-- Dependency Injection: Inject services or repositories into controllers
+-- Middleware: For logging, authentication, error handling
+-- Versioning: api/v1/students
+
+
+4. Example HTTP Request / Response
+GET /api/students
+
+Responses:
+JSON
+
+[
+  { "id": 1, "name": "Ali", "age": 18 },
+  { "id": 2, "name": "Sara", "age": 20 }
+]
+
+POST /api/students
+
+{
+  "name": "Ahmed",
+  "age": 19
+}
+
+Response:
+201 Created with the new student object
+
+
+
+
+5. Comman Design Patterns
+-- Repository Pattern --> Data abstraction
+-- Unit of Work → Transaction management
+-- DTOs (Data Transfer Objects) → Avoid exposing entities directly
+-- AutoMapper → Map entities ↔ DTOs
+-- Dependency Injection → Loose coupling
+
+
+6. Security Considerations
+-- Authentication: JWT, OAuth2
+-- Authorization: Role-based or policy-based
+-- HTTPS: Always secure communication
+-- Input validation: Prevent injection attacks
+
+
+7. Advantages of Layered Web API
+-- Maintainable & testable
+-- Scalable (easier to add new services)
+-- Reusable logic (services can be reused by multiple controllers or clients)

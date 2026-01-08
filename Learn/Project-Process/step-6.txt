@@ -1,0 +1,9 @@
+connected local SqlServer in ssms in object explorer the default SqlServer
+
+then in object explorer right click on databases  then create new database name your databse ECommerceDB
+
+then create then in database folder your database is created
+
+then `click new query 
+
+and add your query in that sql file and run then all your database will be created 

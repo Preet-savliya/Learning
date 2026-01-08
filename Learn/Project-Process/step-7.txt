@@ -1,0 +1,145 @@
+after creating database we add our database to config in our project in appsettings.json file
+
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.\\SQL2025EXP_DEV; Database=ECommerceDB; Trusted_Connection=True;"
+  },
+  "AllowedHosts": "*"
+}
+
+
+then in Controllers folder we created a ProductController.cs file 
+
+right click on Controllers folder ----> Add ----> select controller ---> controller empty ----> add ----> name your controller like ProductControllers.cs -----> create
+
+
+In ProductControllers.cs file code means 
+
+
+
+Sure! Here's a clear, step-by-step explanation of your **ProductsController** code in your ASP.NET Core Web API:
+
+---
+
+### 1. Namespaces imported
+
+```csharp
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ECommerceAPI.Data;
+using ECommerceAPI.Models;
+```
+
+* These bring in necessary classes for:
+
+  * Building web API controllers (`Microsoft.AspNetCore.Mvc`)
+  * Working with the database asynchronously (`Microsoft.EntityFrameworkCore`)
+  * Your app’s database context (`AppDbContext`) and models (`Product`, `Category`)
+
+---
+
+### 2. Controller declaration and routing
+
+```csharp
+[Route("api/[controller]")]
+[ApiController]
+public class ProductsController : ControllerBase
+```
+
+* **[Route("api/[controller]")]**: Sets the base URL route to `api/products` (controller name minus "Controller")
+* **[ApiController]**: Enables features like automatic model validation and binding
+* **ControllerBase**: Base class for API controllers (no MVC Views here, just JSON API)
+
+---
+
+### 3. Dependency Injection of `AppDbContext`
+
+```csharp
+private readonly AppDbContext _context;
+
+public ProductsController(AppDbContext context)
+{
+    _context = context;
+}
+```
+
+* `AppDbContext` is injected into the controller via constructor.
+* This `_context` is the database connection, used to query and save products.
+
+---
+
+### 4. GET method - `GetProducts`
+
+```csharp
+[HttpGet]
+public async Task<IActionResult> GetProducts()
+{
+    var products = await _context.Products.Include(p => p.Category).ToListAsync();
+    return Ok(products);
+}
+```
+
+* `[HttpGet]`: This action responds to HTTP GET requests at `api/products`.
+* It fetches all products from the database including their related **Category** info (`Include(p => p.Category)` is eager loading).
+* `ToListAsync()` runs the query asynchronously (good for performance).
+* Returns a 200 OK response with the list of products as JSON.
+
+---
+
+### 5. POST method - `AddProduct`
+
+```csharp
+[HttpPost]
+public async Task<IActionResult> AddProduct([FromBody] Product product)
+{
+    _context.Products.Add(product);
+    await _context.SaveChangesAsync();
+    return Ok(product);
+}
+```
+
+* `[HttpPost]`: This action handles HTTP POST requests at `api/products`.
+* `[FromBody]` means the new `Product` data comes from the request body in JSON format.
+* Adds the new product to the database context.
+* `SaveChangesAsync()` saves the new product to the database asynchronously.
+* Returns 200 OK with the newly added product (including any database-generated fields like ProductId).
+
+---
+
+### Summary:
+
+This controller allows clients to:
+
+* **GET**: Fetch all products with their categories
+* **POST**: Add a new product
+
+It uses async calls for better scalability, and uses Entity Framework Core's DbContext to interact with the database.
+
+---
+
+If you want, I can explain how to test this API or how to add more endpoints like PUT or DELETE!
+
+
+
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+        options.JsonSerializerOptions.MaxDepth = 64; // Optional: increase max depth if needed
+    });
+
+var app = builder.Build();
+app.MapControllers();
+
+app.Run();

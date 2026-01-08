@@ -1,0 +1,37 @@
+Views - a view is a virtual table based on a query. it does not store data physically, it retrieves data from one or more tables, and you can query a view just like a table.
+
+Example : Orders by customer view
+
+CREATE VIEW OrdersByCustomer AS
+SELECT OrderID, CustomerID, OrderDate, Amount
+FROM Orders;
+
+
+SELECT * FROM OrdersByCustomer WHERE CustomerID = 101;
+
+
+Views With Joins - You can create views combining multiple tables
+
+CREATE VIEW CustomerOrders AS
+SELECT c.CustomerID, c.Name, o.OrderID, o.OrderDate, o.Amount
+FROM Customer c
+JOIN Orders o ON c.CustomerID = o.CustomerID;
+
+
+SELECT * FROM CustomerOrders WHERE Name = 'Alice';
+
+
+Updating Views - Some views are updatable (you can INSERT, UPDATE, DELETE)
+
+Example of Updatable View
+CREATE VIEW ActiveOrders AS
+SELECT * FROM Orders
+WHERE Status = 'Pending';
+
+UPDATE ActiveOrders SET Status = 'Shipped' WHERE OrderID = 101;
+
+
+
+Dropping a View
+
+DROP VIEW view_name;

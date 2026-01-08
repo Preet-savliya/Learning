@@ -1,0 +1,135 @@
+Option Patterns - Options pattern in .NET is a way to handle Configuration data in a structured, strongly-typed manner. it is commonly used to read settings from configuration files like appsettings.json and map them to c# classes. this makes it easier to manage and work with complex configuration.
+
+-- keeps your code clean and maintainable.
+-- access complex settings in a structured way, without relying on magic strings or loose configuration data.
+-- Benefits from dependency injection (DI) to inject configuration into services and controllers.
+
+
+2. Why use the options pattern ?
+-- strong typing: instead of accessing settings via Configuration["key"], you work with strongly-typed classes
+-- validation: you can easily validate the configuration when the app starts.
+-- DI integration: .NET automatically injects these configuration options whereever needed.
+
+
+3. How Does the options patters works? 
+Step by step process:
+1. create a configuration class:
+-- Define a c# class that matches the configuration section in appsettings.json 
+
+2. Configure the Options in Program.cs:
+-- Register the configuration class with the DI container so that it can be injected into classes.
+
+3. Use the Options in your application:
+-- Inject the strongly-typed configuration class whereever you need it (e.g., in controllers or services)
+
+
+
+
+
+4. Example of Using the Options Pattern
+
+Step 1: Create a Configuration Class
+First, create a C# class that represents the configuration section in appsettings.json.
+
+public class JwtSettings
+{
+    public string SecretKey { get; set; }
+    public string Issuer { get; set; }
+    public string Audience { get; set; }
+    public int ExpiryInMinutes { get; set; }
+}
+
+
+Step 2: Configure the Options in Program.cs
+In the Program.cs file, register the configuration class and bind it to the appropriate section in appsettings.json.
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Bind the JwtSettings section from appsettings.json
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
+var app = builder.Build();
+
+app.Run();
+
+
+Step 3: Use the Options in a Service or Controller
+Now, inject the IOptions<T> interface where you need to use the configuration. The IOptions<T> gives you access to the strongly-typed configuration.
+
+public class AuthService
+{
+    private readonly JwtSettings _jwtSettings;
+
+    public AuthService(IOptions<JwtSettings> options)
+    {
+        _jwtSettings = options.Value;  // Access configuration values
+    }
+
+    public string GenerateToken()
+    {
+        // Use _jwtSettings here
+        return $"Secret Key: {_jwtSettings.SecretKey}";
+    }
+}
+
+
+In this example, the AuthService uses the JwtSettings configuration to access JWT-related settings.
+
+
+
+
+
+5. appsettings.json Example
+Here’s how the appsettings.json file might look for the JwtSettings class:
+
+{
+  "JwtSettings": {
+    "SecretKey": "SuperSecretKey123!",
+    "Issuer": "MyApp",
+    "Audience": "MyAppUsers",
+    "ExpiryInMinutes": 60
+  }
+}
+
+---- The JwtSettings section in appsettings.json directly matches the properties of the JwtSettings C# class.
+---- When you call builder.Configuration.GetSection("JwtSettings"), it binds the settings in appsettings.json to the JwtSettings class.
+
+
+
+6. IOptions vs IOptionsSnapshot vs IOptionsMonitor
+
+IOptions<T>
+-- Best for static configuration that doesn’t change during the application’s lifetime.
+-- Used when you only need the configuration once.
+
+// Access configuration directly
+var options = _options.Value;
+
+IOptionsSnapshot<T>
+-- Best for dynamic configuration that might change during the application's lifetime (e.g., per-request).
+-- Works only for scoped services (like per HTTP request).
+
+public MyController(IOptionsSnapshot<JwtSettings> options)
+{
+    var currentSettings = options.Value;
+}
+
+IOptionsMonitor<T>
+-- Used for real-time updates to configuration. If the configuration changes (e.g., via file or environment), it provides access to the updated values.
+-- Useful for long-running services that need to respond to configuration changes without restarting the application.
+
+public class MyService
+{
+    private readonly IOptionsMonitor<JwtSettings> _optionsMonitor;
+
+    public MyService(IOptionsMonitor<JwtSettings> optionsMonitor)
+    {
+        _optionsMonitor = optionsMonitor;
+    }
+
+    public void OnChange(Action<JwtSettings> onChangeCallback)
+    {
+        _optionsMonitor.OnChange(onChangeCallback);
+    }
+}
+

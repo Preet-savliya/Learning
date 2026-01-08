@@ -1,0 +1,20 @@
+Properties - A property is like a combination of a variable and a method, and it has two methods: a get and a set method:
+
+class Student 
+{
+    private int age;
+
+    public int Age // property
+    {
+        get {return age;} // get method
+
+        // set method
+
+        set{              
+            if (value > 10)
+            age = value;
+        }
+    }
+}
+
+property always will be decalre first letter capital

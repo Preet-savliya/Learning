@@ -1,0 +1,20 @@
+Enums :- Enums (Enumeration) is a string data type that allows a column to contain only a single value chosen from a predefined, static list of permitted values.
+
+For Example;
+
+CREATE TABLE products (
+    product_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(100),
+    size VARCHAR(20) NOT NULL CHECK (size IN ('x-small', 'small', 'medium', 'large', 'x-large')),
+    status VARCHAR(20) DEFAULT 'Pending' CHECK (status IN ('Pending', 'Shipped', 'Delivered', 'Cancelled'))
+);
+
+
+
+Inserting Data Example;
+
+INSERT INTO products (name, size, status) 
+VALUES ('T-Shirt', 'medium', 'Shipped');
+
+INSERT INTO products (name, size, status)
+VALUES ('T-shirt', 'medium', 'Pending');

@@ -1,0 +1,102 @@
+Master Data - Master Data is the fundamental data that defines key entities of an organization. it includes details about customers, products, suppliers, employess, and locations that are used across multiple business processes.
+
+Master Data Examples:
+-- Customer Data: Name, address, contact info
+-- Product data: Product name, category, price, SKU
+-- Employee data: Employee ID, name, department, role
+-- Supplier data: Supplier name, contact details, product categories
+-- Location data: Warehouse locations, shipping addresses
+
+
+Why Master Data Matters:
+-- Provides consistency across applications and systems.
+-- Ensures all departments use the same definations of key data entities
+-- Reduces redundancies and errors
+-- Improves data quality and reporting accuracy.
+
+
+
+
+2. Characteristics of Master Data
+-- Persistent : Master data doesnot change frequently. once created, it's maintained over time.
+-- Authoritative: it's the source of truth for business processes.
+-- Non-transactional: it does not typically represent a transaction (e.g., customer orders or product sales). it is the data used across transaction.
+-- consistent: Master data is used across multiple systems and applications, ensuring consistency.
+
+Example:
+A customer record might include:
+--- Customer ID: 12345
+--- Customer Name: "Sam Bahdur"
+--- Customer Address: "123 Main St, Mumbai, India"
+--- Customer Email: "sambahdur@example.com"
+
+
+
+
+3. Master Data management (MDM) - master data management (MDM) refers to the process of managing and maintaining an organization's master data. this ensures that the data is consistent, accurate, and accessible accross the organization. MDM involves:
+-- Data Governance: Defining policies for managing data.
+-- Data quality: Ensuring data is accurate and cleaned
+-- Data integration: Ensuring master data is available in all systems
+-- Data Security: Controlling access to sensitive master data
+-- Data Maintenance: keeping the master data updated as needed.
+
+
+
+4. Types of Master Data
+master data is generally categorized into several types, depending on the business function:
+
+a. Reference Data
+--- Refers to data that categorizes other data.
+--- Example: Country codes, currency codes, and department codes.
+
+b. Transaction Data
+--- Although not technically master data, transactional data is highly related and often uses master data.
+--- Example: An order will reference customer data and product data.
+
+c. Hierarchical Data
+--- Master data can represent Hierarchical structures.
+--- Example: Organizational structure, product categories, and locations.
+
+
+
+5. Master Data in C# / .NET Core: Example
+-- When dealing with Master Data in an application, you might need to structure it properly in your EF Core models to maintain consistency across your application.
+
+step 1: Define Master Data Models in EF Core
+
+public class Customer
+{
+    public int Id {get; set;}
+    public string Name {get; set;}
+    public string Address {get; set;}
+    public string Email {get; set;}
+}
+
+public class Product 
+{
+    public int Id {get; set;}
+    public string Name {get; set;}
+    public decimal Price {get; set;}
+    public string SKU {get; set;}
+}
+
+
+Step 2: Configure EF Core DbContext
+
+public class AppDbContext : DbContext
+{
+    public DbSet<Customer> Customers {get; set;}
+    public DbSet<Product> Products {get; set;}
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options) { }
+
+    // Configurations for relationships, indexes, etc.
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        // Example: Configure unique constraints on the Email field
+        modelBuilder.Entity<Customer>().HasIndex(c => c.Email).IsUnique();
+    }
+}

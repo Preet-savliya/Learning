@@ -1,0 +1,87 @@
+Swagger / OpenAPI in Web API - Swagger (OpenAPI) is a tool to document, test, and explore your API directly from a browser.
+it allows:
+-- Auto-generating API documentation
+-- Testing endpoints without Postman
+-- Sharing API specs with front-end or clients
+
+1️⃣ Install Swagger
+For ASP.NET Core, install the NuGet package:
+
+dotnet add package Swashbuckle.AspNetCore
+
+2️⃣ Configure Swagger in Program.cs
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add Swagger services
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+
+// Enable Swagger middleware
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();                 // Generate JSON
+    app.UseSwaggerUI(c =>             // UI to test endpoints
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    });
+}
+
+app.MapControllers();
+app.Run();
+
+After running, go to: https://localhost:{port}/swagger
+
+3️⃣ Add Metadata / Info (Optional)
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Student API",
+        Version = "v1",
+        Description = "A simple Web API for managing students",
+        Contact = new Microsoft.OpenApi.Models.OpenApiContact
+        {
+            Name = "Your Name",
+            Email = "your@email.com"
+        }
+    });
+});
+
+
+
+4️⃣ Document Endpoints with XML Comments
+
+Enable XML comments:
+---- Right-click project → Properties → Build → XML documentation file: bin\Debug\net6.0\MyApi.xml
+---- Add to Swagger config:
+
+var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+c.IncludeXmlComments(xmlPath);
+
+---- Add comments to controllers:
+
+/// <summary>
+/// Get a student by ID
+/// </summary>
+/// <param name="id">Student ID</param>
+/// <returns>Returns student details</returns>
+[HttpGet("{id}")]
+public IActionResult GetById(int id)
+{
+    var student = context.Students.Find(id);
+    if (student == null) return NotFound();
+    var dto = _mapper.Map<StudentDto>(student);
+    return Ok(dto);
+}
+
+
+5️⃣ Test APIs in Swagger UI
+---- Open browser at /swagger
+---- Explore endpoints
+---- Send GET, POST, PUT, DELETE requests
+---- See request/response schemas (DTOs) automatically

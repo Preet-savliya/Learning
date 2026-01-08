@@ -1,0 +1,134 @@
+LINQ with EF Core - LINQ (Language Integrated Query) lets you query the database using C# syntax instead of SQL.
+With EF Core, LINQ queries are translated into SQL and executed in the database.
+
+1. Basic LINQ Query
+-- Get all Records 
+var students = context.Students.ToList();
+
+-- filter (Where)
+
+var adults = context.Students
+    .Where(s => s.Age >= 18)
+    .ToList();
+
+
+
+
+2. SELECT (Projection)
+-- Select specific columns
+
+var names = context.Students
+    .Select(s => s.Name)
+    .ToList();
+
+-- Anonymous object
+
+var result = context.Students
+    .Select(s => new { s.Name, s.Age })
+    .ToList();
+
+
+
+3. Sorting (ORDER BY)
+
+var students = context.Students
+    .OrderBy(s => s.Name)
+    .ThenByDescending(s => s.Age)
+    .ToList();
+
+
+
+4. Single Record 
+
+var student = context.Students.FirstOrDefault(s => s.Id == 1);
+
+| Method            | Behavior                  |
+| ----------------- | ------------------------- |
+| First()           | Throws error if not found |
+| FirstOrDefault()  | Returns null              |
+| Single()          | Exactly one record        |
+| SingleOrDefault() | Zero or one               |
+
+
+
+5. Aggregates 
+
+var count = context.Students.Count();
+var maxAge = context.Students.Max(s => s.Age);
+var avgAge = context.Students.Average(s => s.Age);
+
+
+
+
+6. Joins 
+-- Navigation property
+
+var students = context.Students
+    .Include(s => s.Department)
+    .ToList();
+
+Explicit join
+
+var data = from s in context.Students
+           join d in context.Departments
+           on s.DepartmentId equals d.Id
+           select new { s.Name, d.Name };
+
+
+
+
+
+7. Group By
+var group = context.Students
+    .GroupBy(s => s.DepartmentId)
+    .Select(g => new
+    {
+        DepartmentId = g.Key,
+        Count = g.Count()
+    })
+    .ToList();
+
+
+
+8. Paging (skip & Take)
+var students = context.Students
+    .Skip(10)
+    .Take(5)
+    .ToList();
+
+-- Used for pagination.
+
+
+
+
+9. Any / All 
+bool hasAdults = context.Students.Any(s => s.Age >= 18);
+bool allAdults = context.Students.All(s => s.Age >= 18);
+
+
+10. Tracking vs No Tracking
+-- Tracking (default)
+var students = context.Students.ToList();
+
+-- No Tracking (faster for read-only)
+var students = context.Students
+    .AsNoTracking()
+    .ToList();
+
+
+
+
+11. Async LINQ 
+var students = await context.Students.ToListAsync();
+
+-- Others async methods:
+----- FirstOrDefaultAsync()
+----- CountAsync()
+----- AnyAsync()
+
+
+
+12. Important Rules
+-- Not all C# methods can be translated to SQL
+-- Avoid ToList() before filtering
+-- Queries execute only when enumerated

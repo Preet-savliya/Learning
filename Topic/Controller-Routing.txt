@@ -1,0 +1,170 @@
+Controller & Routing - Controllers and routing define how HTTP request reach your code and which method handles which URL
+
+1. Controllers - A controller is a class that
+-- Handles HTTP request
+-- contains action methods
+-- returns HTTP responses (200, 404, 400, 500, etc.)
+
+Basic Controller 
+
+[ApiController]
+[Route("api/[controller]")]
+public class StudentsController : ControllerBase
+{
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        return Ok("List of students");
+    }
+}
+
+
+Key attributes
+-- [ApiController]
+----- Automatic model validation
+----- Better error Responses
+----- Required for modern Web APIs
+
+-- controllerBase
+----- Used for APIs (no Views)
+
+
+
+
+
+2. Routing 
+Routing maps an HTTP request (URL + Method) to a controller action.
+
+Example URL
+GET /api/students
+---- students --> Controller name (StudentsController)
+---- GET --> [HttpGet] action
+
+
+3. Attribute Routing (Recommended)
+routing is defined using attributes.
+
+Route at controller level 
+[Route("api/[controller]")]
+--- [controller] → Controller name without "Controller"
+
+Route at Action Level
+[HttpGet("{id}")]
+public IActionResult GetById(int id)
+{
+    return Ok($"Student {id}");
+}
+
+GET /api/students/5
+
+
+
+
+
+
+
+
+
+4. HTTP Method Attributes
+| Attribute      | HTTP Method |
+| -------------- | ----------- |
+| `[HttpGet]`    | GET         |
+| `[HttpPost]`   | POST        |
+| `[HttpPut]`    | PUT         |
+| `[HttpPatch]`  | PATCH       |
+| `[HttpDelete]` | DELETE      |
+
+
+Example CRUD Controller
+
+[ApiController]
+[Route("api/[controller]")]
+public class StudentsController : ControllerBase
+{
+    [HttpGet]
+    public IActionResult GetAll() => Ok();
+
+    [HttpGet("{id}")]
+    public IActionResult Get(int id) => Ok();
+
+    [HttpPost]
+    public IActionResult Create(Student student) => Ok();
+
+    [HttpPut("{id}")]
+    public IActionResult Update(int id, Student student) => Ok();
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id) => Ok();
+}
+
+
+
+
+5. Route Parameters
+-- Required parameter
+
+[HttpGet("{id}")]
+public IActionResult Get(int id)
+
+-- Optional parameter
+
+[HttpGet("{id?}")]
+public IActionResult Get(int? id)
+
+
+
+6. Query String Parameters
+
+[HttpGet]
+public IActionResult Get([FromQuery] int page, [FromQuery] int size)
+
+URL:
+GET /api/students?page=1&size=10
+
+
+
+
+7. Route Constraints
+[HttpGet("{id:int}")]
+public IActionResult Get(int id)
+
+-- Ensures id is an integer
+
+Other constraints:
+-- int
+-- guid
+-- min(1)
+-- max(100)
+
+
+
+8. Action Results
+-- Common return types:
+
+return Ok(data);           // 200
+return CreatedAtAction();  // 201
+return BadRequest();       // 400
+return NotFound();         // 404
+return NoContent();        // 204
+
+
+
+9. Conventional Routing (less common)
+Defined in Program.cs:
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "api/{controller}/{action}/{id?}");
+
+-- Attribute routing is preferred for APIs.
+
+
+
+10. Best Practices
+-- Use plural nouns for controllers (StudentsController)
+-- Keep controllers thin (logic in services)
+-- Use proper HTTP status codes
+-- Version your APIs (api/v1/students)
+-- Validate input using [ApiController]
+
+

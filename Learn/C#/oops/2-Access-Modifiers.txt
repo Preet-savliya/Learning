@@ -1,0 +1,36 @@
+Access Modifiers - access Modifiers decide who can access a class or its members.(variables, methods, etc)
+
+Common Access Modifiers in C#
+
+1. public - this is the Common Access Modifiers in c# which can be accessed from anywhere
+
+class Student 
+{
+    public string name;
+}
+
+this is accessible inside and outside the class.
+
+2. Private - private access Modifiers in c# can only access within the same class and it can only access inside the class not outside
+
+class Student
+{
+    private string name;
+    private int age;
+}
+
+3. Protected - The code is accessible within the same class, or in a class that is inherited from that class.
+
+4. Internal -  The code is only accessible within its own assembly, but not from another assembly.
+
+Why Use Access Modifiers?
+
+---- Protect data (Encapsulation)
+---- Prevent misuse
+---- Improve code structure
+
+Real-Life Example :-
+House
+---- Living room → public
+---- Bedroom → private
+---- Family things → protected

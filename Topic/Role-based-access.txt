@@ -1,0 +1,81 @@
+1. What is Role-based Access Control 
+-- Role-Based Access Control (RBAC) is a method for restricting system access to authorized users based on their roles. Instead of managing permissions individually for each user, you define roles (e.g., Admin, User, Manager) and assign users to those roles. Each role has specific permissions associated with it.
+
+Goal of RBAC: Simplify the management of permissions and ensure that only authorized users can access certain resources.
+
+Access Control: Controls what users (authenticated entities) can or cannot do based on their roles.
+
+
+2. Basic Concepts of Role Based Access control
+-- Role: A defined set of permissions. for example:
+----- Admin: Full Access to all resources.
+----- User: Limited access, like viewing personal data.
+----- Manager: Can edit some resources but not all.
+
+-- Permission: A specific right to access a resource or perform an action. for example:
+------ Read, Create, Update, Delete (CRUD operations).
+
+-- User: An individual entity (person or system) with roles assigned to them.
+
+
+
+3. Role-Based Authorization in .NET Core - In .NET Core, RBAC is typically implemented using JWT for authentication, combined with the [Authorize] attribute to enforce authorization based on roles.
+
+Step 1: Set Up JWT Authentication
+JWT tokens will contain the user's roles, which will be used for authorization.
+
+install necessary NuGet packages:
+
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+
+-- Configure JWT Authentication (Program.cs or Startup.cs)
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = "YourIssuer",
+        ValidAudience = "YourAudience",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SuperSecretKey"))
+    };
+});
+
+
+
+Step 2: Create JWT Token with Roles
+When the user logs in, you issue a JWT token that contains the user's roles. here's how you can create the JWT token in C#.
+
+public string GenerateJwtToken(User user)
+{
+    var tokenHandler = new JwtSecurityTokenHandler();
+    var key = Encoding.ASCII.GetBytes("SuperSecretKey");
+
+    var tokenDescriptor = new SecurityTokenDescriptor
+    {
+        Subject = new ClaimsIdentity(new[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Role, user.Role)
+        }),
+        Expires = DateTime.UtcNow.AddHours(1),
+        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+        Issuer = "YourIssuer",
+        Audience = "YourAudience"
+    };
+
+    var token = tokenHandler.CreateToken(tokenDescriptor);
+    return tokenHandler.WriteToken(token);
+}
+
+
+Step 3: Protect API Endpoints Using Roles 

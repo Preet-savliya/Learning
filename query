@@ -1,0 +1,3 @@
+1. when i add git command git add .
+warning: in the working copy of 'ECommerceAPI/obj/Debug/net10.0/EndpointInfo/ECommerceAPI.json', LF will be replaced by CRLF the next time Git touches it
+

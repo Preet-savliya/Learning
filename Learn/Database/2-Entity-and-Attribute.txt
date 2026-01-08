@@ -1,0 +1,67 @@
+Entity - an entity is a real world object that can be uniquely identified and about which data is stored in a database.
+
+Types of Entity
+1. Strong Entity : Exists independently | Example: Student, Employee
+2. Weak Entity : Depends on another Entity | Example: Marks (Depends on Student)
+
+Example : In a School Database, Student is the Entity, Teacher is the Entity.
+
+an entity has an attributes (details)
+
+
+
+
+
+
+
+
+Attributes - Attributes are the details or properties of an entity. they describe more information about the entity.
+
+Example: Student(Entity)
+attributes :- Roll No, Name, Age, Class, Marks.
+
+Types of Attributes
+1. Simple Attributes - Cannot be divided further | Example : age, gender
+2. Composite Attributes - can be divided further | Example : name as First name + Last name, Address as Street, City, PIN.
+3. Single-Valued Attributes - Has only one value | Example : Date of Birth
+4. Multi-Valued Attributes - Can have many values | Example : Phone no, Email ID's
+5. Key Attributes - uniquely identifies an entity | Example : Roll no, Account no
+
+Entity = Person
+Attributes = Height, Name, Age, Hair Color
+
+
+
+
+
+
+
+
+
+Entity-Relationship Diagram (ER) - ER Diagram is a Diagram that shows entities, attributes & Relationship connection between entities. it is used to design a database before creating it.
+
+simple ER Diagram example 
+
+Student course system 
+
+Student -> Roll no (Key)
+        -> Name
+        -> Age
+
+Course -> Course ID (Key)
+       -> Course name
+
+Relationship -> Student Enrolls in Course
+
+There are 3 types of Entities
+1. 1:1 - One to One --> Person to Passport
+2. 1:M - One to Many  --> Teachers to Students
+3. M:M - Many to Many  --> Students to Courses
+
+Why ER Diagrams are important ?
+
+---- Easy to understand data
+---- helps in database planning
+---- Reduces mistake
+---- used before writing SQL code
+

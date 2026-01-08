@@ -1,0 +1,114 @@
+HTTP Methods (Web API / REST) - HTTP methods define what action the client wants to perform on a resource.
+They are a core part of RESTful Web APIs.
+
+1️⃣ Common HTTP Methods
+| Method | Purpose                | CRUD   |
+| ------ | ---------------------- | ------ |
+| GET    | Retrieve data          | Read   |
+| POST   | Create new resource    | Create |
+| PUT    | Update entire resource | Update |
+| PATCH  | Partial update         | Update |
+| DELETE | Remove resource        | Delete |
+
+2️⃣ GET
+
+🔹 Used to read data
+🔹 Should NOT change server data
+🔹 Idempotent (same request → same result)
+
+GET /api/students
+GET /api/students/5
+
+Controller:
+
+[HttpGet]
+public IActionResult GetAll() => Ok();
+
+[HttpGet("{id}")]
+public IActionResult GetById(int id) => Ok();
+
+3️⃣ POST
+
+🔹 Used to create new data
+🔹 Not idempotent
+🔹 Sends data in request body
+
+POST /api/students
+Content-Type: application/json
+
+Controller:
+[HttpPost]
+public IActionResult Create(Student student) => Ok();
+
+Response:
+-- 201 Created
+-- Location header
+
+
+
+4️⃣ PUT
+
+🔹 Updates the entire resource
+🔹 Idempotent
+🔹 Client sends full object
+
+PUT /api/students/5
+
+Controller:
+
+[HttpPut("{id}")]
+public IActionResult Update(int id, Student student) => Ok();
+
+
+
+5️⃣ PATCH
+
+🔹 Updates part of a resource
+🔹 Preferred for partial updates
+
+PATCH /api/students/5
+
+Example body:
+{ "age": 21 }
+
+Controller:
+[HttpPatch("{id}")]
+public IActionResult Patch(int id) => Ok();
+
+
+
+6️⃣ DELETE
+
+🔹 Removes a resource
+🔹 Idempotent
+
+DELETE /api/students/5
+
+Controller:
+
+[HttpDelete("{id}")]
+public IActionResult Delete(int id) => NoContent();
+
+
+
+
+
+7️⃣ Safe & Idempotent Methods
+
+| Method | Safe | Idempotent |
+| ------ | ---- | ---------- |
+| GET    | ✅   | ✅        |
+| POST   | ❌   | ❌        |
+| PUT    | ❌   | ✅        |
+| PATCH  | ❌   | ❌        |
+| DELETE | ❌   | ✅        |
+
+8️⃣ Less Common HTTP Methods
+
+| Method  | Purpose         |
+| ------- | --------------- |
+| HEAD    | Headers only    |
+| OPTIONS | Allowed methods |
+| TRACE   | Debugging       |
+| CONNECT | Tunneling       |
+

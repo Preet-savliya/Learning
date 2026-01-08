@@ -1,0 +1,66 @@
+1. Denormalization - Denormalization is when you make things simpler in a database to make it faster to get information. Normally, databases keep things super organized, but sometimes that makes it slower to find what you need. Denormalization is like messing up the organization a little so that it's quicker to look up data.
+
+when you have a lot data, sometimes joining pieces of information from different places can take a lot of time. Denormalization makes it faster to get info because it puts everything in one place.
+
+Example :
+imagine you have two list
+1. customers - this list has names and addresses.
+2. orders - this list has order details, like what someone bought.
+
+if you want to know which customer made which order, you normally have to join the two lists. but when Denormalization, you can just put the customers name and address right inside the order list. that way when you look at the order you already have the customer's info no need to join lists
+
+disadvantage :
+it uses more space because you are repeating some information
+if something change (like a customer's address), you might have to change it in multiple places.
+
+when do you use it?
+when you need things to be really fast to look up.
+when you dont change the data very often.
+
+Denormalization is about making things faster to find in the database, but it might use more space and be harder to update.
+
+
+Example;
+
+Online Store orders
+
+Normalization Design (Before Denormalization)
+
+customer
+| CustomerID | CustomerName | City  |
+| ---------- | ------------ | ----- |
+| 101        | Alice        | Delhi |
+
+Product 
+| ProductID | ProductName | Price |
+| --------- | ----------- | ----- |
+| P1        | Laptop      | 800   |
+
+Order 
+| OrderID | CustomerID | OrderDate  |
+| ------- | ---------- | ---------- |
+| 5001    | 101        | 2025-01-10 |
+
+OrderItem
+| OrderID | ProductID | Quantity |
+| ------- | --------- | -------- |
+| 5001    | P1        | 1        |
+
+
+to get a full order reports you need multiple joins
+
+Denormalized Design (After Denormalization)
+
+Order_Denormalized
+| OrderID | CustomerName | City  | ProductName | Price | Quantity | OrderDate  |
+| ------- | ------------ | ----- | ----------- | ----- | -------- | ---------- |
+| 5001    | Alice        | Delhi | Laptop      | 800   | 1        | 2025-01-10 |
+
+Why Denormalize used?
+✔ Faster reporting
+✔ Fewer JOIN operations
+✔ Simpler queries for dashboards
+
+Example Query -
+SELECT OrderID, CustomerName, ProductName, Price
+FROM Order_Denormalized;

@@ -1,0 +1,115 @@
+Code First Approach - the code first Approach means you write c# classes first, and entity Framework creates the database from those classes
+Code ---> Database
+
+1. When to use Code First
+-- you are starting a new project
+-- you want full control using C#
+-- you prefer version control for database changes
+-- common in ASP.NET core
+
+
+2. Steps in code first
+
+Setp 1 - create entity models
+
+public class Student
+{
+    public int Id {get; set;} // Primary Key (by convention)
+    public string Name {get; set;}
+    public int Age {get; set;}
+}
+
+Step 2 - Create DbContext
+
+public class SchoolContext : DbContext
+{
+    public DbSet<Student> Students {get; set;}
+
+    protected override void onConfiguring(DbContextOptionsBuilder options)
+    {
+        options.UseSqlServer("connection-string");
+    }
+}
+
+
+Step 3 - Add EF Core Packages
+
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+
+
+Step 4 - Create Migeration
+
+dotnet ef migerations add InitialCreate
+
+-- EF generates code to create tables
+
+
+Step 5 - Update Database
+
+dotnet ef database update
+
+-- Database + tables are created
+
+
+
+
+
+3. Making changes (code first)
+
+Example : Add new property
+
+public string Email {get; set;}
+
+then:
+
+dotnet ef migerations add AddEmailToStudent
+dotnet ef database update
+
+-- Database updates safely without losing data
+
+
+
+
+
+4. Convention in Code First
+
+EF automatically understands:
+-- Id or {ClassName}Id ---> Primary Key
+-- string ---> nvarchar(max)
+-- Navigation properties ---> Relationships
+-- Required, MaxLength ----> Constrains
+
+
+Example :
+
+[Required]
+[MaxLength(50)]
+public string Name {get; set;}
+
+
+
+
+5. Fluent API (More Control)
+
+Inside OnModelCreating:
+
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Student>()
+        .Property(s => s.Name)
+        .HasMaxLength(50)
+        .IsRequired();
+}
+
+
+
+6. Code first vs Database first
+
+| Code First      | Database First     |
+| --------------- | ------------------ |
+| Start from C#   | Start from DB      |
+| Uses migrations | No migrations      |
+| Easy to change  | Harder to maintain |
+| Modern approach | Legacy systems     |

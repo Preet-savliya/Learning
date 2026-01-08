@@ -1,0 +1,43 @@
+async & await - async and await keywords are a pair of language features that simplify asynchronous programming, allowing your application to perform long-running operation without blocking the main thread. this results in more responsive user interfaces and more scalable server-side applications
+
+async and await are used in c# to handle asynchronous programming. they allow you to run tasks concurrently without blocking the main thread, which is especially usefull for I/O-Bound Operations (e.g; file reading, web requests, database calls).
+
+what is asynchronous programming ?
+asynchronous programming allows a program to perform operations concurrently without waiting for one task to complete before starting another.
+with async and await the main thread doesnt get blocked while the program waits for tasks to finish, making the app more responsive (especially in UI application like WPF, WinForms, ASP.NET Core).
+
+
+how does async and await work?
+
+1. async - the async keyword is added before a method definition to indicate that the method will contain asynchronous code. it returns a Task or Task<T> instead of the usual return type (e.g; int or void).
+
+2. await - the await keyword is used inside an async method to indicate that the method should wait for the an asynchronous operation to complete before continuing. it does not block the thread; it just pauses the method until the awaited task is complete.
+
+Example of using async and await :
+
+using System;
+using System.threading.Tasks;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        Console.WriteLine("Start");
+
+        await PrintMessageAsync();
+
+        Console.WriteLine("End");
+    }
+
+    static async Task PrintMessageAsync()
+    {
+        await Task.Delay(2000);
+        Console.WriteLine("Message after 2 Seconds");
+    }
+}
+
+Output:
+
+Start
+Message after 2 seconds
+End

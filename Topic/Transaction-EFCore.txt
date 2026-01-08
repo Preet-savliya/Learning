@@ -1,0 +1,132 @@
+Transactions in Entity Framework Core - A transaction ensures that multiple database operations succeed or fail as a single unit.
+All succeed --> Commit
+Any fails --> Rollback
+
+this is critical for data consistency.
+
+
+1. Automatic transaction (default)
+--- EF Core automatically wraps SaveChanges() in a transaction.
+
+context.Add(order);
+context.Add(orderItem);
+context.SaveChanges();
+
+--- if an error occurs, changes are rolled back.
+--- use this when one SaveChanges() call is enough.
+
+
+
+2. Mannual Transactions (Explicit)
+-- Use When:
+---- Multiple SaveChanges() calls
+---- Multiple operations must succeed together
+
+Example:
+
+using var transaction = context.Database.BeginTransaction();
+
+try
+{
+    context.Accounts.Add(account);
+    context.SaveChanges();
+
+    context.Payments.Add(payment);
+    context.SaveChanges();
+
+    transaction.Commit();
+}
+catch
+{
+    transaction.Rollback();
+    throw;
+}
+
+
+
+
+
+3. Async Transactions (Recommended)
+
+await using var transaction =
+    await context.Database.BeginTransactionAsync();
+
+try
+{
+    await context.SaveChangesAsync();
+    await transaction.CommitAsync();
+}
+catch
+{
+    await transaction.RollbackAsync();
+    throw;
+}
+
+
+
+
+4. Transactions Scope (Advanced)
+-- Allows multiple DbContexts to share one transaction.
+
+using (var scope = new TransactionScope(
+    TransactionScopeAsyncFlowOption.Enabled))
+{
+    context1.SaveChanges();
+    context2.SaveChanges();
+
+    scope.Complete();
+}
+
+Use carefully (can escalate to distributed transactions).
+
+
+
+
+
+
+5. Savepoints (EF Core 5+)
+-- Savepoints allow partial rollback.
+
+await context.Database.BeginTransactionAsync();
+
+try
+{
+    await context.SaveChangesAsync();
+    await context.Database.CreateSavepointAsync("Point1");
+
+    // risky operation
+    await context.SaveChangesAsync();
+}
+catch
+{
+    await context.Database.RollbackToSavepointAsync("Point1");
+}
+
+
+
+
+
+6. Execution Strategy + Transactions (Retry Logic)
+-- for transient failures (e.g., SQL Azure):
+
+var strategy = context.Database.CreateExecutionStrategy();
+
+await strategy.ExecuteAsync(async () =>
+{
+    await using var transaction =
+        await context.Database.BeginTransactionAsync();
+
+    await context.SaveChangesAsync();
+    await transaction.CommitAsync();
+});
+
+
+
+
+7. Best Practices
+-- Prefer one SaveChanges()
+-- Use manual transactions only when needed 
+-- Always use async in web apps
+-- keep transactions short
+-- Handle exception properly
+

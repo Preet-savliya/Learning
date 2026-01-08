@@ -1,0 +1,118 @@
+Authentication - Authentication is the process of verifying the identity of a user or system. it answers the question: who are you?
+
+key points:
+-- Determines if the user is who they claim to be.
+-- usually involves credentials like usernamr / password, tokens, or certificates.
+-- does not Determine what the user can do.
+
+Common Methods in .NET Core Web API:
+-- JWT (Json web tokens)
+-- oAuth 2.0 / OpenID Connect
+-- Cookie-based authentication
+-- API keys
+
+Example (JWT Authentication in .NET Core):
+
+// Startup.cs or Program.cs (adding authentication)
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = "MyApi",
+        ValidAudience = "MyApiClient",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SuperSecretKey"))
+    };
+});
+
+Flow of Authentication:
+
+Client sends credentials → Server verifies → Server issues token/session → Client uses token for requests
+
+
+
+
+
+
+
+
+
+
+
+
+Authorization - Authorization is the process of determining what an authenticated user is allowed to do. it answers the questionS: What can you access?
+
+Key points:
+-- Happens after authentication
+-- can be role-based or policy-based
+-- controls access to resources, endpoints, actions.
+
+Common Methods in .NET Core Web API:
+-- Role-based Authentication ( [Authorize(Roles = "Admin")] )
+-- Police-based Authorization
+-- Claims-based authorization (using JWT claims)
+
+Example (Role-based Authorization):
+
+[Authorize(Roles = "Admin")]
+[HttpPost("create")]
+public IActionResult CreateUser(UserDto user)
+{
+    // Only Admins can create users
+    return Ok();
+}
+
+Flow of Authorization:
+
+User authenticated → Server checks roles/permissions → Allows or denies access
+
+
+
+
+
+
+3. Key Differences
+| Feature        | Authentication                         | Authorization                              |
+| -------------- | -------------------------------------- | ------------------------------------------ |
+| Purpose        | Verify identity (“Who are you?”)       | Determine permissions (“What can you do?”) |
+| Happens Before | Yes                                    | After authentication                       |
+| Data Checked   | Username, password, token, certificate | Roles, policies, claims                    |
+| Tools/Methods  | JWT, OAuth, Cookies, API Keys          | Role-based, Policy-based, Claims-based     |
+| Example        | Logging in with username/password      | Accessing admin endpoint                   |
+
+
+4. Combined flow in .NET Core Web API
+1. Authentication: user logs in ----> Receives JWT token
+2. Authorization: user sends JWT token ----> Server checks if user role or claims allow requested actions.
+
+[Authorize] // Only authenticated users
+[HttpGet("profile")]
+public IActionResult GetProfile()
+{
+    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    return Ok($"User profile for userId={userId}");
+}
+
+[Authorize(Roles = "Admin")] // Only Admin users
+[HttpPost("admin/create")]
+public IActionResult AdminCreateUser(UserDto user)
+{
+    return Ok("User created");
+}
+
+
+
+5. Best Practices in .NET Core
+1. Never expose sensitive data in tokens.
+2. use HTTPS for all API requests
+3. keep authentication and authorization logic separate.
+4. use short-lived tokens and refresh tokens if needed.
+5. use role-based or policy-based authorization for fine-grained access control.

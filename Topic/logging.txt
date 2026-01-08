@@ -1,0 +1,97 @@
+Logging - logging in .NET is the process of recording information about an application's execution to help with:
+-- Debugging errors
+-- Monitoring application behavior
+-- tracking performance
+-- auditing and troubleshooting issues
+
+Built-in Logging in .NET
+.NET provides a built-in logging framework via Microsoft.Extensions.Logging
+-- Cross platform
+-- Dependency Injection based
+-- Supports multiple log providers
+-- Configuration via appsettings.json
+
+Log Levels 
+.NET defines six standard log levels:
+
+| Level         | Description                     |
+| ------------- | ------------------------------- |
+| `Trace`       | Very detailed, lowest level     |
+| `Debug`       | Debugging information           |
+| `Information` | General application flow        |
+| `Warning`     | Unexpected but non-fatal events |
+| `Error`       | Errors that stop an operation   |
+| `Critical`    | Application-crashing failures   |
+
+
+Using Logging in Program.cs 
+
+var builder = WebApplication.CreateBuilder(args);
+
+// configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
+var app = builder.Build();
+app.Run();
+
+
+Logging Configuration in appsettings.json
+
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  }
+}
+
+this controls what level of logs are recorded.
+
+
+Using ILogger in Controllers / Services
+
+public class ProductController : ControllerBase
+{
+    private readonly ILogger<ProductController> _logger;
+
+    public ProductController(ILogger<ProductController> logger)
+    {
+        _logger = logger;
+    }
+
+    [HttpGet]
+    public IActionResult Get()
+    {
+        _logger.LogInformation("Fetching product list");
+        return Ok();
+    }
+}
+
+
+Log Providers - Common logging providers include:
+
+| Provider             | Purpose                               |
+| -------------------- | ------------------------------------- |
+| Console              | Output logs to terminal               |
+| Debug                | Visual Studio debug window            |
+| EventLog             | Windows Event Viewer                  |
+| File                 | Write logs to files (via third-party) |
+| Application Insights | Cloud monitoring (Azure)              |
+
+
+Third party logging libraries
+-- Serilog (structured logging)
+-- NLog
+-- Log4Net
+
+
+Example (Serilog):
+
+builder.Host.UseSerilog();
+
+
+
+Logging is the process of capturing runtime information about an application to monitor, debug, and diagnose issues.

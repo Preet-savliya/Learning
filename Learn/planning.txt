@@ -1,0 +1,144 @@
+Technology Stack: C#, ASP.NET Core Web API, EF Core, SQL Server
+
+Done Topics - C# Basics and OOPS
+
+class and objects
+Data Types and Variables
+Control Statements
+Operators
+Access Modifiers
+Destructor
+Encapsulation
+Properties
+Inheritance
+Polymorphism
+
+Done Topics - Database
+
+Database Basics
+Entity & attributes
+Keys (Primary Key, Foreign Key, Unique Key)
+Instance, Tables, Tuple, Domain, Query
+Data Dictionary
+CURD Operations - Create, Update, Read, Delete
+
+
+
+Date :- 3/1/26 - Saturday
+
+Exception Handling                       
+Async / Await Basics                     
+Dependency Injection                     
+Interfaces & abstraction                  
+Enums                                     
+File handling                             
+Collections & Generics                    
+LINQ basics                               
+ALTER (Add, DROP, Rename, Modify)
+Constraints
+Functions
+
+
+Date :- 5/1/26 - Monday
+
+
+Data Modeling Fundamentals
+Normalization
+Denormalization
+Joins
+Subqueries
+Execution plan (basics)
+locks and deadlocks
+Stored Procedures
+Views
+Transactions
+SQL Injection
+Query Performance Basics
+
+
+
+Date :- 6/1/26 - Tuesday
+
+.NET Core Fundamentals
+
+.NET Core Project Structure or Folder Structure
+Program.cs and Startup configuration
+SDK, NuGet, CLI
+Cross Platform Support
+Middleware pipeline
+Configuration (appsettings.json)
+Dependency Injection Lifetime
+Logging
+Environment setup
+Service lifetimes
+Request-response lifecycle
+Options pattern (basic)
+Simple background tasks concept
+
+
+
+
+Date :- 7/6/26 - Wednesday
+
+Entity Framework
+
+EF Core
+Db Context & Db Set
+Code First Approach
+Migrations
+Entity Relationships(1-1, 1-M, M-M)
+LINQ with EF Core
+Lazy loading
+Eager loading
+Transactions in EF Core
+Change tracking
+AsNoTracking()
+soft delete concept
+Concurrency handling
+
+
+
+Date :- 8/1/26 - Thursday
+
+.NET Core Web API
+
+Web API architecture
+Controllers & Routing
+Request and response structure
+HTTP headers
+Content types (JSON)
+HTTP methods (GET, POST, PUT, DELETE)
+Model Binding & validation
+DTOs
+Mapping
+Status Codes
+API
+API naming conventions
+Global exception handling
+Swagger / Open API
+Pagination
+Filtering and sorting
+
+
+
+Date :- 9/1/26 - Friday
+
+Security and ERP Concepts
+
+Layered architecture (controller, service, repository)
+Code readability & Naming Standards
+logging levels
+Authentication 
+Authorization
+JWT Tokens basics
+Roll based access control
+Master Data 
+Transaction Data
+ERP Modules
+Audit logging concept
+
+
+
+Date :- 10/1/26 - Saturday
+
+Implementation

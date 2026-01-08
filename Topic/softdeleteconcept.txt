@@ -1,0 +1,110 @@
+Soft Delete in Entity Framework Core - Soft Delete is a pattern where instead of actually deleting a record from the database, you mark it as deleted.
+The record remains in the database but is usually hidden from normal queries.
+❌ Hard Delete = DELETE FROM Table
+✅ Soft Delete = UPDATE Table SET IsDeleted = true
+
+
+
+1. Why Use Soft Delete
+-- Keep historical data
+-- Prevent accidental deletion
+-- Maintain audit trails
+-- Useful in apps like CRM, ERP, Banking
+
+
+2. Implementation Steps
+
+Step 1: Add a flag to the entity
+
+public class Student
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public bool IsDeleted { get; set; } = false;
+}
+
+
+Step 2: Override SaveChanges (Optional)
+-- Automatically mark entities as deleted instead of removing:
+
+public override int SaveChanges()
+{
+    foreach (var entry in ChangeTracker.Entries()
+                 .Where(e => e.State == EntityState.Deleted))
+    {
+        entry.State = EntityState.Modified;
+        entry.CurrentValues["IsDeleted"] = true;
+    }
+
+    return base.SaveChanges();
+}
+
+Step 3: Filter Deleted Records Automatically (Global Query Filter)
+
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Student>()
+        .HasQueryFilter(s => !s.IsDeleted);
+}
+
+-- Now, all queries exclude soft-deleted records automatically:
+
+var students = context.Students.ToList();
+
+
+
+
+
+
+
+
+
+3. Soft Delete Example
+
+var student = context.Students.First();
+context.Students.Remove(student);
+context.SaveChanges(); // actually sets IsDeleted = true
+
+-- Record remains in database
+-- Not visible in normal queries
+
+
+
+
+4. Restore Soft Deleted Records
+
+var deletedStudent = context.Students
+    .IgnoreQueryFilters()
+    .First(s => s.Id == 1);
+
+deletedStudent.IsDeleted = false;
+context.SaveChanges();
+
+-- IgnoreQueryFilters() bypasses the global filter
+
+
+
+
+
+
+5. Hard Delete (Optional)
+
+-- Sometimes you need permanent removal:
+var student = context.Students
+    .IgnoreQueryFilters()
+    .First(s => s.Id == 1);
+
+context.Students.Remove(student);
+context.SaveChanges(); // actually deletes
+
+
+
+6. Best Practices
+-- Use global query filters for safety
+-- Keep IsDeleted flag indexed for performance
+-- Combine with CreatedAt / UpdatedAt / DeletedAt for audit
+-- Avoid soft delete for huge tables with frequent deletes (can affect performance)
+
+
+
+

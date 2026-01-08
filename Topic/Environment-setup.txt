@@ -1,0 +1,83 @@
+What is Environment Setup in .NET? - Enviornment setup is the process of preparing your system to develop, run, deploy .NET applications by installing the required tools and configuring Enviornments.
+
+1. Install .NET SDK
+you must install the .NET SDK for Development
+
+steps:
+1. Go to the official .NET website -  https://dotnet.microsoft.com/download
+2. download the latest .NET SDK (e.g., .NET 10) for your OS: Windows, macOS, Linux
+3. Install it and restart your system if needed.
+
+verify installation:
+dotnet --version
+dotnet --list-sdks
+
+
+2. Choose an IDE or Code Editor 
+you can use any of the following:
+
+| Tool               | Platform              |
+| ------------------ | --------------------- |
+| Visual Studio      | Windows               |
+| Visual Studio Code | Windows, macOS, Linux |
+| JetBrains Rider    | Cross-platform        |
+
+
+For VS Code, Install Extensions:
+-- C#
+-- .NET Install Tool
+-- NuGet Package Manager
+
+
+
+3. Set Enviornment variables
+Common .NET Enviornment variables:
+| Variable                 | Purpose                                                |
+| ------------------------ | ------------------------------------------------------ |
+| `ASPNETCORE_ENVIRONMENT` | Defines environment (Development, Staging, Production) |
+| `DOTNET_ENVIRONMENT`     | Used in non-web apps                                   |
+| `PATH`                   | Includes dotnet CLI                                    |
+
+Example (Windows – PowerShell):
+setx ASPNETCORE_ENVIRONMENT "Development"
+
+Example (Linux/macOS):
+export ASPNETCORE_ENVIRONMENT=Development
+
+
+
+
+4. Create your First Project
+
+dotnet new webapi -n MyFristApi
+cd MyFristApi
+dotnet run
+
+visit:
+https://localhost:5001
+
+
+
+
+5. Configure appsettings Files
+create environment Specific configuration:
+
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
+
+.NET automatically loads the correct file based on environment
+
+
+
+
+6. Database & Tools 
+Depending on your Project:
+-- Install SQL server / PostgreSQL / MySQL
+-- Install Docker Desktop (for containerized apps)
+-- install Git (version control)
+
+
+
+
+Environment setup in .NET is the process of installing and configuring tools, SDKs, and variables required to develop and run .NET applications.

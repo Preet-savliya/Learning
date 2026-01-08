@@ -1,0 +1,100 @@
+1. What is appsettings.json ? - appsettings.json is a JSON file used to store configuration settings for a .NET application. these settings can include:
+-- Database connection strings 
+-- API keys
+-- Logging options 
+-- Custom application settings
+
+2. appsettings.json Structure 
+
+Example for web API
+
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=MyAppDb;User Id=sa;Password=YourPassword;"
+  },
+  "JwtSettings": {
+    "SecretKey": "SuperSecretKey123!",
+    "Issuer": "MyApp",
+    "Audience": "MyAppUsers",
+    "ExpiryInMinutes": 60
+  }
+}
+
+Explaination:
+
+| Section             | Purpose                                                          |
+| ------------------- | ---------------------------------------------------------------- |
+| `Logging`           | Configures logging levels for different namespaces               |
+| `AllowedHosts`      | Restricts which hosts can access the app (useful in production)  |
+| `ConnectionStrings` | Stores database connection strings                               |
+| `JwtSettings`       | Example of a custom configuration section for JWT authentication |
+
+
+
+3. Reading appsettings.json - .NET automatically reads appsettings.json when you create a project. you can access configuration via dependency injection (IConfiguration).
+
+Example in Program.cs 
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Access configuration
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var jwtSecret = builder.Configuration["JwtSettings:SecretKey"];
+
+builder.Services.AddDbContext<MyDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+var app = builder.Build();
+app.Run();
+
+
+
+
+4. Binding to strongly typed classes 
+you can map configuration sections to C# classes for type safety:
+
+// 1. Define class
+public class JwtSettings
+{
+    public string SecretKey { get; set; }
+    public string Issuer { get; set; }
+    public string Audience { get; set; }
+    public int ExpiryInMinutes { get; set; }
+}
+
+// 2. Bind in Program.cs
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
+// 3. Inject in a service/controller
+public class AuthService
+{
+    private readonly JwtSettings _jwtSettings;
+    public AuthService(IOptions<JwtSettings> options)
+    {
+        _jwtSettings = options.Value;
+    }
+}
+
+
+
+5. Enviornment Specific Configuration
+1. appsettings.Development.json ---> used in Development
+2. appsettings.Production.json ---> used in production
+3. .NET automatically loads the correct file based on ASPNETCORE_ENVIRONMENT.
+
+Example:
+
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
+
+.NET merges settings - Enviornment-Specific setting override defaults
+
+

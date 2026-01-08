@@ -1,0 +1,94 @@
+Files - file handling in c# is the way to read, write, and manage files using code. This lets your program store data permanently on the computer.
+
+Common Classes for file handling
+
+File - Create, delete, copy, move files easily.
+FileInfo - Get file details, properties, create, delete.
+StreamReader - Read data from file.'
+StreamWriter - Write data to file.
+BinaryReader/Writer - Read/Write binary data.
+
+1️⃣ Writing to a File
+
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        string path = "example.txt";
+        // Write text to file
+        File.WriteAllText(path, "Hello, C# File Handling!");
+        Console.WriteLine("File created and written successfully.");
+    }
+}
+
+✅ This will create a file if it doesn’t exist and write text to it.
+
+2️⃣ Reading from a File
+
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        string path = "example.txt";
+        // Read text from file
+        string content = File.ReadAllText(path);
+        Console.WriteLine("File Content: " + content);
+    }
+}
+
+3️⃣ Using StreamWriter & StreamReader
+
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        string path = "example2.txt";
+        
+        // Writing multiple lines
+        using (StreamWriter writer = new StreamWriter(path))
+        {
+            writer.WriteLine("Line 1");
+            writer.WriteLine("Line 2");
+        }
+
+        // Reading lines
+        using (StreamReader reader = new StreamReader(path))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                Console.WriteLine(line);
+            }
+        }
+    }
+}
+
+4️⃣ File Info Example
+
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        FileInfo file = new FileInfo("example.txt");
+        if (file.Exists)
+        {
+            Console.WriteLine("File Size: " + file.Length + " bytes");
+            Console.WriteLine("Created on: " + file.CreationTime);
+        }
+    }
+}
+
+Real-Life Example :-
+---- Saving user data in a game
+---- Storing logs of a program
+---- Reading configuration files
+
+📌 File Handling = Reading, writing, and managing files using C# code

@@ -1,0 +1,115 @@
+Global Exception Handling in Web API - Global exception handling allows you to catch all unhandled errors in one place and return consistent error responses to clients.
+
+This helps:
+--- Avoid repeating try-catch in every controller
+--- Return standard error responses
+--- Log exceptions for debugging
+
+1️⃣ Using Middleware for Global Exceptions
+Create a custom middleware to handle exceptions.
+
+public class GlobalExceptionMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly ILogger<GlobalExceptionMiddleware> _logger;
+
+    public GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExceptionMiddleware> logger)
+    {
+        _next = next;
+        _logger = logger;
+    }
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
+        {
+            await _next(context); // Call the next middleware
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Unhandled exception occurred");
+            await HandleExceptionAsync(context, ex);
+        }
+    }
+
+    private static Task HandleExceptionAsync(HttpContext context, Exception ex)
+    {
+        context.Response.ContentType = "application/json";
+
+        // Default to 500 Internal Server Error
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+        var response = new
+        {
+            StatusCode = context.Response.StatusCode,
+            Message = "Internal Server Error",
+            Details = ex.Message // Optional: hide in production
+        };
+
+        return context.Response.WriteAsJsonAsync(response);
+    }
+}
+
+2️⃣ Register Middleware in Program.cs
+
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+// Add custom global exception middleware
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
+app.MapControllers();
+app.Run();
+
+3️⃣ Example Controller Behavior`
+
+[HttpGet("{id}")]
+public IActionResult GetById(int id)
+{
+    var student = context.Students.Find(id);
+    
+    if (student == null)
+        throw new KeyNotFoundException($"Student with ID {id} not found"); // Will be handled globally
+
+    var dto = _mapper.Map<StudentDto>(student);
+    return Ok(dto);
+}
+
+Result:
+
+{
+  "StatusCode": 500,
+  "Message": "Internal Server Error",
+  "Details": "Student with ID 99 not found"
+}
+
+In production, you can hide Details for security.
+
+
+4️⃣ Optional: Customize Status Codes by Exception Type
+You can map specific exceptions to HTTP status codes:
+
+
+private static Task HandleExceptionAsync(HttpContext context, Exception ex)
+{
+    context.Response.ContentType = "application/json";
+
+    int statusCode = ex switch
+    {
+        KeyNotFoundException => StatusCodes.Status404NotFound,
+        UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+        _ => StatusCodes.Status500InternalServerError
+    };
+
+    context.Response.StatusCode = statusCode;
+
+    var response = new
+    {
+        StatusCode = statusCode,
+        Message = ex.Message
+    };
+
+    return context.Response.WriteAsJsonAsync(response);
+}
+
+

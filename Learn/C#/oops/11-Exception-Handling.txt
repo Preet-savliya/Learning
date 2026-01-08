@@ -1,0 +1,66 @@
+Exceptions - Exceptions is like a problem that happens while a program is running. like in real life you are baking a cake, but suddenly you realize there is no sugar. that is an unexpected problem - an Exceptions in your baking process.
+
+Why handle exceptions?
+---- So your program doesn’t crash.
+---- So you can fix problems or show a friendly message instead of stopping.
+
+Real-life:
+---- If you forget sugar, you can buy sugar from a neighbor instead of stopping baking completely.
+
+How C# handles exceptions
+
+try – try doing something
+
+try
+{
+    int result = 10 / 0;  // This will cause a problem
+}
+
+catch – handle the problem
+
+catch (DivideByZeroException)
+{
+    Console.WriteLine("Cannot divide by zero!");
+}
+
+finally – do something anyway
+
+finally
+{
+    Console.WriteLine("Cleaning the kitchen.");
+}
+
+
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        try
+        {
+            Console.Write("Enter a number to divide 100 by: ");
+            int num = Convert.ToInt32(Console.ReadLine());
+            int result = 100 / num;  // Might throw an error if num = 0
+            Console.WriteLine("Result: " + result);
+        }
+        catch (DivideByZeroException)
+        {
+            Console.WriteLine("Oops! You cannot divide by zero.");
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Please enter a valid number.");
+        }
+        finally
+        {
+            Console.WriteLine("Program finished, thanks for using it!");
+        }
+    }
+}
+
+You try to divide 100 by a number (try).
+If you divide by zero, it shows a friendly message (catch).
+At the end, it thanks the user no matter what (finally).
+
+✅ Exception handling is like planning for mistakes so your program doesn’t crash and can recover gracefully.

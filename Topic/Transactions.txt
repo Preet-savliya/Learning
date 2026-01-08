@@ -1,0 +1,28 @@
+Transactions - A transaction is a sequence of one or more SQL operations performed as a single unit of work. transaction follows ACID properties rules
+
+ACID properties
+| Property        | Meaning                                        |
+| --------------- | ---------------------------------------------- |
+| A – Atomicity   | All operations succeed or all fail             |
+| C – Consistency | Database moves from one valid state to another |
+| I – Isolation   | Transactions don’t interfere with each other   |
+| D – Durability  | Once committed, changes are permanent          |
+
+
+Simple Transaction Example
+
+Imagine transferring $100 from Account A to Account B:
+
+START TRANSACTION;
+
+UPDATE Accounts
+SET balance = balance - 100
+WHERE acc_id = 1;
+
+UPDATE Accounts
+SET balance = balance + 100
+WHERE acc_id = 2;
+
+COMMIT;
+
+

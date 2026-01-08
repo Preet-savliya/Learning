@@ -1,0 +1,48 @@
+Encapsulation - Encapsulation means hiding data and controlling how it is accessed. in c#, we keep data private and allow access through public methods or properties.
+
+Why Encapsulation is Needed ?
+
+---- Protects data from wrong use
+---- Improves security
+---- Makes code easy to manage
+
+Example :-
+
+Without Encapsulation
+
+class Student
+{
+    public int age;
+}
+
+// anyone can set
+
+Student s = new Student();
+s.age = -10;   // wrong value
+
+
+With Encapsulation
+
+class Student
+{
+    private int age;
+
+    public int Age
+    {
+        get { return age; }
+        set 
+        {
+            if (value > 10)
+            age = value;
+        }
+    }
+}
+
+usage
+
+Student s = new Student();
+s.Age = 18;
+Console.WriteLine(s.Age);
+
+Real-Life Example :-
+---- ATM Machine - You cannot touch the cash directly, You use buttons (methods)

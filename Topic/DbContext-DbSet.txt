@@ -1,0 +1,75 @@
+1. DbContext - DbContext represents a connection/session with the database. like a manager that knows which tables exist and how to talk to the database
+
+Example :
+
+public class AppDbContext : DbContext
+{
+    public DbSet<Student> Students {get; set;}
+
+    protected override void onConfiguring(DbContextOptionsBuilder options)
+    {
+        options.UseSqlServer("connection-string");
+    }
+}
+
+Key Points:
+-- Usually one DbContext per request (in web apps)
+-- it is lightweight but not thread-safe
+-- inherits from DbContext
+
+
+
+
+2. DbSet - DbSet<T> represents a table in the database. like a collection of rows mapped to C# objects
+
+What it does?
+-- Query data ( ToList(), FirstOrDefault() )
+-- Add new records ( Add() )
+-- Update records 
+-- delete records ( Remove() )
+
+
+Example Entity
+
+public class Student
+{
+    public int Id {get; set;}
+    public string Name {get; set;}
+}
+
+
+Example Usage
+
+using (var context = new AppDbContext())
+{
+    // create
+    context.Students.Add(new Student {Name = "Setu"});
+    context.SaveChanges();
+
+    // Read
+    var Students = context.Students.ToList();
+
+
+    // update
+    var Students = context.Students.First();
+    student.Name = "RamSetu";
+    context.SaveChanges();
+
+    context.Students.Remove(student);
+    context.SaveChanges();
+}
+
+
+
+Relationship between DbContext & DbSet
+
+| DbContext             | DbSet               |
+| --------------------- | ------------------- |
+| Database session      | Database table      |
+| Manages entities      | Represents entities |
+| Calls `SaveChanges()` | Performs CRUD       |
+| One per database      | Many per context    |
+
+DbContext contains DbSet(s)
+
+

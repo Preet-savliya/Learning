@@ -1,0 +1,15 @@
+STEP 3: Add NuGet Packages
+
+In Visual Studio:
+
+Right-click the project → Manage NuGet Packages
+
+Search and install:
+
+Microsoft.EntityFrameworkCore
+
+Microsoft.EntityFrameworkCore.SqlServer
+
+Microsoft.EntityFrameworkCore.Tools
+
+Microsoft.AspNetCore.Authentication.JwtBearer

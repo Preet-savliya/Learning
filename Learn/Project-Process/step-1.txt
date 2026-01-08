@@ -1,0 +1,24 @@
+STEP 1: Create Backend Project in Visual Studio
+1. Open Visual Studio
+
+Go to File → New → Project.
+
+Select ASP.NET Core Web API.
+
+Click Next.
+
+2. Configure Project
+
+Project Name: ECommerceAPI
+
+Location: Choose your folder, e.g., C:\Projects\ECommerceProject\
+
+Click Next.
+
+3. Configure .NET
+
+Framework: Select .NET 7 (or latest)
+
+Authentication Type: None (we’ll add JWT manually later)
+
+Click Create.

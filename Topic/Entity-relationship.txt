@@ -1,0 +1,139 @@
+Entity Relationship - Entity Relationships defines how tables are connected in the database. EF core uses navigation properties + foreign keys to build these Relationships.
+
+1. One to One (1:1)
+Example
+one person --> one passport
+
+public class Person
+{
+    public int Id {get; set;}
+    public Passport Passport {get; set;}
+}
+
+public class Passport
+{
+    public int Id {get; set;}
+    public int PersonId {get; set;}
+    public Person Person {get; set;}
+}
+
+Fluent API 
+
+modelBuilder.Entity<Person>()
+  .HasOne(p => p.Passport)
+  .WithOne(p => p.Person)
+  .HasForeignKey<Passport>(p => p.PersonId);
+
+
+
+2. One to Many (1:M)
+Example
+One Department → Many Employees
+
+public class Department
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+
+    public ICollection<Employee> Employees { get; set; }
+}
+
+public class Employee
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+
+    public int DepartmentId { get; set; }   // FK
+    public Department Department { get; set; }
+}
+
+How EF understands it
+-- DepartmentId --> Foreign Key
+-- ICollection<Employee> ---> Many side
+
+---- No Fluent API needed 
+
+
+
+3. Many to Many (M:M)
+Example
+Students <---> Courses
+
+EF Core 5+ (No join class needed)
+
+public class Student
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+
+    public ICollection<Course> Courses { get; set; }
+}
+
+public class Course
+{
+    public int Id { get; set; }
+    public string Title { get; set; }
+
+    public ICollection<Student> Students { get; set; }
+}
+
+EF automatically creates a join table.
+
+with join Entity (More Control)
+
+public class StudentCourse
+{
+    public int StudentId {get; set;}
+    public Student Student {get; set;}
+
+    public int CourseId {get; set;}
+    public Course Course {get; set;}
+}
+
+
+Used when:
+-- Extra columns (Grade, Date, etc.)
+-- Custom constraints
+
+
+4. Loading Related Data
+
+--- Eager Loading
+
+var students = context.Students
+   .Include(s => s.Courses)
+   .ToList();
+
+--- Lazy Loading
+Requiers:
+
+virtual ICollection<Course> Course {get; set;}
+
+--- Explicit Loading
+
+context.Entry(student)
+    .Collection(s => s.Courses)
+    .Load();
+
+
+
+
+
+5. Cascade Delete 
+
+modelBuilder.Entity<Employee>()
+    .HasOne(e => e.Department)
+    .WithMany(d => d.Employees)
+    .OnDelete(DeleteBehavior.Cascade);
+
+--- Deletes child records automatically.
+
+
+
+
+6. Conventions vs Configuration
+| Method           | Use Case              |
+| ---------------- | --------------------- |
+| Conventions      | Simple relationships  |
+| Data Annotations | Small constraints     |
+| Fluent API       | Complex relationships |

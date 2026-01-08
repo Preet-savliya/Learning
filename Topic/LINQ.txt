@@ -1,0 +1,101 @@
+LINQ - language integrated query 
+linq is used in C# to query, filter, sort, and transform data from Collections like List, array, dictionary, or database results in a simple and readable way.
+
+---- allows querying data using c# syntax 
+works with 
+----- Collections(list, array)
+----- database (entity framework)
+----- XML
+
+---- Namespace:
+using System.Linq;
+
+
+LINQ syntax types
+
+1. Query Syntax (SQL like)
+
+var result = from n in numbers
+where n > 10
+select n;
+
+
+2️⃣ Method Syntax (Most used in real projects)
+var result = numbers.Where(n => n > 10);
+
+🔹 Sample Data
+
+List<int> numbers = new List<int> { 5, 10, 15, 20, 25 };
+
+🔹 Common LINQ Methods (Most Used)
+
+Where() – Filtering
+var result = numbers.Where(n => n > 10);
+
+Output: 15, 20, 25
+
+
+Select() – Projection
+var result = numbers.Select(n => n * 2);
+
+Output: 10, 20, 30, 40, 50
+
+OrderBy() / OrderByDescending() – Sorting
+var result = numbers.OrderByDescending(n => n);
+
+Output: 25, 20, 15, 10, 5
+
+
+First() / FirstOrDefault()
+var result = numbers.First(n => n > 10);
+
+Output: 15
+
+Count()
+int count = numbers.Count();
+
+Output: 5
+
+Any() / All()
+bool hasLarge = numbers.Any(n => n > 20);  // true
+bool allPositive = numbers.All(n => n > 0); // true
+
+Sum() / Avg()
+int sum = numbers.Sum();       // 75
+double avg = numbers.Average(); // 15
+
+
+🔹 LINQ with Objects Example
+
+class Employee
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int Salary { get; set; }
+}
+
+List<Employee> employees = new List<Employee>
+{
+    new Employee { Id = 1, Name = "Alice", Salary = 60000 },
+    new Employee { Id = 2, Name = "Bob", Salary = 45000 },
+    new Employee { Id = 3, Name = "Charlie", Salary = 70000 }
+};
+
+var highSalary = employees
+                 .Where(e => e.Salary > 50000)
+                 .Select(e => e.Name);
+
+Output:
+Alice, Charlie
+
+🔹 Why LINQ is Important
+
+Reduces code
+
+Improves readability
+
+Strongly typed
+
+Widely used in .NET Core & ASP.NET
+
+LINQ allows querying collections using C# syntax, making data operations simpler, safer, and readable.

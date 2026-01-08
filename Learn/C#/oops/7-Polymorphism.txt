@@ -1,0 +1,93 @@
+Polymorphism - Polymorphism means one thing many forms. in C# Polymorphism allows the same method name to work in different ways.
+
+Types of Polymorphism in C#
+---- Compile time Polymorphism (Method Overloading) : same method name but different parameters
+
+class MathOperation
+{
+    public int Add(int a, int b)
+    {
+        return a + b;
+    }
+
+    public int Add(int a, int b, int c)
+    {
+        return a + b + c;
+    }
+}
+
+✔ method chosen at compile time
+
+---- Run-time Polymorphism (Method Overriding) : Child class changes the behaviour of parent class method. same method but different parameters
+
+class Animal
+{
+    public virtual void Sound()
+    {
+        Console.WriteLine("Animal makes a sound");
+    }
+}
+
+class Dog : Animal
+{
+    public override void Sound()
+    {
+        Console.WriteLine("Dog barks");
+    }
+}
+✔ Method chosen at run time
+
+Usage :
+
+Animal a = new Dog();
+a.Sound();   // Output: Dog barks
+
+Why Use Polymorphism ?
+---- Makes code flexible
+---- Easy to extend
+---- Reduces complexity
+
+Real-life Example :-
+
+1. Remote button
+---- Same button
+---- Different TV ---> Different Behaviour
+
+2. Vehicle Example
+Parent class : Vehicle
+Child class : Bike, Car, Bus.
+
+Method StartEngine()
+---- Bike : engine starts with the key.
+---- Car : engine start with the button.
+---- Bus : engine start with the igniation lever.
+
+
+🔄 Virtual and Override in C# (in simple words)
+
+this are used in Run-time Polymorphism, where a child class changes the behaviour of a parenr class method.
+
+1️⃣ virtual keyword
+---- Placed in parent class method
+---- Marks a method that can be overridden in a child class
+
+class Animal
+{
+    public virtual void MakeSound()
+    {
+        Console.WriteLine("Animal makes a sound");
+    }
+}
+
+2️⃣ override keyword
+---- Placed in child class method
+---- Provides a new implementation for the parent’s virtual method
+
+Real-Life Example :-
+
+---- Vehicle class → StartEngine() method
+---- Car class → StartEngine() says “Car engine starts”
+---- Bike class → StartEngine() says “Bike engine starts”
+---- Same action, different result depending on object → polymorphism
+
+📌 Virtual = parent method can be overridden, Override = child changes parent method behavior

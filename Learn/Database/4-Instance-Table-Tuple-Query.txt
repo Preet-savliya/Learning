@@ -1,0 +1,205 @@
+1. Instance - an instance is the current data in the database at a given time.
+
+Example : 
+---- Todays student records = one instance
+---- Tomorrow’s updated records = another instance
+
+
+
+
+
+2. Table - a table stores data in rows and columns
+
+Example :
+----------------------------------------------------------------------
+|  Roll no         |   Name                  |   Class               |
+----------------------------------------------------------------------
+|                  |                         |                       |
+|                  |                         |                       |
+----------------------------------------------------------------------
+
+
+
+
+
+3. Tuple - a Tuple is a single row in a table.
+
+Example :
+----------------------------------------------------------------------
+|  Roll no         |   Name                  |   Class               |
+----------------------------------------------------------------------
+|  101             |   Rahul                 |   10                  |
+----------------------------------------------------------------------
+
+
+
+
+
+4. Domain - A domain is a set of rules that tells the database what kind of data is allowed in a specific column.
+
+Example:
+Age --> 1-100
+Grade --> A,B,C
+If you are filling out a form that asks for "Day of the Week," the domain is (Monday–Sunday). If you write "Apple," the form rejects it because it’s not in the allowed list.
+
+
+
+
+
+5. Query - A Query is a request for data. query is a question ask to the SQL for the data.
+Example : SELECT * FROM Student WHERE class = 10;
+
+
+
+
+6. SQL - Structured Query Language is used to: create tables, insert data, retrieve data. this is the Language used to talk to the database.
+Example : SELECT Name FROM Student;
+
+
+
+
+7. Index - An index is a shortcut that helps the database find info without looking at every single row.
+Example : index page in a book helps find topics faster.
+
+
+
+
+10. Normalization - Normalization is the process of organizing data to remove duplication.
+Benefits - Saves storage, avoids inconsistency
+Example : Store Student details once instead of repeating.
+
+Normalization Rules :
+1. First Normal Form (1NF) - Eliminates repeating groups and confirms each fields holds only atomic values.
+
+2. Second Normal Form (2NF) - Removes Partial depedencies all non key attributes depend on the whole primary key.
+
+3. Third Normal Form (3NF) - Eliminates transitive depedencies between non key attributes.
+
+4. boyce codd normal form (BCNF) Strengthens 3NF by ensuring every determinant is a candidate key. BCNF fixes cases where non-key columns depend on other non-key columns (more strict than 3NF).
+
+5. Fourth Normal From (4NF) - 4NF ensures that a table doesn't have columns that are related to each other in a way that causes duplication of rows.
+
+Example:
+Imagine a table that stores information about students, their courses, and their extracurricural activites:
+
+| StudentID | Course  | Activity |
+| --------- | ------- | -------- |
+| 1         | Math    | Soccer   |
+| 1         | Science | Drama    |
+| 1         | Math    | Drama    |
+
+here, courses and Activity are independent of each other. So, if a student takes multiple courses and has multiple activities, the table ends up repeating the same student data over and over.
+
+To fix this for 4NF, you'd break the table into two separate tables:
+
+A table for Student_Courses (StudentID, Course)
+A table for Student_Activities (StudentID, Activity)
+This way, we avoid repeating the same student information when the student has multiple courses and activities.
+
+
+
+
+
+
+11. Data Integrity - Data Integrity confirm data is accurate, valid and consistant.
+
+Types of data Integrity:
+---- Entity integrity: Primary key cannot be null
+---- Referential integrity: Foriegn key must match Primary key in related table
+---- Domain integrity: Attribute values valid
+
+Example :
+---- StudentID exist
+---- Age >= 5
+
+
+
+
+
+12. Data Redundancy - Data redundancy occurs when multiple copies of the same data are stored across different locations, formats or systems.
+Example : Don’t store student address in every table; keep in Student table only. if you save a friends phone number in your phone, your email, and a notebook. if your friend change the number then you update the number only in your phone, your other two lists are now wrong.
+
+
+
+
+
+
+13. Views - Can hide sensitive data, Provide simplified tables for specific users. a view is a customized window into your data. it shows you only what you need to see and hides the rest.
+Example:
+---- Admin sees full Student Table
+---- Teacher sees only Name and Marks
+---- Guest mode on your laptop, you can see the internet and games, but you cant see the owner's private tax files or passwords.
+
+
+
+
+
+
+14. ACID Properties - a set of rules (automicity, consistency, Isolation, Durability) that ensures database trasactions are processed reliably - critical for banking.
+
+
+1. Automicity - Automicity confirms that either every single steps is compeleted successfully or none of them happen at all. there is no middle ground where only half the job gets done.
+
+Example : suppose you want to send $100 to a friend. this transaction actually has two steps in the database
+---- Step 1: Subtract $100 from your account
+---- Step 2: Add $100 to your friends account
+
+without automicity - if the systems crashes after step 1, you loose $100, but your friends never receives it. the money simply vanishes.
+
+with automicity - the database treats both steps as one single unit. if step 2 fails, maybe your friends account is closed or the power goes out the database rolls back step 1. your account balance goes back to exactly what it was before you started.
+
+key terms:
+1. Commit - when all steps succeed, the database saves the changes permanently.
+2. Rollback - if any steps fails the database undoes every changes made during that transactions to return to a safe starting state
+3. invisible - just like an atom was once thought to be the smallest unit that couldnt be split, an atomic transaction cannot be split into partial parts.
+
+why we need it - it prevents data courroption. it confirms that if there is a crash, a bug, or a power failure, your data remains clean and reliable rather than being left in a messy, half-finished state.
+
+
+
+
+
+2. consistency - Consistency is about following the laws of the database. it confirms that any data written to the database is valid according to all defiend rules, including constraints, cascades, and triggers. 
+
+like the rule is that every book must have an author so if you try to add a book but leave an author field blank the database will reject the transaction. because the consistency will not let you save the data because it breaks the rules. consistency is discipline.
+
+Example : The total balance rule, in a bank the total amount of money in the system should stay the same during a transfer.
+---- Before transfer : you have $500 and your friend have $500 , total is $1000
+---- During transfer : you send $100
+---- after transfer : you have have $400 and your friend have $600, total is $1000
+
+if for some reason the total becomes $900 or $1100 then the database has become inconsistent. consistency confirms that math always adds up and the integrity rules are never broken.
+
+common consistant rules
+---- Data types : you cannot put pizza in a column meant for dates
+---- Primary Key : you cannot have two students with the exact same ID number
+---- Foreign key : you cannot delete a class if there are still Students assigned to it.
+
+
+
+
+
+
+
+3. Isolation - Isolation means that even if many people are using the databse at the exact same time, they shouldn't get in each others way. the databse makes it feel like you are the only person using it.
+
+Example : The hotel room booking
+---- User A looks at room 101. it is available they start filling out their credit card info
+---- user B looks at room 101 at the exact same time.
+---- without Isolation : user B sees the room is available and books it instantly.
+---- the result : User A hits the confirm a second later and gets an error, or worse, the room is double-booked.
+---- with Isolation : the database hides user A's work in progress from user B until user A is either finished or cancels.
+
+the 4 main problems of Isolation prevents:
+
+Problem 
+
+Dirty Read : seeing data from a transaction that has not been saved yet
+Non-repeatable Read : Reading the same row twice and getting different results because someone else changed it in between
+Phantom Read : running a search and getting a different number of rows each time because someone is adding new ones.
+
+
+
+
+
+4. Durability - Durability means once it's saved, it stays saved. the database guarantee that once a transaction is finished and committed, it is permanent. even if the power goes out, the server crashes, or the building's WIFI dies a second later, your data will not be lost.

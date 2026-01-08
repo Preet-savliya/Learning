@@ -1,0 +1,135 @@
+1. Data Dictionary - data Dictionary also known as data about data. stores details about database structure such as schema definitions, constraints, and table properties. maintained automatically by the DBMS for system reference and management.
+
+A Simple Example: Students Table
+Imagine you have a table that stores student information. The Data Dictionary for that table would look like this:
+
+---------------------------------------------------------------------------------------------------------------------------------------
+| Column Name  |  Data Type |	Length  |   Allow Null?  |	Description	                                |  Example / Rules            |
+---------------------------------------------------------------------------------------------------------------------------------------
+| StudentID	   |  Integer	|    N/A	|     No	     |  Unique ID for each student (Primary Key).	|  1001, 1002                 |
+---------------------------------------------------------------------------------------------------------------------------------------
+| FirstName	   |  Varchar	|    50	    |     No	     |  The student's first name.	                |  "John", "Sarah"            |
+---------------------------------------------------------------------------------------------------------------------------------------
+| Email	       |  Varchar	|    100	|     Yes	     |  Personal email address.	                    |  must contain "@"           |
+---------------------------------------------------------------------------------------------------------------------------------------
+| JoinDate	   |  Date	    |    N/A	|     No	     |  The date the student enrolled.	            |  YYYY-MM-DD                 |
+---------------------------------------------------------------------------------------------------------------------------------------
+| Status	   |  Char	    |     1	    |     No	     |  Current enrollment status.	                |  'A' (Active),'I'(Inactive) |
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+2. Data manipulation - data manipulation refers to operations that modify data within the database. includes insertion, deletion, and updation of records. performed through DML (data manipulation language) commands in SQL
+
+CURD Operations: the four basic things you can do with the data.
+---- Create (Add new data)
+---- Read (view existing data)
+---- update (edit existing data)
+---- Delete (Remove Data)
+
+
+
+
+
+
+3. Data Engine - data Engine is the core component responsible for processing and excecuting database queries. handles tasks such as query optimization, transaction management, and data retrieval. like if the database is a giant library, the data engine is the librarian who actually walks to the shelves, picks up the books, and organizes them so they donot get lost.
+
+example the car :
+1. the user interface (steering wheel) : this is the app or website you use.
+2. SQL (the commands) : this is your turning the wheel or hitting the gas.
+3. The DBMS (the car body) : this is the whole system like MySQL or oracle
+4. the data engine (the engine) : this is the actual burning of fuel and moving of parts to make the car go.
+
+
+
+
+
+
+
+
+
+
+
+
+4. Backup & Recovery - backup is the act of making a copy & recovery is the act of using that copy to get back what you lost.
+
+example :
+Backup - buying a spare tire and keeping it in your trunk just in case.
+Recovery - pulling over, taking a spare out, and putting it on the car so you can keep driving.
+
+
+types of backup :
+---- full backup : copying evrything you have. example, every sunday night you copy every single folder on your computer to a portable drive.
+---- Incremental backup : only copying what has changed since your last backup. example, on monday you only save the two new emails you wrote, rather than copying your whole inbox again.
+
+
+Recovery - recovery is a reactive. you do it after  a disaster. if your phone falls in a lake or a virus deletes your files, you recover by grabbing your backup and putting it back onto a working device.
+
+Example : 
+
+you accidentally delete a 50 page report. you go into your version history or cloud trash and hit restore. this is a small scale recovery.
+your laptop's hard drive dies compeletely. you buy a new laptop, log into your cloud account, and download all your files. your data has been recovered. 
+
+
+Security and Authorization - security is the protective fence around your information and Authorization is the clipboard that decides which specific gates you walk through once you are inside.
+
+Example :
+
+1. Security / Authentication - you enter your username and password. the system checks if they match. once they do, you are in.
+
+2. Authorization - the system then checks your permissions. you are authorised to delete yopur own photos, but you are not authorized to delete your friend's photos, even though you are both logged into the same app.
+
+
+Example 2 :
+
+1. Security / Authentication - you scan your employee badge to enter the building and log into your computer.
+
+2. Authorization - A junior accountant is authorized to see the expense reports, but only the CFO (Chief finnacial officer) is the authorized to see the company's total profit and salary data.
+
+
+Security - the entire system of protection used to keep hackers out and keep data safe.
+Authorization - the specific permissions given to a user. it decides what you are allowed to see or change once you are logged in.
+
+
+
+
+
+
+
+
+🔟 Transactions & Concurrency
+🔹 Transaction
+All operations succeed or none.
+ERP Example:
+Invoice creation:
+
+Save invoice
+
+Reduce stock
+
+Save payment
+
+If one fails → rollback
+
+
+
+
+
+
+🔹 Concurrency
+
+Multiple users updating same data.
+
+ERP Example:
+Two users selling same product → stock conflict
+
+Solution:
+RowVersion
+Optimistic locking

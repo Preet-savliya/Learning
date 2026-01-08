@@ -1,0 +1,143 @@
+Joins - JOIN is used to combine rows from two or more tables based on a related column 
+
+Types of joins 
+1. INNER JOIN - returns only matching records from both tables.
+
+Example tables
+
+Customer 
+| CustomerID | Name  |
+| ---------- | ----- |
+| 1          | Alice |
+| 2          | Bob   |
+
+Order
+| OrderID | CustomerID |
+| ------- | ---------- |
+| 101     | 1          |
+| 102     | 3          |
+
+Query 
+
+SELECT c.Name, o.OrderID
+FROM Customer c
+INNER JOIN Order o
+ON c.CustomerID = o.CustomerID;
+
+results
+| Name  | OrderID |
+| ----- | ------- |
+| Alice | 101     |
+
+
+
+2. Left Join - Returns all records from the left table, and matching records from the right table.
+
+Query - 
+
+SELECT c.Name, o.OrderID
+FROM Customer c
+LEFT JOIN Order o
+ON c.CustomerID = o.CustomerID;
+
+
+Results
+| Name  | OrderID |
+| ----- | ------- |
+| Alice | 101     |
+| Bob   | NULL    |
+
+
+
+
+3. Right Join - Returns all records from the right table, and matching records from the left table.
+
+Employees table:
+| EmpID | Name    | DeptID |
+| ----- | ------- | ------ |
+| 1     | Alice   | 10     |
+| 2     | Bob     | 20     |
+| 3     | Charlie | NULL   |
+
+Department 
+
+| DeptID | DeptName |
+| ------ | -------- |
+| 10     | HR       |
+| 20     | IT       |
+| 30     | Finance  |
+
+Query -
+
+SELECT e.Name, d.DeptName
+FROM Employee e
+RIGHT JOIN Department d
+ON e.DeptID = d.DeptID;
+
+Results-
+| Name  | DeptName |
+| ----- | -------- |
+| Alice | HR       |
+| Bob   | IT       |
+| NULL  | Finance  |
+
+
+
+
+
+4. Full Join - Returns all records when there is a match in either table.
+
+SELECT e.Name, d.DeptName
+FROM Employee e
+FULL OUTER JOIN Department d
+ON e.DeptID = d.DeptID;
+
+
+Results-
+
+| Name    | DeptName |
+| ------- | -------- |
+| Alice   | HR       |
+| Bob     | IT       |
+| Charlie | NULL     |
+| NULL    | Finance  |
+
+
+
+
+5. Cross JOin - Returns every combination of rows (Cartesian product).
+
+Query -
+SELECT e.Name, d.DeptName
+FROM Employee e
+CROSS JOIN Department d;
+
+results - 
+Alice–HR, Alice–IT, Alice–Finance, Bob–HR, ...
+
+
+
+
+6. Self Join - A table joins with itself.
+
+| EmpID | Name    | ManagerID |
+| ----- | ------- | --------- |
+| 1     | Alice   | NULL      |
+| 2     | Bob     | 1         |
+| 3     | Charlie | 1         |
+
+
+Query -
+
+SELECT e.Name AS Employee, m.Name AS Manager
+FROM Employee e
+LEFT JOIN Employee m
+ON e.ManagerID = m.EmpID;
+
+
+Results -
+| Employee | Manager |
+| -------- | ------- |
+| Alice    | NULL    |
+| Bob      | Alice   |
+| Charlie  | Alice   |

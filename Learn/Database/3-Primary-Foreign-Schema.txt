@@ -1,0 +1,22 @@
+Primary Key - a primary key is a column that uniquely identifies each record in a table. no two rows can have a primary key
+Example : Roll no ---> Primary Key
+
+
+
+
+Foreign Key - a Foreign key is a column that links one table to another table.
+Example : Roll no in Marks table is a Foreign key, it connects marks to the correct students.
+
+
+
+
+
+database Schema - a Schema is the structure or design of a database. it tells what table exist, what columns they have, what keys are used.
+Example : like a blueprint of a building before construction
+
+Student table schema 
+Roll no (int, primary key)
+name (varchar)
+class (int)
+
+

@@ -1,0 +1,34 @@
+Sql injections - sql injection is a security vulnerability where an attacker tricks an application into executing unintended sql commands by inserting malicious input into a query. it happens when user input is directly combined with sql code without validation.
+
+why sql injection is dangerous
+an attacker may:
+---- bypass login authentication
+---- view confidential data
+---- modify or delete database records 
+---- gain full control over the database
+
+
+Simple concept example 
+application builds sql like this
+
+SELECT * FROM Users
+WHERE username = 'input' AND password = 'input';
+
+If user input is not handled safely, the database may interpret it as SQL code, not just data.
+
+Root Cause of SQL Injection
+---- user input is trusted blindly
+---- SQL queries are built using string concatenation
+---- No input validation or parameter binding
+
+
+types of sql injection
+1. authentication bypass - logs in without valid credentials
+2. data extraction - reads sensitive data
+3. data manipulation - updates or delete records
+4. blind sql injection - no error shown, attackers infers behavior
+
+
+SQL Injection is a security attack where malicious input alters SQL queries.
+It occurs due to improper input handling and can be prevented using prepared statements, input validation, and least privilege access.
+

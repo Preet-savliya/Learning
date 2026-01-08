@@ -1,0 +1,4 @@
+1. .NET Core MVC project Migerate to .NET Web API
+2. Resources to Migerate the project 
+3. what components will be best for making .NET Web API Project like in Frontend languages like html, react or angualr, etc + logging + exceptional handling + Backend and etc.
+4. Ask AI which is the best options and short options other then coding a project full code to migerate.

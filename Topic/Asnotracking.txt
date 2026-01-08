@@ -1,0 +1,82 @@
+AsNoTracking() in Entity Framework Core - AsNoTracking() is a method in EF Core that tells the DbContext not to track the entities returned by a query.
+-- Use it for read-only queries to improve performance.
+
+1. why use AsNoTracking()
+EF core tracks entities so it can detect changes and save them later. tracking has a small memory and performance cost, especially when querying many rows.
+-- with tracking: EF keeps a reference to every entity
+-- without tracking: EF just returns data, no tracking
+
+
+2. Syntax
+
+var students = context.Students
+    .AsNoTracking()
+    .ToList();
+
+-- students will not be tracked
+-- changing their properties wont be saved with SaveChanges()
+
+
+
+3. Example: performance comparison
+
+-- with tracking (default)
+var students = context.Students.ToList();
+students[0].Name = "Ali";
+context.SaveChanges();
+
+-- without tracking
+var students = context.Students
+    .AsNoTracking()
+    .ToList();
+
+students[0].Name = "Ali";
+context.SaveChanges(); // Nothing is saved
+
+❌ No tracking → Cannot update entity unless re-attached
+
+
+
+
+
+4. When to Use
+-- large read-only queries
+-- reporting or analytics
+-- queries where entities wont be modified
+
+❌ Don’t use for update/delete scenarios unless you attach the entity manually
+
+
+
+5. Combining with LINQ
+
+var students = await context.Students
+    .AsNoTracking()
+    .Where(s => s.Age >= 18)
+    .OrderBy(s => s.Name)
+    .ToListAsync();
+
+-- Works with filters, sorting, joins, Projections
+-- EF never tracks these entities
+
+
+
+
+6. Re-Attaching a No-Tracking Entity
+
+-- If you need to update a no-tracking entity:
+context.Students.Update(student);
+context.SaveChanges();
+
+-- or attach manually:
+context.Attach(student);
+context.Entry(student).Property(s => s.Name).IsModified = true;
+context.SaveChanges();
+
+
+
+
+Best Practices
+-- Use AsNoTracking() for read-only queries
+-- Combine with Select() to fetch only needed columns
+-- Avoid unnecessary tracking on large datasets

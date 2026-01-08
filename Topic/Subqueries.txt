@@ -1,0 +1,96 @@
+Subquery - Subquery is a query inside another query. it is used to retrieve data that will be used by the main query.
+
+types of Subquery
+1. Single Row Subquery - Returns only one value.
+
+Example., Employees earning more then average salary
+
+SELECT Name, Salary
+FROM Employee
+WHERE Salary > (
+    SELECT AVG(Salary)
+    FROM Employee
+);
+
+Subquery runs first
+Outer query uses the result
+
+
+
+2. Multiple Row Subquery - Returns Multiple values
+
+Example: Employees working in HR or IT
+
+SELECT Name
+FROM Employee
+WHERE DeptID IN (
+    SELECT DeptID
+    FROM Department
+    WHERE DeptName IN ('HR', 'IT')
+);
+
+
+Uses operators like:
+IN
+ANY
+ALL
+
+
+
+
+
+3. Correlated Subquery - Subquery depends on the outer query (runs once per row).
+
+Example: Highest-paid employee in each department
+
+SELECT Name, DeptID, Salary
+FROM Employee e
+WHERE Salary = (
+    SELECT MAX(Salary)
+    FROM Employee
+    WHERE DeptID = e.DeptID
+);
+
+
+
+
+
+4. Subquery in SELECT Clause - used to calculate values
+
+Example: Display total number of employees
+
+SELECT Name,
+       (SELECT COUNT(*) FROM Employee) AS TotalEmployees
+FROM Employee;
+
+
+
+
+5. Subquery in FROM Clause (Derived Table) - Acts like a temporary table.
+
+Example: Average salary per department
+
+SELECT DeptID, AVG(Salary)
+FROM (
+    SELECT DeptID, Salary
+    FROM Employee
+) AS DeptSalary
+GROUP BY DeptID;
+
+
+
+
+
+6. Exists Subquery - checks if rows exist.
+
+Example: Employees assigned to a department
+
+SELECT Name
+FROM Employee e
+WHERE EXISTS (
+    SELECT 1
+    FROM Department d
+    WHERE d.DeptID = e.DeptID
+);
+
+

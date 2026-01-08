@@ -1,0 +1,81 @@
+Filtering and Sorting in Web API - filtering allows clients to get only the records they need. sorting allows clients to order the results by a specific field.
+both are Usually implemented via query parameters.
+
+1. Example: URL with filtering and sorting
+
+GET /api/students?name=Alice&sortBy=name&sortOrder=asc&pageNumber=1&pageSize=10
+
+Query Parameters Explained:
+| Parameter    | Description                                 |
+| ------------ | ------------------------------------------- |
+| `name`       | Filter students whose name contains “Alice” |
+| `sortBy`     | Field to sort by (e.g., name, email)        |
+| `sortOrder`  | Order of sorting (`asc` or `desc`)          |
+| `pageNumber` | Current page number (pagination)            |
+| `pageSize`   | Number of items per page                    |
+
+2️⃣ Controller Example with EF Core
+
+[HttpGet]
+public IActionResult GetAll(
+    string? name = null,
+    string? email = null,
+    string sortBy = "name",
+    string sortOrder = "asc",
+    int pageNumber = 1,
+    int pageSize = 10)
+{
+    var query = context.Students.AsQueryable();
+
+    // Filtering
+    if (!string.IsNullOrEmpty(name))
+        query = query.Where(s => s.Name.Contains(name));
+
+    if (!string.IsNullOrEmpty(email))
+        query = query.Where(s => s.Email.Contains(email));
+
+    // Sorting
+    query = (sortBy.ToLower(), sortOrder.ToLower()) switch
+    {
+        ("name", "desc") => query.OrderByDescending(s => s.Name),
+        ("email", "asc") => query.OrderBy(s => s.Email),
+        ("email", "desc") => query.OrderByDescending(s => s.Email),
+        _ => query.OrderBy(s => s.Name) // default
+    };
+
+    // Pagination
+    var totalCount = query.Count();
+    var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+    var students = query
+        .Skip((pageNumber - 1) * pageSize)
+        .Take(pageSize)
+        .ToList();
+
+    var studentDtos = _mapper.Map<List<StudentDto>>(students);
+
+    var response = new
+    {
+        PageNumber = pageNumber,
+        PageSize = pageSize,
+        TotalPages = totalPages,
+        TotalCount = totalCount,
+        Data = studentDtos
+    };
+
+    return Ok(response);
+}
+
+3️⃣ Example Response
+
+{
+  "PageNumber": 1,
+  "PageSize": 10,
+  "TotalPages": 2,
+  "TotalCount": 12,
+  "Data": [
+    { "Id": 1, "Name": "Alice", "Email": "alice@mail.com" },
+    { "Id": 5, "Name": "Alice B", "Email": "aliceb@mail.com" }
+  ]
+}
+

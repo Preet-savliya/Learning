@@ -1,0 +1,67 @@
+Logging Levels - Logging levels are categories used to indicate the importance or severity of a log message. they help developers and system administrators filter logs, debug issues, and monitor applications effectively.
+
+In .NET Core, logging is typically done via the Microsoft.Extensions.Logging Namespace, supporting multiple logging providers (console, file, database, etc.).
+
+
+1. Common Logging Levels
+here's a list of standard logging levels from most detailed / verbose to most servere:
+
+| Level    | Severity    | Description                   | Example                                                              |
+| -------- | ----------- | ----------------------------- | -------------------------------------------------------------------- |
+| Trace    | Very Low    | Detailed debug info           | `logger.LogTrace("Entered GetUserById {Id}", id);`                   |
+| Debug    | Low         | Developer-focused info        | `logger.LogDebug("User retrieved: {@User}", user);`                  |
+| Info     | Medium      | General app flow              | `logger.LogInformation("User {UserId} logged in", userId);`          |
+| Warning  | Medium-High | Unexpected but non-critical   | `logger.LogWarning("Login with expired password {UserId}", userId);` |
+| Error    | High        | Operation failed              | `logger.LogError(ex, "Failed to save user {UserId}", userId);`       |
+| Critical | Very High   | Severe failure, may crash app | `logger.LogCritical(ex, "Database unavailable");`                    |
+
+
+
+2. Logging Example in .NET Core Web API
+
+[ApiController]
+[Route("api/[controller]")]
+public class UsersController : ControllerBase
+{
+    private readonly ILogger<UsersController> _logger;
+
+    public UsersController(ILogger<UsersController> logger)
+    {
+        _logger = logger;
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UserDto>> GetUser(int id)
+    {
+        _logger.LogTrace("GetUser method called with id={Id}", id);
+        _logger.LogDebug("Checking database for user with id={Id}", id);
+
+        try
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                _logger.LogWarning("User with id={Id} not found", id);
+                return NotFound();
+            }
+
+            _logger.LogInformation("User with id={Id} retrieved successfully", id);
+            return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving user with id={Id}", id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+}
+
+
+
+
+3. Logging levels Best Practices in C# / .NET Core
+1. Trace & Debug - use in development or staging, not in production unless needed for detailed troubleshooting.
+2. Information - use for General events, e.g., user login, API calls, transactions.
+3. Warning - Unexpected behavior or minor issues that dont stop the app, e.g., missing optional data.
+4. Error - Failures of functionality, exceptions, or failed operations.
+5. Critical - fatal system errors that require immediate attention.

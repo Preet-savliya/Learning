@@ -1,0 +1,130 @@
+Database - A database is like a super-organized storage system for information, so you can store, find, and manage data easily.
+
+Types of databases ?
+1. Relational databases (SQL) - this is the most common type of database. data is organized into tables with fixed rows and columns they are connected to each other using keys.
+
+Examples -  MySQL, PostgreSQL, Oracle, SQL Server.
+an excel spreadsheet where different sheets are linked together.
+
+2. NoSQL database (non -relational) - this are flexible. they do not use tables instead they stored data like folders, documents, or graphs. they are great for "Big Data" that changes quickly.
+
+Examples - MongoDB, Cassandra, Redis.
+a folder full of word documents and each documents can look a but different from the next.
+
+3. Distributed Databases - the data is not in one place. it is spread across different computers in different locations or even different countries. if one server fails, the other keep working. it also makes the app faster for users far away.
+
+example - a chain of coffee shops. they all have the same menu and records, but they are located in different cities.
+
+4. Cloud Database - instead of buying your own physical server, you rent space on a provider's server like amazon and google.
+example - amazon rds , Google Cloud Spanner.
+
+5. Centralized databases - in this Centralized databases all the data is stored in one single locations (one main computer). but in this the risk gets higher because if the main computer breaks, the whole system goes down.
+
+example - in a centralized banking database, your account information is not stored atr your local home branch. instead it lives on a central server owned by the bank.
+access : when you withdraw money from an ATM in a different city, that ATM sends a request to the central server.
+update : the central server Subtracts the money from your balance.
+consistency : Because there is only one central record, if you check your balance on your phone app a second later, it will show the updated amount immediately.
+
+University database - students grades, attendance, and tution records are stored on one campus server. Professors and students logs from different buildings to see the same data.
+
+6. Graph Databases - the graph database focus on the relationships between pieces of data. it is best for fraud detection and social networks. it is also type of NoSQL Database.
+
+Example : 
+the social network example
+Imagine you are building a simplified version of linkedin or facebook
+
+---- Nodes (the who) - these are ther entities like person, company, skill.
+---- Edges (the connection) - these are the lines connecting the nodes. like FRIENDS_WITH, WORKS_AT, HAS_SKILL.    
+---- Properties (the details) - key-value pairs attached to nodes or edges 
+                 ---- Node Property : "Alice", Age:30.
+                 ---- Edge Property : Since: "2015".
+
+
+Simple analogy
+
+Imagine a library:
+---- Books = data
+---- Shelves = tables
+---- Asking the librarian for a book = query
+
+
+
+
+
+
+
+
+Database Management System (DBMS) - DBMS is a software tool that helps us store, manage, and use data efficiently without messing things up.
+
+
+
+
+
+
+
+
+Data Model - A data model is a simple way to decide how data will be stored and connected inside a database.
+
+Real-life example :-
+---- Before building a house, you make a map/plan.
+---- Similarly, before creating a database, we create a data model.
+
+Types of Data Models
+1. Hierrchical Data Model
+2. Network Data Model
+3. Relational Data Model (Most Common)
+4. Object-Oriented Data Model
+
+1. Hierrchical Data Model
+---- Data is stored like a tree (parent -> child).
+---- one parent can have many children.
+
+Example :- 
+---- One class -> many students
+---- But One student -> only one class
+
+2. Network Data Model
+---- Data is Connected like a web
+---- A child can have more than one parent
+
+Example :-
+---- Students can join multiple clubs
+---- clubs can have many students
+
+3. Relational Data Model
+---- Data is stored in tables (rows and columns)
+
+Example :-
+---- Excel sheet
+---- Student table: Roll No | Name | Class | Marks
+
+This model is used in MySQL, SQL Server, Oracle, etc.
+
+4. Object-Oriented Data Model
+---- Data is stored as objects, like in OOP
+
+Example :-
+---- Student object : name, age, marks, Methods like CalculateGrade().
+
+Object-Oriented Data Model used when databases work closely with the object-Oriented Programming
+
+
+
+
+
+
+
+Database Abstraction - the major purpose of a database is to provide users with only the information they need, without exposing unnecessary details. the system hides the complicated technincal details of a database and shows you only what you need to see.
+
+the 3 level of Abstraction
+1. Physical Level (the How) - this is the lowest level. it deals with how the data is actually stored on the hard drive (blocks, bytes and memory).
+
+example : in car engine the pistons moving, the spark plugs firing and the gas flowing most drivers dont understand this part.
+
+2. Logical Level (the what) - this level describes what data is stored and what the relationships are. it defines the tables, columns and rules. Represents what data is stored in the database and the relationships among that data.
+
+example : how the engine connects to the wheels and how the brakes works
+
+3. View level or external level (the "you") - this is the highest level. it shows only the parts of the database that specific user is allowed to see.
+
+example : there is a bank app on your phone. you see your balance and your name, but you dont see the others people's balances.

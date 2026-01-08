@@ -1,0 +1,157 @@
+Request–Response Structure in Web API (ASP.NET Core)
+-- The Request–Response Structure defines how a client sends data to the server and how the server sends data back. web APIs follow the HTTP protocol.
+
+1. HTTP Request Structure 
+an HTTP request has 4 main parts:
+
+HTTP Method + URL
+Headers
+Body (optional)
+Query / Route Parameters
+
+
+1. HTTP Method - defines the actions
+
+| Method | Purpose        |
+| ------ | -------------- |
+| GET    | Read data      |
+| POST   | Create data    |
+| PUT    | Update data    |
+| PATCH  | Partial update |
+| DELETE | Delete data    |
+
+Example:
+GET /api/students/5
+
+2. URL (Endpoint)
+https://example.com/api/students/5
+
+-- api/students → Resource
+-- 5 → Route parameter
+
+3. Headers - Metadata about the request:
+Content-Type: application/json
+Authorization: Bearer <token>
+Accept: application/json
+
+Used for:
+-- Authentication
+-- Content format
+-- Caching
+-- Versioning
+
+
+
+4. Query Parameters
+-- Used for filtering, paging, sorting:
+
+GET /api/students?page=1&size=10
+
+public IActionResult Get([FromQuery] int page, int size)
+
+
+
+
+5. Request Body (POST / PUT)
+-- Sent as JSON:
+{
+  "name": "Ahmed",
+  "age": 20
+}
+Mapped automatically to a C# model.
+
+
+
+
+
+
+
+
+
+
+
+
+2. HTTP Response Structure
+-- an HTTP response has 3 main parts:
+
+Status Code
+Headers
+Body
+
+
+1. Status Codes
+| Code                      | Meaning            |
+| ------------------------- | ------------------ |
+| 200 OK                    | Success            |
+| 201 Created               | Resource created   |
+| 204 No Content            | Success, no body   |
+| 400 Bad Request           | Validation error   |
+| 401 Unauthorized          | Not authenticated  |
+| 403 Forbidden             | No permission      |
+| 404 Not Found             | Resource not found |
+| 500 Internal Server Error | Server error       |
+
+
+2. Response Headers
+Content-Type: application/json
+Location: /api/students/10
+
+
+3. Response Body (JSON)
+{
+  "id": 10,
+  "name": "Ahmed",
+  "age": 20
+}
+
+
+
+
+
+
+
+3. ASP.NET core example
+controller action
+
+[HttpPost]
+public IActionResult Create(StudentDto dto)
+{
+    if (!ModelState.IsValid)
+        return BadRequest(ModelState);
+
+    return CreatedAtAction(nameof(GetById),
+        new { id = 1 }, dto);
+}
+
+
+
+4. Standard API Response Format 
+{
+  "success": true,
+  "message": "Student created successfully",
+  "data": {
+    "id": 1,
+    "name": "Ahmed"
+  }
+}
+
+Error Response
+{
+  "success": false,
+  "errors": [
+    "Name is required",
+    "Age must be greater than 0"
+  ]
+}
+
+
+
+
+
+5. Model Binding & Validation Flow
+-- Client sends request
+-- ASP.NET core binds JSON --> C# object
+-- Validation occurs
+-- controller action executes
+-- Response is returned
+

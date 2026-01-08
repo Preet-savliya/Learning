@@ -1,0 +1,55 @@
+Abstraction - Abstraction means hiding complex details and showing only what is necessary. in C# Abstraction is done using abstract classes and interfaces. The abstract keyword is used for classes and methods
+
+📌 Abstraction = Showing only essential features, hiding complexity
+
+Abstract class: is a restricted class that cannot be used to create objects (to access it, it must be inherited from another class).
+Abstract method: can only be used in an abstract class, and it does not have a body. The body is provided by the derived class (inherited from).
+
+abstract class Vehicle   // abstract class
+{
+    public abstract void Start();   // abstract method (no body)
+
+    public void Stop()              // regular method
+    {
+        Console.WriteLine("Vehicle stopped");
+    }
+}
+
+class Car : Vehicle
+{
+    public override void Start()   // implementing abstract method
+    {
+        Console.WriteLine("Car started");
+    }
+}
+
+Usage: 
+
+Car c = new Car();
+c.Start();   // Car started
+c.Stop();    // Vehicle stopped
+
+2. interfaces 
+
+interface IAnimal
+{
+    void MakeSound();
+}
+
+class Dog : IAnimal
+{
+    public void MakeSound()
+    {
+        Console.WriteLine("Dog barks");
+    }
+}
+
+Why Use Abstraction?
+---- Hides unnecessary details
+---- Only exposes what’s important
+---- Makes code easier to use and maintain
+
+Real-Life Examples :-
+---- Remote control → you press buttons, don’t see internal wiring
+---- ATM machine → you withdraw money, don’t see bank server processes
+---- Car → you turn the key, don’t see how engine works

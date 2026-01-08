@@ -1,0 +1,78 @@
+API Naming Conventions
+Good naming conventions make your API consistent, readable, and intuitive.
+
+1️⃣ Use Nouns, Not Verbs
+-- Endpoints represent resources (entities), not actions.
+-- Use HTTP methods to define the action (GET, POST, PUT, DELETE).
+
+Example:
+| HTTP Method | URL               | Action                   |
+| ----------- | ----------------- | ------------------------ |
+| GET         | `/api/students`   | Get all students         |
+| GET         | `/api/students/1` | Get student with ID 1    |
+| POST        | `/api/students`   | Create a new student     |
+| PUT         | `/api/students/1` | Update student with ID 1 |
+| DELETE      | `/api/students/1` | Delete student with ID 1 |
+
+❌ Avoid /api/getStudents or /api/createStudent
+
+2️⃣ Use Plural Nouns for Collections
+
+Plural makes it clear the endpoint returns multiple items.
+
+Correct:
+GET /api/students
+POST /api/courses
+
+Incorrect:
+GET /api/student
+POST /api/course
+
+
+3️⃣ Use Hierarchy for Related Resources
+Use nested routes for resources that belong to another resource.
+
+Example: Courses of a student:
+GET /api/students/1/courses        // Get all courses of student 1
+POST /api/students/1/courses       // Add a course to student 1
+
+4️⃣ Filtering, Sorting, Paging via Query Parameters
+Use query strings for filtering, sorting, and pagination instead of creating new endpoints.
+
+Example:
+GET /api/students?age=18&sort=name&page=2&pageSize=10
+
+5️⃣ Version Your API
+Include the version in the URL to support backward compatibility.
+
+Example:
+GET /api/v1/students
+GET /api/v2/students
+
+6️⃣ Use Hyphens, Not Underscores
+Hyphens improve readability in URLs.
+
+Correct:
+GET /api/student-records
+
+Incorrect:
+GET /api/student_records
+
+7️⃣ Consistent Naming Rules
+----- Lowercase in URLs.
+----- Avoid spaces or special characters.
+----- Use nouns for resources.
+----- Use query parameters for optional filters.
+
+Example Full API Naming
+| Action                  | HTTP Method | Endpoint                     |
+| ----------------------- | ----------- | ---------------------------- |
+| Get all students        | GET         | `/api/v1/students`           |
+| Get student by ID       | GET         | `/api/v1/students/1`         |
+| Create student          | POST        | `/api/v1/students`           |
+| Update student          | PUT         | `/api/v1/students/1`         |
+| Delete student          | DELETE      | `/api/v1/students/1`         |
+| Get student’s courses   | GET         | `/api/v1/students/1/courses` |
+| Add a course to student | POST        | `/api/v1/students/1/courses` |
+
+

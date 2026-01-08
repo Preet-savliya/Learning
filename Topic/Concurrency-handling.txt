@@ -1,0 +1,109 @@
+Concurrency Handling - Concurrency happens when multiple users try to update the same data at the same time. EF core provides mechanisms to detect conflicts and prevent overwriting changes accidentally.
+
+⚠️ Without concurrency handling, last update wins, which can cause data loss.
+
+1. Types of Concurrency
+
+1. Optimistic Concurrency (most common)
+-- Assumes conflicts are rare
+-- EF Core checks before saving if the data changed
+-- Uses a version column (e.g., RowVersion)
+
+
+2. Pessimistic Concurrency
+-- Locks the row in the database until operation finishes
+-- Rarely used in EF Core (requires raw SQL / database locking)
+
+
+
+
+
+2. Optimistic Concurrency in EF Core
+Step 1: Add a RowVersion column
+
+public class Student
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+
+    [Timestamp] // Marks property for concurrency check
+    public byte[] RowVersion { get; set; }
+}
+
+-- EF will check RowVersion during updates
+-- if it changed, EF throws DbUpdateConcurrencyException
+
+
+
+Step 2: Update Entity with Concurrency Check
+
+try
+{
+    student.Name = "Ahmed";
+    context.SaveChanges();
+}
+catch (DbUpdateConcurrencyException ex)
+{
+    Console.WriteLine("Concurrency conflict detected!");
+    // Handle conflict (reload, merge, alert user)
+}
+
+
+
+
+
+
+3. Handling Concurrency Conflicts
+
+-- Option 1: Client Wins (Overwrite)
+
+catch (DbUpdateConcurrencyException ex)
+{
+    foreach (var entry in ex.Entries)
+    {
+        entry.OriginalValues.SetValues(entry.GetDatabaseValues());
+    }
+    context.SaveChanges();
+}
+
+-- Your changes overwrite database values
+
+
+Option 2: Store Wins (Discard Client Changes)
+
+catch (DbUpdateConcurrencyException ex)
+{
+    foreach (var entry in ex.Entries)
+    {
+        entry.Reload(); // reload DB values
+    }
+}
+
+-- Client discards changes, sees latest database data
+
+
+Option 3: Merge Changes
+
+-- Read both client and DB values
+-- Merge manually (e.g., keep some fields, overwrite others)
+
+
+
+
+
+
+4. Querying with Concurrency Token
+-- EF automatically adds the RowVersion check in the WHERE clause:
+UPDATE Students
+SET Name = 'Ahmed'
+WHERE Id = 1 AND RowVersion = 0x000001
+
+-- If no rows affected → concurrency exception
+
+
+
+5. Best Practices
+-- Use [Timestamp] / RowVersion for critical data
+-- Always catch DbUpdateConcurrencyException
+-- Notify users if their changes conflict
+-- Keep transactions short to reduce conflicts

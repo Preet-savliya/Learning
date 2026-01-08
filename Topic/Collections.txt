@@ -1,0 +1,185 @@
+Collections - Collections is a container that stores multiple objects in memory.
+Collections are more flexible than arrays because: they can grow dynamically and they provide many built in methods for searching, sorting, and manipulating data.
+
+Types of Collections:
+C# Collections are mainly in System.Collections and System.Collections.Generic namespaces.
+
+1. Non-Generic Collections
+---- Can store any type of object
+---- Defined in System.Collections
+
+2. Generic Collections
+---- Type Safe (store specific types)
+---- defined in System.Collections.Generic
+---- Recommended for most real-world projects.
+
+3. Specialized Collections 
+---- SortedList<TKey, TValue> - like dictionary but sorted by key
+---- LinkedList<T> - Doubly Linked list
+---- ObservableCollection<T> - For UI Updates in WPF
+
+
+
+1. Non-Generic Collections
+Example;
+
+1. ArrayList - like an array but dynamic
+
+
+using System;
+using System.Collections;
+
+class Program
+{
+    static void Main()
+    {
+        ArrayList list = new ArrayList();
+        list.Add(10);
+        list.Add("Hello");
+        list.Add(3.14);
+
+        foreach (var item in list)
+        {
+            Console.WriteLine(item);
+        }
+    }
+}
+
+
+Output:
+10
+Hello
+3.14
+
+
+2. Hashtable - Stores key-value pairs (like a dictionary).
+
+using System;
+using System.Collections;
+
+class Program
+{
+    static void Main()
+    {
+        Hashtable table = new Hashtable();
+        table.Add(1, "Apple");
+        table.Add(2, "Banana");
+
+        Console.WriteLine(table[1]);
+    }
+}
+
+
+Output: Apple
+
+
+
+2. Generic Collections:
+Example;
+
+1. List<T> – Like ArrayList but type-safe
+
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        List<int> numbers = new List<int>();
+        numbers.Add(20);
+        numbers.Add(30);
+        numbers.Add(40);
+
+        foreach(var num in numbers)
+        {
+            Console.WriteLine(num);
+        }
+    }
+}
+
+Output:
+20
+30
+40
+
+
+
+2. Dictionary<TKey, TValue> – Key-value pairs
+
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        Dictionary<int, string> dic = new Dictionary<int, string>();
+        dic.Add(1, "Alice");
+        dic.Add(2, "Bob");
+
+
+        Console.WriteLine(dic[2]);
+    }
+}
+
+
+Output: Bob
+
+
+3. Queue<T> – First-In-First-Out (FIFO)
+
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        Queue<string> queue = new Queue<string>();
+        queue.Enqueue("A");
+        queue.Enqueue("B");
+        Console.WriteLine(queue.Dequeue());
+    }
+}
+
+Output: A
+
+
+
+4. Stack<T> – Last-In-First-Out (LIFO)
+
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        Stack<int> stack = new Stack<int>();
+        stack.Push(10);
+        stack.Push(20);
+        Console.WriteLine(stack.Pop());
+    }
+}
+
+Output: 20
+
+
+5. HashSet<T> – Stores unique elements only
+
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        HashSet<int> set = new HashSet<int>();
+        set.Add(1);
+        set.Add(1);
+        Console.WriteLine(set.Count);
+    }
+}
+
+Output: 1

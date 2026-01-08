@@ -1,0 +1,183 @@
+1.1 What is C#?
+
+Object-oriented programming language
+Used for desktop, web, mobile, cloud, APIs
+Runs on .NET Framework / .NET Core
+
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("Hello World");
+    }
+}
+
+
+
+
+
+
+
+
+1.2 Variables & Data Types
+
+A variable is a named memory location that stores data.
+Every variable has a type
+Type decides what data it can hold
+Prevents runtime errors
+
+Types of Data Types
+Value Types
+
+Store actual value directly.
+
+int
+double
+bool
+char
+struct
+
+Reference Types
+
+Store memory address (reference).
+
+string
+class
+array
+object
+
+Why this matters in real projects
+
+Value types are faster
+Reference types are flexible
+Important for performance and memory usage in ERP systems
+
+int age = 20;
+double salary = 25000.50;
+string name = "John";
+bool isActive = true;
+
+
+
+
+
+
+
+
+
+1.3 Operators - Operators perform operations on data.
+Categories- Arithmetic (+ - * /) , Relational (> < ==),  Logical (&& || !),   Assignment (= += -=)
+
+In real applications
+
+Used for calculations (salary, tax)
+Used for conditions (user role, permissions)
+Used in validations
+
+int a = 10, b = 5;
+int sum = a + b;
+bool result = a > b;
+
+
+
+
+
+
+
+
+
+1.4 Control statements (Decision Making) - Programs are useless without decision making.
+
+if-else - Used when program must choose based on condition.
+Example use cases:
+
+If user is admin → show admin panel
+If stock < minimum → alert
+
+if (age>=18)
+{
+    Console.WriteLine("Adult");
+}
+else
+{
+    Console.WriteLine("Minor");
+}
+
+
+
+Loops - Used when work must repeat.
+
+Types:
+
+for → known count
+while → unknown count
+foreach → collections
+
+ERP relevance
+
+Loop through employees
+Loop through transactions
+Generate reports
+
+
+for (int i = 1; i <= 5; i++)
+{
+    Console.WriteLine(i);
+}
+
+
+
+
+
+
+
+
+
+1.5 Methods - A method is a reusable block of code.
+Why methods are important
+
+Avoid repetition
+Improve readability
+Easy maintenance
+
+In ERP:
+
+CalculateSalary()
+GenerateInvoice()
+ValidateUser()
+
+static int Add(int a, int b)
+{
+    return a + b;
+}
+
+
+
+1.6 Arrays & Collections (Handling Multiple Data)
+
+Array -
+Fixed size
+Same data type
+
+Collections -
+Dynamic size
+Powerful operations
+
+Common collections:
+
+List -
+Dictionary
+Queue
+Stack
+
+ERP usage -
+List of employees
+Dictionary of permissions
+Queue for background jobs
+
+int[] numbers = {1,2,3};
+
+List<string> names = new List<string>();
+names.Add("Alice");

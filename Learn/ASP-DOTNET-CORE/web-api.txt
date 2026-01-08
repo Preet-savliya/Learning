@@ -1,0 +1,10 @@
+what is web API ?
+
+Bridge between frontend (Angular) & Database (SQL) - Angular ----> .Net Web API -----> SQL.
+
+[HttpGet]
+public List<Employee> GetEmployees()
+{
+    return employeeList;
+}
+

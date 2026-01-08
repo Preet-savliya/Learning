@@ -1,0 +1,502 @@
+1. Joins - joins are used to combine rows from two or more tables based on a related column between them. when you work with relational databases, data is often stored across different tables. joins allow you to retrieve data that spans multiple tables.
+
+
+
+
+
+INNER Join
+---- the inner join returns only the rows where is a match in both tables.
+---- use case : you use this when you only want records that have corresponding data in both tables.
+
+Example :
+
+we have two tables:
+
+1. Employees
+
+| EmpID | EmpName | DeptID |
+| ----- | ------- | ------ |
+| 1     | Alice   | 101    |
+| 2     | Bob     | 102    |
+| 3     | Charlie | 103    |
+
+2. Departments
+
+| DeptID | DeptName |
+| ------ | -------- |
+| 101    | HR       |
+| 102    | IT       |
+| 104    | Finance  |
+
+to get the Employees names and the Departments names where they work, we can use an Inner Join :
+
+sql query :
+
+SELECT Employees.EmpName, Departments.DeptName
+FROM Employees
+INNER JOIN Departments
+ON Employees.DeptID = Departments.DeptID;
+
+Result :
+
+| EmpName | DeptName |
+| ------- | -------- |
+| Alice   | HR       |
+| Bob     | IT       |
+
+Explanation:
+Only Alice and Bob are shown because they have matching DeptID values in both tables. Charlie is excluded because their department DeptID doesn't exist in the Departments table.
+
+
+
+
+
+
+
+LEFT JOIN (LEFT OUTER JOIN) - the left join returns all the rows from the left table and the matching rows from the right table. if there is no match, it returns NULL values for columns from the right table.
+
+Example :
+
+sql query :
+
+SELECT Employees.EmpName, Departments.DeptName
+FROM Employees
+LEFT JOIN Departments
+ON Employees.DeptID = Departments.DeptID;
+
+Result :
+
+| EmpName | DeptName |
+| ------- | -------- |
+| Alice   | HR       |
+| Bob     | IT       |
+| Charlie | NULL     |
+
+Explanation:
+All employees are included in the result. Since Charlie does not have a matching DeptID in the Departments table, his DeptName is shown as NULL.
+
+
+
+
+
+
+
+RIGHT JOIN (RIGHT OUTER JOIN) - The RIGHT JOIN is the opposite of the LEFT JOIN. it returns all the rows from the right table and the matching rows from the left table. if there is no match, it returns NULL for columns from the left table.
+
+Example :
+
+sql query :
+
+SELECT Employees.EmpName, Departments.DeptName
+FROM Employees
+RIGHT JOIN Departments
+ON Employees.DeptID = Departments.DeptID;
+
+Results :
+
+| EmpName | DeptName |
+| ------- | -------- |
+| Alice   | HR       |
+| Bob     | IT       |
+| NULL    | Finance  |
+
+Explanation:
+All departments are included. Since the Departments table has a department (Finance) with no matching employee, we get a NULL for EmpName.
+
+
+
+
+
+
+
+FULL OUTER JOIN - the FULL OUTER JOIN returns all the rows when there is a match in either of the tables. if there is no match, it returns NULL for columns from the table without match.
+
+Example :
+
+sql query :
+
+SELECT Employees.EmpName, Departments.DeptName
+FROM Employees
+FULL OUTER JOIN Departments
+ON Employees.DeptID = Departments.DeptID;
+
+Results :
+
+| EmpName | DeptName |
+| ------- | -------- |
+| Alice   | HR       |
+| Bob     | IT       |
+| Charlie | NULL     |
+| NULL    | Finance  |
+
+Explanation:
+This join includes all rows from both tables. If there's no match in one of the tables, you get NULL values for that table's columns.
+
+
+
+
+
+
+2. Subqueries (Nested Queries)
+
+A subquery is a query within another query. it can be used in SELECT, INSERT, UPDATE, or DELETE statements to help break down complex queries.
+
+there are two types of subqueries:
+1. scalar subqueries - Return a single value.
+2. multi-rows subqueries - return multiple rows or a list of values.
+
+Example 1: scalar subquery 
+A scalar subquery returns a single value for example you might want to find the employees who can earn more than the average salary.
+Assume we have an Employees table with the following columns:
+
+| EmpID | EmpName | Salary |
+| ----- | ------- | ------ |
+| 1     | Alice   | 50000  |
+| 2     | Bob     | 60000  |
+| 3     | Charlie | 70000  |
+
+Now, let's find employees whose salary is higher than the average salary:
+
+sql query :
+
+SELECT EmpName
+FROM Employees
+WHERE Salary > (SELECT AVG(Salary) FROM Employees);
+
+Explanation:
+The subquery (SELECT AVG(Salary) FROM Employees) calculates the average salary, and the outer query fetches the employees with a salary greater than that average.
+The result will be: Bob and Charlie because their salaries are above the average.
+
+
+
+Example 2: Multi-Row subquery
+multi-row subquery returns multiple values. For example, if you want to find all employees working in departments where the DeptID is 101 or 102:
+
+SELECT EmpName
+FROM Employees
+WHERE DeptID IN (SELECT DeptID FROM Departments WHERE DeptName IN ('HR', 'IT'));
+
+Explanation:
+The subquery (SELECT DeptID FROM Departments WHERE DeptName IN ('HR', 'IT')) returns the DeptID values for departments HR and IT.
+The outer query then selects all employees whose DeptID is either 101 or 102.
+
+
+
+
+
+
+
+
+3. Correlated Subqueries - A Correlated subquery is a subquery that references columns from the outer query. it is evaluated once for each row processed by the outer query.
+
+Example of Correlated subquery :
+Suppose you want to find employees whose salary is higher than the average salary in their respective department. We assume there's an Employees table and a Departments table.
+
+sql query :
+
+SELECT EmpName, Salary
+FROM Employees E
+WHERE Salary > (SELECT AVG(Salary) FROM Employees WHERE DeptID = E.DeptID);
+
+Explanation:
+The subquery SELECT AVG(Salary) FROM Employees WHERE DeptID = E.DeptID is correlated because it uses E.DeptID from the outer query.
+For each employee, the subquery is executed to calculate the average salary of that specific department.
+
+
+
+
+
+
+
+
+1. Unique constraint - the Unique constraint ensures that all values in a column are distinct. no two rows can have the same value in the columns that are part of a UNIQUE constraint.
+Use case: you use this when you need to make sure that no two rows have the same value in a column, but it allows NULL values
+
+Example of UNIQUE :
+
+sql query :
+
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY,
+    UserName VARCHAR(100),
+    Email VARCHAR(100) UNIQUE
+);
+
+in this case the email column is constraint to be unique meaning no two users can have the same email address.
+
+Inserting Data:
+
+INSERT INTO Users (UserID, UserName, Email)
+VALUES (1, 'Alice', 'alice@example.com');  -- Success
+
+INSERT INTO Users (UserID, UserName, Email)
+VALUES (2, 'Bob', 'bob@example.com');     -- Success
+
+INSERT INTO Users (UserID, UserName, Email)
+VALUES (3, 'Charlie', 'alice@example.com');  -- Error: Duplicate Email
+
+Explanation: The third insert will fail because the email alice@example.com already exists in the table.
+
+
+
+
+
+
+
+2. CHECK constraint - the CHECK constraint is used to ensure that the values in a column meet a specific condition or rule. it checks whether a value satisfies the condition defiend in the constraint.
+Use case - you use this constraint when you want to enforce rules like age being greater than 18 or ensuring that only positive numbers are stored in a column.
+
+Example of CHECK:
+Suppose we have a table Employees, and we want to ensure that the age of each employee is greater than 18.
+
+sql query :
+
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    EmployeeName VARCHAR(100),
+    Age INT CHECK (Age > 18)
+);
+
+Here, the CHECK constraint ensures that Age must be greater than 18.
+
+Inserting Data :
+
+INSERT INTO Employees (EmployeeID, EmployeeName, Age)
+VALUES (1, 'Alice', 25);  -- Success
+
+INSERT INTO Employees (EmployeeID, EmployeeName, Age)
+VALUES (2, 'Bob', 17);    -- Error: Age must be greater than 18
+
+Explanation: The second insert will fail because Bob's age (17) does not meet the condition of the CHECK constraint (Age > 18).
+
+
+
+
+
+
+
+3. DEFAULT constraint - the DEFAULT constraint is used to assign a DEFAULT value to a column when a value is not explicity provided during the insertion of a record.
+Use case - this is useful when you want a column to automatically have a default value if no value is specified 
+
+Example of DEFAULT :
+suppose we have a table Products and want the stock column to have a default value of 10 if no value is provided during insertion 
+
+sql query :
+
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(100),
+    Stock INT DEFAULT 10
+);
+
+Here, the Stock column will automatically be set to 10 if no value is provided.
+
+Inserting Data :
+
+INSERT INTO Products (ProductID, ProductName)
+VALUES (1, 'Laptop');  -- Success, Stock will be set to 10 by default
+
+INSERT INTO Products (ProductID, ProductName, Stock)
+VALUES (2, 'Smartphone', 50);  -- Success, Stock is explicitly set to 50
+
+Explanation: In the first insert, we didn’t specify the Stock value, so it defaults to 10. In the second insert, the Stock value was explicitly provided as 50.
+
+
+
+
+
+
+
+4. Combining constraints - you can also combine multiple constraints on a single column or table. for example, you can have a column that is both UNIQUE and has a DEFAULT value.
+
+Example :
+
+sql query :
+
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    EmployeeName VARCHAR(100),
+    Email VARCHAR(100) UNIQUE,
+    Salary DECIMAL(10, 2) CHECK (Salary > 0) DEFAULT 30000
+);
+
+Here:
+
+The Email column has the UNIQUE constraint, ensuring all emails are distinct.
+The Salary column has the CHECK constraint to ensure salaries are positive.
+The Salary column also has a DEFAULT value of 30000, which will be used if no value is provided
+
+
+
+
+
+
+
+5. Functions :
+
+functions are predefined or custom operations that return a result based on some input. They help you process data in queries. SQL has built-in functions like COUNT(), SUM(), AVG(), etc., and you can also create your own custom functions.
+
+Example of a built-in function:
+If you want to find the total number of rows in a table:
+
+sql query :
+
+SELECT COUNT(*) FROM employees;
+
+Example of a custom function:
+If you want to create a function to calculate the age based on a birth date, you'd create a custom function in SQL, depending on the database you're using.
+
+
+
+
+
+6. Triggers (in SQL) -  A trigger in SQL is an automatic action that occurs when a certain event (like insert, update, or delete) happens on a table. think of a trigger like a rule that says : "when something happens to this table, do this automatically."
+
+Example of a trigger:
+If you want to automatically record the date and time whenever a new employee is added to the table, you could use a trigger:
+
+sql query :
+
+CREATE TRIGGER before_insert_employee
+BEFORE INSERT ON employees
+FOR EACH ROW
+SET NEW.created_at = NOW();
+
+
+
+
+7. views (in SQL) - A view in SQL is a saved query that you can use like a table. It's a way of storing a complex SELECT query that you can reference later. Views don't store data themselves; they just display data from one or more tables, based on the query.
+
+Example of a view:
+If you want to create a view that shows all employees and their department names from two different tables (employees and departments), you could do something like this:
+
+
+sql query :
+
+CREATE VIEW employee_department AS
+SELECT employees.name, departments.department_name
+FROM employees
+JOIN departments ON employees.department_id = departments.id;
+
+Now, every time you want to see the employee names with their department, you can just use:
+
+SELECT * FROM employee_department;
+
+This way, you're reusing complex queries without having to write them out again.
+
+
+
+
+
+
+
+
+
+
+
+
+
+8. Query Optimization - query Optimization is the process of improving the performance of a SQL query so that it runs faster and uses fewer resources (like CPU and memory). The goal is to make sure your database responds quickly, especially when dealing with large amounts of data.
+
+How does query Optimization work ?
+When you write a query, there are different ways to execute it. Some ways might be faster than others, even though they give the same result. Query optimization finds the best way to run a query by considering things like:
+Indexes (to find data faster)
+Join strategies (how to combine multiple tables efficiently)
+Using the right conditions (e.g., filtering rows early in the query)
+
+Simple Example:
+Imagine you have a table with millions of records, and you want to find the data of a specific customer by their ID:
+
+Unoptimized Query:
+
+SELECT * FROM customers WHERE customer_id = 123;
+
+This works fine, but if your customers table is huge, the database might take a long time to scan through every row to find that customer.
+
+Optimized Query:
+You can add an index to the customer_id column, which is like creating a quick reference book for the database to find data faster.
+
+CREATE INDEX idx_customer_id ON customers (customer_id);
+
+Now, when you run the same query:
+SELECT * FROM customers WHERE customer_id = 123;
+
+The database will use the index to jump directly to the correct row, instead of scanning every row in the table. This makes the query much faster.
+
+Basic Query Optimization Tips:
+
+Use Indexes: Create indexes on columns that are frequently searched or used in joins (like customer_id).
+
+Avoid SELECT: Only select the columns you actually need. For example:
+
+SELECT name, email FROM customers WHERE customer_id = 123;
+
+This avoids pulling unnecessary data.
+
+Use WHERE Clauses Efficiently: Filter your data as early as possible in the query to reduce the amount of data being worked with.
+
+Use Joins Properly: If you're joining tables, make sure you use the most efficient join type (like INNER JOIN instead of OUTER JOIN when possible) and join on indexed columns.
+
+Limit the Amount of Data: If you only need a small set of rows (e.g., the top 10 customers), use the LIMIT clause:
+
+SELECT * FROM customers LIMIT 10;
+
+Avoid Complex Subqueries: Sometimes, breaking down a complex query into smaller, simpler queries can improve performance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Important SQL topics 
+
+| Topic    | ERP Use         |
+| -------- | --------------- |
+| SELECT   | Data dikhana    |
+| INSERT   | New record      |
+| UPDATE   | Data change     |
+| DELETE   | Data delete     |
+| JOIN     | Multiple tables |
+| WHERE    | Filter          |
+| GROUP BY | Reports         |
+
+
+Example :
+
+SELECT Name, Salary FROM Employee WHERE Dept = 'Production';
+
+
+
+
+
+
+
+
+
+
+Stored Procedures -
+Precompiled SQL logic
+Faster
+Secure
+
+Used in ERP for:
+Reports
+Financial calculations
+
+CREATE PROCEDURE GetEmployees
+AS
+BEGIN
+   SELECT * FROM Employee
+END
+
+
+
+
+

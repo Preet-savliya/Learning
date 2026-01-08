@@ -1,0 +1,121 @@
+DTOs (Data Transfer Objects) in Web API / EF Core
+DTOs are simple objects used to transfer data between layers, especially between API and client, without exposing your internal entities.
+Think of DTOs as a safe, lightweight copy of your data for communication.
+
+
+1️⃣ Why Use DTOs?
+---- Security - Don’t expose database entities directly (avoid sensitive fields like passwords)
+---- Decoupling - Client is not tightly bound to database schema
+---- Performance - Send only necessary fields
+---- Validation - DTOs can have specific rules for API requests
+---- Flexibility - API shape can change independently of database
+
+
+2️⃣ Example: Entity vs DTO
+Entity (EF Core)
+
+public class Student
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string PasswordHash { get; set; } // Sensitive
+}
+
+DTO
+
+public class StudentDto
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+}
+
+Notice: PasswordHash is not exposed in the DTO
+
+
+
+3️⃣ Request DTO vs Response DTO
+
+Request DTO
+-- Data sent from client to API
+-- Usually has validation attributes
+
+public class CreateStudentDto
+{
+    [Required]
+    [MaxLength(50)]
+    public string Name { get; set; }
+
+    [EmailAddress]
+    public string Email { get; set; }
+}
+
+Response DTO
+-- Data sent from API to client
+-- Can include only fields the client needs
+
+public class StudentResponseDto
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+
+
+
+4️⃣ Mapping DTOs to Entities
+Manual Mapping
+
+var student = new Student
+{
+    Name = dto.Name,
+    Email = dto.Email
+};
+
+Mapping Entity → DTO
+
+var dto = new StudentDto
+{
+    Id = student.Id,
+    Name = student.Name,
+    Email = student.Email
+};
+
+
+AutoMapper (Recommended for Large Projects)
+
+var config = new MapperConfiguration(cfg =>
+{
+    cfg.CreateMap<Student, StudentDto>();
+    cfg.CreateMap<CreateStudentDto, Student>();
+});
+
+IMapper mapper = config.CreateMapper();
+var studentDto = mapper.Map<StudentDto>(student);
+
+
+5️⃣ Controller Example Using DTO
+
+[HttpPost]
+public IActionResult Create(CreateStudentDto dto)
+{
+    var student = new Student
+    {
+        Name = dto.Name,
+        Email = dto.Email
+    };
+
+    context.Students.Add(student);
+    context.SaveChanges();
+
+    var response = new StudentDto
+    {
+        Id = student.Id,
+        Name = student.Name,
+        Email = student.Email
+    };
+
+    return CreatedAtAction(nameof(GetById), new { id = student.Id }, response);
+}
+
+

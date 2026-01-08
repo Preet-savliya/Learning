@@ -1,0 +1,96 @@
+1. .NET SDK (Software development kit) - the .Net SDK is the best set of tools you install to develop .Net applications. it includes:
+---- the .Net runtime (to run app)
+---- compilers (c#, F#, VB)
+---- core libraries (like System.Collections, System.IO, etc)
+---- CLI tools (for building, running, publishing apps)
+
+purpose of .Net SDK - you need the SDK to create, build, run, and publish .NET apps.
+
+Example: Installing .NET 10 SDK
+
+# Check installed SDKs
+dotnet --list-sdks
+
+# Download from official site
+https://dotnet.microsoft.com/en-us/download/dotnet/10.0
+
+Key point:
+You need the SDK, but end users only need the runtime to run your app.
+
+
+
+2. NuGet (Package Manager) - NuGet is the Package Manager for .Net think of it npm for javascript or pip for python.
+---- Package can be libraries, tools, or templates
+---- Package are distributed via NuGet.org
+---- Project reference Package in their .csproj file
+
+Example: Using NuGet Packages
+
+<!-- In MyApp.csproj -->
+<ItemGroup>
+  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
+  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
+</ItemGroup>
+
+Common NuGet operations (CLI)
+
+# Install a package
+dotnet add package Newtonsoft.Json
+
+# Remove a package
+dotnet remove package Newtonsoft.Json
+
+# Restore packages (downloads from NuGet.org)
+dotnet restore
+
+# List installed packages
+dotnet list package
+
+
+
+
+
+
+
+3. .Net CLI (Command line interface) - the .Net CLI is a set of Command line tools included in the SDK. it allows you to create, build, run, test, and publish .Net apps from the terminal.
+
+Comman Commands:
+
+| Command              | Description                 | Example                      |
+| -------------------- | --------------------------- | ---------------------------- |
+| `dotnet new`         | Create a new project        | `dotnet new webapi -n MyApi` |
+| `dotnet build`       | Compile the project         | `dotnet build MyApi.csproj`  |
+| `dotnet run`         | Build and run the app       | `dotnet run`                 |
+| `dotnet publish`     | Prepare app for deployment  | `dotnet publish -c Release`  |
+| `dotnet test`        | Run unit tests              | `dotnet test`                |
+| `dotnet add package` | Add NuGet package           | `dotnet add package Serilog` |
+| `dotnet restore`     | Download NuGet dependencies | `dotnet restore`             |
+
+
+Example Workflow using CLI:
+
+# Create a new Web API project
+dotnet new webapi -n MyApi
+
+cd MyApi
+
+# Add EF Core package
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+# Run the app
+dotnet run
+
+
+
+
+4. How they work together
+
+[.NET SDK] --> provides CLI tools and runtime
+     |
+     v
+[CLI commands] --> create, build, run projects
+     |
+     v
+[NuGet] --> manages external libraries your projects depend on
+
+

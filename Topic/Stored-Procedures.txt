@@ -1,0 +1,27 @@
+Stored Procedures - a stored procedure is a pre-written SQL program stored in the database that you can call multiple times.
+key features -
+---- stored in the database
+---- can accept input parameters 
+---- can return output parameters or results sets
+---- improves performance and security 
+---- reduces repeated SQL code
+
+
+DELIMITER //
+
+CREATE PROCEDURE GetOrdersByCustomer(IN cust_id INT)
+BEGIN
+    SELECT * 
+    FROM Orders
+    WHERE CustomerID = cust_id;
+END //
+
+DELIMITER ;
+
+
+Results -
+
+| OrderID | CustomerID | OrderDate  | Amount |
+| ------- | ---------- | ---------- | ------ |
+| 1001    | 101        | 2025-01-02 | 250    |
+| 1005    | 101        | 2025-02-10 | 400    |

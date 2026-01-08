@@ -1,0 +1,14 @@
+Execution Plan - An Execution Plan shows how the database executes a SQL query. it explains order of operation, how tables are accessed, which indexes are used, estimated cost of each step. this is that the database's step by step stratergy to run your query efficiently.
+
+Example :
+
+Query - 
+
+EXPLAIN SELECT * FROM Employee WHERE DeptID = 10;
+
+
+Why Execution Plans Matter
+---- Identify slow queries
+---- Understand performance bottlenecks
+---- Decide when to add indexes
+---- Optimize JOINs and filters

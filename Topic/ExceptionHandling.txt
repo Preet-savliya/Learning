@@ -1,0 +1,139 @@
+Exception Handling - structured approach to manage runtime errors and unexpected situations, preventing application crashes and allowing for graceful recovery or logging
+
+the four keywords 
+
+try - encloses the code that might throw an exception. if an exception occurs, the control flow immediately jumps to a corresponding catch block.
+
+catch - contains the exception handler code. it is excecuted when an exception of a specific type is thrown in associated try block.
+
+finally - contains code that is always excecuted, regardless of wheather an exception occured or was handled. this is primarily used for cleanup tasks like closing files or releasing resources.
+
+throw - used to manually raise an exception. this is can be used to signal an error condition or re-throw a caught exception to a higher level of call stack.
+
+
+Example;
+
+
+1. Basic Try Catch 
+
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        try
+        {
+            int a = 10;
+            int b = 0;
+            int result = a / b;  // This will cause DivideByZeroException
+            Console.WriteLine(result);
+        }
+        catch (DivideByZeroException ex)
+        {
+            Console.WriteLine("Cannot divide by zero!");
+        }
+    }
+}
+
+
+Output:
+Cannot divide by zero!
+
+
+2. Try-Catch-finally
+
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        try
+        {
+            int[] numbers = {1, 2, 3, 4};
+            Console.WriteLine(numbers[5]);
+        }
+        catch(IndexOutOfRangeException ex)
+        {
+            Console.WriteLine("Index is out of range!");
+        }
+        finally
+        {
+            Console.WriteLine("This will always excecute.");
+        }
+    }
+}
+
+
+Output:
+Index is out of range!
+This will always execute.
+
+
+3. Multiple catch blocks
+
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        try
+        {
+            string str = null;
+            Console.WriteLine(str.Length);
+        }
+        catch(DivideByZeroException)
+        {
+            Console.WriteLine("Cannot divide by zero");
+        }
+        catch(NullReferenceException ex)
+        {
+            Console.WriteLine("Object is NUll");
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine("Some other exception:" + ex.Message);
+        }
+    }
+}
+
+Output:
+Object is Null
+
+
+4. Throwing Custom Exception
+
+using System;
+
+class Program
+{
+    static void CheckAge(int age)
+    {
+        if (age < 18)
+        {
+            throw new Exception("Age must be 18 or older.");
+        }
+        else
+        {
+            Console.WriteLine("Access Granted");
+        }
+    }
+
+    static void Main()
+    {
+        try
+        {
+            CheckAge(16);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error:" + ex.Message);
+        }
+    }
+}
+
+
+Output:
+Error: Age must be 18 or older.

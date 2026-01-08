@@ -1,0 +1,13 @@
+STEP 4: Create Models
+
+Right-click Models → Add → Class and create:
+
+User.cs
+
+Category.cs
+
+Product.cs
+
+CartItem.cs
+
+Order.cs

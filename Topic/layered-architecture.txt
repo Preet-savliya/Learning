@@ -1,0 +1,105 @@
+Layered Architecture - Layered Architecture is a software design patterns where an application is divided into logical layers, each with a specific responsibility. Each layer communicates only with the layer directly below it, which ensures sepration of concerns, modularity, and maintainability.
+
+the most common layered structure in modern application is:
+
+Client
+  |
+  v
+Controller
+  |
+  v
+Service
+  |
+  v
+Repository
+  |
+  v
+Database
+
+
+1. Controller layer 
+-- the Controller layer is the topmost layer that handles client requests and returns responses. it acts as an interface between the client (web browser, mobile app, or API consumer) and the rest of the application.
+
+Responsibilities:
+-- Accept incoming requests (HTTP, API calls).
+-- Validate request data (basic validation).
+-- Call the Service layer to execute business logic.
+-- Send appropriate responses (success, error codes, messages) to the client.
+
+Example:
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
+}
+
+
+✅ Key point: Controllers should not contain business logic; they only manage request/response flow.
+
+
+
+2. Service Layer
+-- the service layer contains the business logic of the application. it acts as a bridge between the controller and Repository layers.
+
+Responsibilities:
+-- Process and transform data.
+-- Apply business rules and calculations.
+-- Handle transactions (if required).
+-- Call Repository layer for data storage/retrieval.
+
+Example:
+
+@Service
+public class UserService {
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+}
+
+✅ Key point: The Service layer never interacts directly with the client; it focuses on what the application does, not how the client communicates.
+
+
+
+3. Repository layer
+-- the Repository layer (or DAO - Data access object layer) is responsible for interacting with the database or any data storage.
+
+Responsibilities:
+-- Perform CRUD operations (Create, Read, Update, Delete).
+-- Query the database for required data.
+-- Return raw data to the Service layer for processing.
+
+Example:
+
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    // Spring Data JPA provides built-in CRUD operations
+}
+
+✅ Key point: Repository layer does not contain business logic; it only deals with data persistence.
+
+
+
+Flow of Data:
+-- Client sends a request (e.g., get user info).
+-- Controller receives the request → delegates to Service.
+-- Service executes business logic → calls Repository for data.
+-- Repository interacts with the database → returns data to Service.
+-- Service processes data → sends result to Controller.
+-- Controller sends response to the client.

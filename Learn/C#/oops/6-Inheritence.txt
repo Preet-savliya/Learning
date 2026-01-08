@@ -1,0 +1,50 @@
+Inheritance - Inheritance means one class (child) uses the properties and methods of another class (parent). it helps reuse code and makes programs easier to manage. this is used with " : " this symbol.
+
+Parent class - gives features
+Child class - takes features
+
+class Animal   // Parent class
+{
+    public void Eat()
+    {
+        Console.WriteLine("Animal is eating");
+    }
+}
+
+class Dog : Animal   // Child class
+{
+    public void Bark()
+    {
+        Console.WriteLine("Dog is barking");
+    }
+}
+
+usage:
+
+Dog d = new Dog();
+d.Eat();   // from Animal
+d.Bark();  // from Dog
+
+Types of Inheritance in C#
+---- Single Inheritance
+---- Multilevel Inheritance
+---- Hierarchical Inheritance
+
+Multilevel Inheritance :- 
+
+class Vehicle     // Parent class
+{
+    public void Start() 
+    {
+    }
+}
+
+class Car : Vehicle   // Child class
+{
+}
+
+class ElectricCar : Car   // Child class
+{
+}
+
+Inheritance =  getting features from another class using :

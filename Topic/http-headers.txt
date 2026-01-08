@@ -1,0 +1,117 @@
+HTTP Headers (Web API – ASP.NET Core) - HTTP headers are key-value pairs sent with requests and responses.
+They carry metadata, not the actual data.
+headers = instructions about the request / response 
+
+
+1. why HTTP headers matter
+Headers are used for:
+-- Authentication & Authorization
+-- Content format (JSON, XML)
+-- Caching
+-- Security
+-- Versioning
+-- Client/server communication rules
+
+
+2. Request Headers (Client → Server)
+Common Request headers
+| Header            | Purpose                  |
+| ----------------- | ------------------------ |
+| `Content-Type`    | Format of request body   |
+| `Accept`          | Expected response format |
+| `Authorization`   | Authentication token     |
+| `User-Agent`      | Client info              |
+| `Host`            | Server domain            |
+| `Accept-Language` | Language preference      |
+
+Example
+POST /api/students HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOi...
+
+
+
+3. Response Headers (Server ---> Client)
+Common Response Headers
+| Header             | Purpose                 |
+| ------------------ | ----------------------- |
+| `Content-Type`     | Response format         |
+| `Location`         | URL of created resource |
+| `Cache-Control`    | Caching rules           |
+| `Expires`          | Cache expiry            |
+| `Set-Cookie`       | Set cookies             |
+| `WWW-Authenticate` | Auth challenge          |
+
+Example
+HTTP/1.1 201 Created
+Content-Type: application/json
+Location: /api/students/10
+
+
+
+4. Important Headers Explained
+🔹 Content-Type
+Content-Type: application/json
+-- Tells server what data format is sent
+
+🔹 Accept
+Accept: application/json
+-- Tells server what format client wants back
+
+🔹 Authorization
+Authorization: Bearer <JWT-TOKEN>
+-- Used for JWT / OAuth authentication
+
+🔹 Cache-Control
+Cache-Control: no-cache
+-- Controls caching behavior
+
+🔹 CORS Headers (Important in Web APIs)
+| Header                         | Purpose              |
+| ------------------------------ | -------------------- |
+| `Access-Control-Allow-Origin`  | Allowed domains      |
+| `Access-Control-Allow-Methods` | Allowed HTTP methods |
+| `Access-Control-Allow-Headers` | Allowed headers      |
+
+
+
+
+
+
+5. Working with Headers in ASP.NET Core
+
+-- Read Request Headers
+var token = Request.Headers["Authorization"];
+
+-- Add Response Headers
+Response.Headers.Add("X-App-Version", "1.0");
+
+-- Custom Headers
+X-Request-Id: 12345
+X-Correlation-Id: abc-xyz
+
+Used for:
+-- Logging
+-- Tracing
+-- Debugging
+
+
+
+6. Security Headers (Very Important 🔐)
+| Header                      | Purpose               |
+| --------------------------- | --------------------- |
+| `Strict-Transport-Security` | Force HTTPS           |
+| `X-Content-Type-Options`    | Prevent MIME sniffing |
+| `X-Frame-Options`           | Prevent clickjacking  |
+| `Content-Security-Policy`   | Prevent XSS           |
+
+
+
+
+7. Best Practices
+-- Use headers for metadata only
+-- Do not send large data in headers
+-- Use standard headers where possible
+-- Secure sensitive headers (Authorization)
+-- Avoid custom headers unless needed

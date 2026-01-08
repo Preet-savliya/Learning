@@ -1,0 +1,7 @@
+namespace ECommerceAPI.Data
+
+Defines the namespace for this class.
+
+Namespaces help organize code and avoid name conflicts.
+
+In this case, all database-related code is under ECommerceAPI.Data.

@@ -1,0 +1,20 @@
+Cross Platform Support - Cross Platform Support means that the same code can run on different operating Systems without modification.
+
+In .Net, this includes:
+-- Windows
+-- Linux
+-- macOS 
+-- Mobile Platforms (via .Net MAUI: iOS & Android)
+-- Containers (Docker)
+-- Cloud platforms (Azure, AWS, GCP)
+
+
+2. how .Net achieves cross platform Support
+| Feature                    | How it Helps Cross-Platform                                                              |
+| -------------------------- | ---------------------------------------------------------------------------------------- |
+| .NET Runtime               | Abstracts OS differences; your app runs on any OS with the runtime installed.            |
+| .NET SDK                   | Provides compilers and CLI tools for building apps on any OS.                            |
+| IL (Intermediate Language) | Your C# code compiles to IL, which is then JIT/AOT compiled on the host OS.              |
+| Cross-platform libraries   | Most core libraries (`System.IO`, `System.Net`, `EntityFrameworkCore`) work on all OSes. |
+| Minimal APIs & Web Apps    | ASP.NET Core apps run on Windows, Linux, macOS without code changes.                     |
+

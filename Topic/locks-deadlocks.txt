@@ -1,0 +1,4 @@
+Locks - a locks is a mechanism that controls access to data in a database to ensure consistency and prevent conflicts when multiple users try to read/write at the same time.
+
+types of locks -
+1. Shared lock 

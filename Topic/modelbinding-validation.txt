@@ -1,0 +1,147 @@
+Model Binding and Validation in ASP.NET Core Web API
+
+Model Binding maps incoming HTTP request data to C# objects, and
+Validation ensures that the data is correct and safe before your code runs.
+
+1️⃣ Model Binding
+What is Model Binding?
+Model binding automatically converts request data into action method parameters.
+
+Sources it can bind from:
+-- Route values
+-- Query string
+-- Headers
+-- Request body (JSON)
+-- Form data
+
+
+Example Request
+
+POST /api/students
+Content-Type: application/json
+
+{
+  "name": "Ahmed",
+  "age": 20
+}
+
+Controller
+
+[HttpPost]
+public IActionResult Create(StudentDto student)
+{
+    return Ok(student);
+}
+
+✔️ JSON → StudentDto automatically
+
+
+2️⃣ Binding Attributes
+
+| Attribute      | Source       |
+| -------------- | ------------ |
+| `[FromBody]`   | Request body |
+| `[FromRoute]`  | URL route    |
+| `[FromQuery]`  | Query string |
+| `[FromHeader]` | Headers      |
+| `[FromForm]`   | Form data    |
+
+
+Example
+[HttpGet("{id}")]
+public IActionResult Get([FromRoute] int id,
+                         [FromQuery] bool active)
+
+
+
+3️⃣ Model Validation
+What is Validation?
+Validation ensures:
+-- Required fields are present
+-- Values are within valid ranges
+-- Data format is correct
+
+
+Data Annotations (Most Common)
+
+public class StudentDto
+{
+    [Required]
+    [MaxLength(50)]
+    public string Name { get; set; }
+
+    [Range(5, 100)]
+    public int Age { get; set; }
+
+    [EmailAddress]
+    public string Email { get; set; }
+}
+
+
+
+
+
+4️⃣ Automatic Validation with [ApiController]
+When [ApiController] is used:
+
+[ApiController]
+[Route("api/[controller]")]
+public class StudentsController : ControllerBase
+
+-- Validation runs automatically
+-- If model is invalid → 400 Bad Request
+-- Controller action is not executed
+
+Automatic Error Response
+
+{
+  "errors": {
+    "Name": ["The Name field is required."]
+  }
+}
+
+
+
+5️⃣ Manual Validation (Without [ApiController])
+
+if (!ModelState.IsValid)
+{
+    return BadRequest(ModelState);
+}
+
+
+6️⃣ Custom Validation
+Custom Attribute
+
+public class AdultOnlyAttribute : ValidationAttribute
+{
+    public override bool IsValid(object value)
+    {
+        return (int)value >= 18;
+    }
+}
+
+
+[AdultOnly]
+public int Age { get; set; }
+
+
+7️⃣ Validation Order
+-- Model binding
+-- Validation
+-- Controller action executes
+
+If binding fails → validation fails automatically.
+
+
+
+
+
+8️⃣ Common Validation Errors
+
+-- Missing required fields
+-- Wrong data type
+-- Invalid JSON
+-- Violating constraints
+
+

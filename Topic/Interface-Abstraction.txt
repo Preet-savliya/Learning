@@ -1,0 +1,42 @@
+Abstraction - Abstraction is a core principle of object-oriented programming in c# used to hide unnecessary details and show only essential information. 
+
+Declaration: Declared using the abstract keyword.
+Abstract class: is a restricted class that cannot be used to create objects (to access it, it must be inherited from another class).
+Abstract method: can only be used in an abstract class, and it does not have a body. The body is provided by the derived class (inherited from).
+
+abstract class Vehicle   // abstract class
+{
+    public abstract void Start();   // abstract method (no body)
+
+    public void Stop()              // regular method
+    {
+        Console.WriteLine("Vehicle stopped");
+    }
+}
+
+class Car : Vehicle
+{
+    public override void Start()   // implementing abstract method
+    {
+        Console.WriteLine("Car started");
+    }
+}
+
+
+Interfaces - an interface is a pure contract that defines a set of methods, properties, events, and indexers that an implementing class or structured must provide.
+
+Declaration: Declared using the interface keyword and typically named with a leading "I" (e.g; IPaymentProcessor)
+Inheritance: a class can implement Multiple interface, providing a flexible way to incorporate behavior from Multiple sources.
+
+public interface IPaymentProcessor
+{
+    void ProcessPayment(double amount); // Method declaration
+}
+
+public class CreditCardProcessor : IPaymentProcessor
+{
+    public void ProcessPayment(double amount) // Implementation provided by implementing class
+    {
+        Console.WriteLine($"Processing credit card payment of ${amount}");
+    }
+}

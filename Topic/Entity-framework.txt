@@ -1,0 +1,43 @@
+Entity Framework - Entity Framework is a .NET ORM (object relational Mapper) lets you work with a database using C# objects instead of SQL.
+
+What it Does 
+-- Maps C# classes to database tables
+-- lets you query, insert, update, delete data using LINQ
+-- Handles Connections and SQL generation for you
+
+Common versions
+-- Entity Framework Core (EF Core) (Modern, cross platform, recommended)
+-- Entity Framework 6 (older, windows-only)
+
+Key Concepts
+-- DbContext - represents a session with the database
+-- DbSet<T> - represents a table
+-- Entities - C# classes that map tables
+-- Migeration - version control for your database schema
+-- LINQ - Query data using C# syntax
+
+Workflow 
+1. Define C# classes (models)
+2. create a DbContext 
+3. Run Migeration to create/update the database 
+4. use LINQ to work with data
+
+Example (EF Core)
+
+public class Student
+{
+    public int Id {get; set;}
+    public string Name {get; set;}
+}
+
+public class SchoolContext : DbContext
+{
+    public DbSet<Student> Students {get; set;}
+}
+
+why use EF?
+-- faster development
+-- less SQL to write
+-- Strong typing & intellisense
+
+

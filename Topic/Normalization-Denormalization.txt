@@ -1,0 +1,44 @@
+Normalization - Normalization is the process of organizing data to reduce redundancy and improve data integrity by spliting data into related tables.
+
+Goals:
+1. remove duplicate data
+2. prevent update, insert, and delete inconsistency
+3. improve data consistency
+
+types of Normalization
+1. first normal form (1NF)
+---- each field contains atomic values
+---- no repeating groups or multi-valued attributes
+
+phone number 123, 456
+seperate rows or a related table
+
+
+2. Second Normal form (2NF)
+---- Must be in 1NF
+---- no partial dependency on a composite key
+
+orderid + productid ---> productname
+move productname to a product table
+
+
+3. third normal form (3NF)
+---- must be in 2NF
+---- No transitive dependency
+
+emplyeeid ----> deptid ----> deptname
+move deptname to department table
+
+
+
+
+
+
+
+
+Denormalization - Denormalization is the intentional introduction of redundancy to improve query performance and simplify data access.
+
+1. Improve read performance and simplify queries.
+2. Intentionally introduces redundant data by merging tables, reducing the need for joins.
+3. Pros: Faster reads, simpler queries.
+4. Cons: Higher storage usage, potential for data inconsistency (weaker integrity).

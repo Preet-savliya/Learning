@@ -1,0 +1,161 @@
+Code Readability - Code readability is how easily a developer can understand and maintain C# code in your Web API project. Well-structured code improves collaboration, debugging, and reduces bugs.
+
+why it matters:
+-- Helps team members understand code quickly.
+-- Reduces bugs and errors.
+-- Makes maintenance, debugging, and enhancement easier.
+-- Improves collaboration in teams.
+
+Best Practices in C#
+
+1. Follow C# coding conventions:
+-- use PascalCase for classes, methods, and public properties.
+-- Use camelCase for local variables and private fields.
+-- Constants and readonly static fields in ALL_CAPS or PascalCase depending on style.
+
+2. Organize Code Files:
+-- Separate Controllers, Services, and Repositories into different folders.
+
+/Controllers
+/Services
+/Repositories
+/Models
+/DTOs
+
+3. Use Dependency Injection (DI)
+-- Promotes readability and testability.
+
+public class UserController : ControllerBase
+{
+    private readonly IUserService _userService;
+    public UserController(IUserService userService)
+    {
+        _userService = userService;
+    }
+}
+
+
+4. Keep Methods Small and Focused:
+
+// Bad: multiple responsibilities
+public void ProcessUser(User user) {
+    ValidateUser(user);
+    SaveUser(user);
+    SendNotification(user);
+}
+
+// Good: single responsibility per method
+public void ProcessUser(User user) {
+    ValidateUser(user);
+    SaveUser(user);
+    NotifyUser(user);
+}
+
+
+5. Use Early Returns to Avoid Deep Nesting:
+
+if (user == null) return NotFound();
+
+6. Use Async / Await Properly:
+-- Improves readability of Async web api calls.
+
+public async Task<ActionResult<User>> GetUser(int id) {
+    var user = await _userService.GetUserByIdAsync(id);
+    if (user == null) return NotFound();
+    return Ok(user);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+2. Naming Standards in C# / .NET Core
+-- Naming Standards are rules for naming classes, methods, variables, and properties so code is self-explanatory and consistent with .NET conventions.
+
+1. PascalCase - PascalCase is a naming convention where the first letter of each word is capitalized, with no spaces or underscores.
+2. camelCase - camelCase is a naming convention where the first letter of the first word is lowercase, and the first letter of subsequent words is uppercase.
+3. ALL_CAPS - ALL_CAPS is a convention where all letters are uppercase, and words are usually separated by underscores (_).
+
+C# Naming Conventions
+| Item                   | Convention                                    | Example                                       |
+| ---------------------- | --------------------------------------------- | --------------------------------------------- |
+| Class / Interface      | PascalCase                                    | `UserController`, `IUserService`              |
+| Method                 | PascalCase                                    | `GetUserById()`, `CreateUser()`               |
+| Variable / Field       | camelCase                                     | `userName`, `totalAmount`                     |
+| Private Field with DI  | `_camelCase`                                  | `_userService`                                |
+| Constant / Readonly    | PascalCase or ALL_CAPS                        | `MaxUsers`, `DefaultTimeout`                  |
+| Boolean                | Should sound like a question                  | `isActive`, `hasPremium`                      |
+| DTO / Model Properties | PascalCase                                    | `FirstName`, `DateOfBirth`                    |
+| Database Table Names   | Singular or plural depending on team standard | `Users` (EF Core entity maps to table)        |
+| Namespaces             | PascalCase                                    | `MyProject.Services`, `MyProject.Controllers` |
+
+Practical C# Example
+
+// Controller
+[ApiController]
+[Route("api/[controller]")]
+public class UsersController : ControllerBase
+{
+    private readonly IUserService _userService;
+
+    public UsersController(IUserService userService)
+    {
+        _userService = userService;
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UserDto>> GetUser(int id)
+    {
+        var user = await _userService.GetUserByIdAsync(id);
+        if (user == null) return NotFound();
+        return Ok(user);
+    }
+}
+
+// Service
+public class UserService : IUserService
+{
+    private readonly IUserRepository _userRepository;
+
+    public UserService(IUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
+    public async Task<UserDto> GetUserByIdAsync(int id)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user == null) return null;
+        return new UserDto
+        {
+            Id = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName
+        };
+    }
+}
+
+// Repository
+public class UserRepository : IUserRepository
+{
+    private readonly AppDbContext _context;
+
+    public UserRepository(AppDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<User> GetByIdAsync(int id)
+    {
+        return await _context.Users.FindAsync(id);
+    }
+}
+

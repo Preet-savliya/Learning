@@ -1,0 +1,74 @@
+Dependency Injection - Dependency Injection (DI) is a design pattern used to implement inversion of control (IoC) where dependencies (objects) are injected into a class rather than class creating them itself.
+
+
+there are three main ways to inject dependencies:
+
+1. Constructor Injection
+2. Property Injection
+3. Method Injection
+
+1. Constructor Injection - in Constructor Injection dependencies are passed through the Constructor of the class.
+
+Step 1: Create a Service Interface & Implementation
+
+// Define the IEmailService interface
+public interface IEmailService
+{
+    void SendEmail(string recipient, string subject, string body);
+}
+
+// Implement the IEmailService interface
+public class EmailService : IEmailService
+{
+    public void SendEmail(string recipient, string subject, string body)
+    {
+        Console.WriteLine($"Email sent to {recipient} with subject: {subject}");
+    }
+}
+
+
+Step 2: Create the Dependent Class (Consumer)
+
+public class NotificationManager
+{
+    private readonly IEmailService _emailService;
+
+    // Constructor Injection: EmailService is injected via constructor
+    public NotificationManager(IEmailService emailService)
+    {
+        _emailService = emailService;
+    }
+
+    // Use the injected service to send an email
+    public void Notify(string user, string message)
+    {
+        _emailService.SendEmail(user, "Important Notification", message);
+    }
+}
+
+
+Step 3: Set Up Dependency Injection in Main Program
+
+using Microsoft.Extensions.DependencyInjection;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // 1. Set up the DI container
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton<IEmailService, EmailService>() // Register EmailService
+            .AddSingleton<NotificationManager>()         // Register NotificationManager
+            .BuildServiceProvider();
+
+        // 2. Resolve NotificationManager with all dependencies injected
+        var notificationManager = serviceProvider.GetService<NotificationManager>();
+
+        // 3. Use the NotificationManager
+        notificationManager.Notify("alice@example.com", "Welcome to our service!");
+    }
+}
+
+
+Output:
+Email sent to alice@example.com with subject: Important Notification

@@ -1,0 +1,217 @@
+Functions in SQL
+
+SQL Functions are built-in methods used to perform operations on data and return a value.
+
+types of SQL Functions
+
+1. Aggregate Functions - operate on multiple rows and return one result
+---- COUNT()
+---- SUM()
+---- AVG()
+---- MIN()
+---- MAX()
+
+
+2. Scalar Functions - Operate on single values and return one value per row.
+A - String Functions
+---- UPPER()
+---- LOWER()
+---- TRIM()
+---- SUBSTRING()
+---- CONTACT()
+---- REPLACE()
+
+B - Numeric Functions
+---- ROUND()
+---- ABS()
+---- CELING()
+---- FLOOR()
+
+C - Date & Time Functions
+---- NOW() / GETDATE()
+---- CURRENT_DATE
+---- YEAR()
+---- MONTH()
+---- DAY()
+---- DATEDIFF()
+---- DATEADD()
+
+
+
+3. Conversion Functions
+---- CAST()
+---- CONVERT()
+
+
+4. NULL Handling Functions
+---- COALESCE()
+---- ISNULL()
+---- NVL()
+
+
+5. Conditional Functions
+---- CASE
+---- IF()
+---- IIF()
+
+6. Ranking / Window Functions
+---- ROW_NUMBER()
+---- RANK()
+---- DENSE_RANK()
+---- OVER()
+
+
+🔹 Most Used in Real Projects
+
+COUNT(), SUM(), AVG()
+
+COALESCE()
+
+CASE
+
+CAST()
+
+UPPER(), LOWER()
+
+NOW(), DATEDIFF()
+
+ROW_NUMBER()
+
+Examples;
+
+
+| emp_id | name    | salary | bonus | join_date  |
+| ------ | ------- | ------ | ----- | ---------- |
+| 1      | Alice   | 60000  | 5000  | 2022-01-10 |
+| 2      | Bob     | 45000  | NULL  | 2023-03-15 |
+| 3      | Charlie | 70000  | 8000  | 2021-06-01 |
+
+
+
+1. COUNT()
+
+SELECT COUNT(*) AS TotalEmployees
+FROM Employees;
+
+| COUNT(*) |
+| -------- |
+| 3        |
+
+
+2. SUM()
+
+SELECT SUM(salary) AS TotalSalary
+FROM Employees;
+
+| SUM(salary) |
+| ----------- |
+| 175000      |
+
+
+3. AVG()
+
+SELECT AVG(salary) AS AverageSalary
+FROM Employees;
+
+| AVG(salary) |
+| ----------- |
+| 58333.33    |
+
+
+4. COALESCE()
+
+SELECT name, COALESCE(bonus, 0) AS Bonus
+FROM Employees;
+
+| name    | bonus |
+| ------- | ----- |
+| Alice   | 5000  |
+| Bob     | 0     |
+| Charlie | 8000  |
+
+
+5. CASE
+
+SELECT name, salary,
+CASE
+    WHEN salary >= 50000 THEN 'High'
+    ELSE 'Low'
+END AS SalaryLevel
+FROM Employees;
+
+| name    | salary | SalaryLevel |
+| ------- | ------ | ----------- |
+| Alice   | 60000  | High        |
+| Bob     | 45000  | Low         |
+| Charlie | 70000  | High        |
+
+
+6. CAST()
+
+SELECT CAST(salary AS INT) AS SalaryInt
+FROM Employees;
+
+| salary |
+| ------ |
+| 60000  |
+| 45000  |
+| 70000  |
+
+
+7. UPPER()
+
+SELECT UPPER(name) AS UpperName
+FROM Employees;
+
+| UPPER(name) |
+| ----------- |
+| ALICE       |
+| BOB         |
+| CHARLIE     |
+
+
+8. LOWER()
+
+SELECT LOWER(name) AS LowerName
+FROM Employees;
+
+| LOWER(name) |
+| ----------- |
+| alice       |
+| bob         |
+| charlie     |
+
+
+9. NOW()
+
+SELECT NOW();
+
+| NOW()               |
+| ------------------- |
+| 2026-01-03 10:30:45 |
+
+
+10. DATEDIFF()
+
+SELECT name,
+DATEDIFF(CURRENT_DATE, join_date) AS DaysWorked
+FROM Employees;
+
+| name    | DaysWorked |
+| ------- | ---------- |
+| Alice   | 1089       |
+| Bob     | 659        |
+| Charlie | 1678       |
+
+
+11. ROW_NUMBER()
+
+SELECT name, salary,
+ROW_NUMBER() OVER (ORDER BY salary DESC) AS RowNum
+FROM Employees;
+
+| name    | salary | RowNum |
+| ------- | ------ | ------ |
+| Charlie | 70000  | 1      |
+| Alice   | 60000  | 2      |
+| Bob     | 45000  | 3      |

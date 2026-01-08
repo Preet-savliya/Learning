@@ -1,0 +1,67 @@
+Dependency Injection Lifetime - Dependency Injection Lifetime defines how long a service instance is created and reused by the .NET dependency injection container during an application's execution. in simple terms, it controls when an object is created and how long it lives.
+
+types of DI lifetimes in .NET
+.NET provides three main service lifetimes:
+
+1. transient - a new instance is created every time the service is requested.
+
+builder.Services.AddTransiet<IEmailService, EmailService>();
+
+Characteristics:
+-- Short-lived
+-- created each time it is injected
+-- No shared state
+
+Use cases:
+-- Lightweight, stateless Services
+-- Helper or utility classes 
+
+
+
+
+2. Scoped - a single instance is created per request (scope) and shared within that request
+
+builder.Services.AddScoped<IOrderService, OrderService>();
+
+Characteristics:
+-- Same instance for one HTTP request
+-- New instance for each new request
+
+Use cases:
+-- Database contexts (DbContext)
+-- Business logic tied to a request
+
+
+
+
+
+3. Singleton - only one instance is created for the entire application lifetime and reused everywhere.
+
+builder.Services.AddSingleton<ICacheService, CacheService>();
+
+Characteristics:
+-- Created once when app starts
+-- Shared accross all users and requests
+
+Use cases:
+-- Caching 
+-- Logging
+-- Configuration services
+
+
+
+Lifetime Comparison Table
+
+| Lifetime  | Instance Created      | Scope      | Best Used For                |
+| --------- | --------------------- | ---------- | ---------------------------- |
+| Transient | Every request         | Very short | Stateless services           |
+| Scoped    | Once per HTTP request | Request    | DbContext, business services |
+| Singleton | Once per app          | Entire app | Caching, logging             |
+
+Important Rules & Notes 
+-- Scoped services should NOT be injected into Singletons
+-- Singleton services must be thread-safe 
+-- DbContext should always be scoped.
+
+
+Dependency Injection lifetime defines how long service instance lives and how it is shared within a .NET application.

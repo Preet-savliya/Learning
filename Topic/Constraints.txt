@@ -1,0 +1,35 @@
+Constraints - SQL Constraints are rules used to define limits on the data stored in a table, ensuring its accuracy, reliability, integrity.
+
+types of Constraints
+
+1. NOT NULL - Ensures that a column cannot have a NULL value, enforcing that a field always contains a value.
+
+2. UNIQUE - guarantees that all values in a column are distinct, preventing duplicate entries. a table can have multiple UNIQUE Constraints.
+
+3. PRIMARY KEY - establishes a link between data in two tables, ensuring referential integrity. a value in the foreign key column must match a value in the primary key of the referenced table. this prevents actions that would destory links between tables.
+
+4. CHECK - enforces a specific condition that the value in a column must satisfy. for example, it can be used to ensure that an age column only accepts value greater than 18.
+
+5. DEFAULT - assigns a default value to a column if no value is explicity provided during an INSERT operation.
+
+6. CREATE INDEX - although not strictly an integrity Constraints, an index is used to create and retrieve data from the database very quickly, improving query performance.
+
+
+Example;
+
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) UNIQUE,
+    Age INT CHECK (Age >= 18),
+    Country VARCHAR(50) DEFAULT 'USA'
+);
+
+CREATE TABLE Orders (
+    order_id INT PRIMARY KEY,
+    order_date DATE,
+    CustomerID INT,
+    CONSTRAINT fk_customer
+        FOREIGN KEY (CustomerID)
+        REFERENCES Customers(CustomerID)
+);

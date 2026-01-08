@@ -1,0 +1,522 @@
+.NET core Architecture and Components
+
+.Net core is a modern, cross-platform, and open-source framework developed by Microsoft. it is designed to create high-performance applications for cloud, web, desktop, and mobile environments. let dive into the architecture and key components of .NET Core.
+
+
+
+
+
+.NET core Architecture - .NET core follows a modular and lightweight acrhitecture that is different from the traditional .NET framework. it has a set of key components that work together to make it cross-platform and scalable. the overall architecture of .NET core is typically divided into the following layers:
+
+1.1 Common Language Runtime (CLR) - The CLR is the execution engine of .NET Core that manages the execution of .NET programs. it is responsible for:
+
+---- Memory management (garbage collection)
+---- Just-in-time (JIT) compilation: Compiles intermediate code into native machine code.
+---- Exception handling.
+---- Type safety and code verification.
+
+In .NET Core, the CLR is optimized to work across multiple platforms like windows, linux, and macOS.
+
+1.2 .NET Core class library - .NET core class library provides the foundational libraries that .NET core applications use.
+these include common functionality like collections, file I/O, networking, and security.
+---- CoreFX is a set of standard libraries used for application development.
+---- It is designed to be modular, meaning developers can include only the specific libraries they need for their applications, making them lightweight.
+
+
+1.3 Application Models - .NET Core supports different applications models depending on the type of application being built. these include
+
+ASP.NET Core: For building web applications and APIs.
+Console Applications: For lightweight command-line applications.
+Windows Desktop Applications: Through frameworks like Windows Forms or WPF (Windows Presentation Foundation).
+Blazor: A framework for building web UIs using C# instead of JavaScript.
+
+1.4 Host and Dependency Injection (DI)
+
+.NET Core applications use a host to manage the lifetime of the application and its dependencies. The Generic Host and Web Host are used to configure and start your application, and it provides dependency injection (DI) to easily inject services into classes that need them.
+
+
+1.5 Cross-Platform & Containerization
+
+One of the core features of .NET Core is its ability to run on multiple platforms (Windows, Linux, macOS). It supports containerization using Docker, enabling developers to create consistent environments across different platforms.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2. Components of .NET Core - The key components that make up the .NET Core ecosystem include:
+
+2.1 .NET Core Runtime
+The .NET Core Runtime includes the CLR and core libraries required to run a .NET Core application. It is the lightweight version of the runtime that is installed on the target machine.
+
+2.2 SDK (Software Development Kit)
+The .NET Core SDK contains everything a developer needs to build .NET Core applications. It includes the following:
+---- NET Core CLI (Command-Line Interface): To create, build, run, and publish .NET Core applications.
+---- Tools: For compiling, debugging, and deploying applications.
+---- Libraries: For building specific types of applications like web apps, APIs, etc.
+
+
+2.3 NuGet
+NuGet is the package manager for .NET. It is used to distribute libraries, tools, and frameworks in the form of packages. These packages can be installed into your .NET Core project to add additional functionality.
+---- The NuGet Gallery is where you can find and download packages.
+---- NuGet enables version management and ensures dependencies are handled correctly.
+
+
+2.4 Entity Framework Core (EF Core)
+EF Core is an object-relational mapping (ORM) framework used to interact with databases in .NET Core applications. It allows developers to work with databases using C# objects instead of writing raw SQL.
+---- Code-first: Create database schemas from your C# models.
+---- Database-first: Generate models from an existing database.
+
+
+2.5 ASP.NET Core
+
+ASP.NET Core is a high-performance, cross-platform framework for building modern web applications and APIs. It is built on top of .NET Core and designed to provide the following:
+---- MVC (Model-View-Controller) for structuring web applications.
+---- Razor Pages for page-focused web apps.
+---- Web API support for creating RESTful APIs.
+---- SignalR for real-time communication.
+ASP.NET Core is highly optimized for performance and is used to build scalable and secure web applications.
+
+
+2.6 Kestrel Web Server
+Kestrel is the web server used in ASP.NET Core applications. It is lightweight, cross-platform, and can be used directly for serving HTTP requests or in combination with a reverse proxy like Nginx or IIS.
+
+2.7 CLI (Command-Line Interface) - The .NET Core CLI is a powerful command-line tool that is used for:
+---- Creating new projects.
+---- Building and publishing applications.
+---- Running unit tests.
+---- Managing NuGet packages.
+---- It is cross-platform and works in both Windows and non-Windows environments.
+
+2.8 Cross-Platform Support - As mentioned, one of the standout features of .NET Core is its ability to run across multiple platforms, including:
+
+---- Windows
+---- Linux
+---- macOS
+
+.NET Core apps are compiled into platform-specific binaries, so they can run efficiently on different operating systems without modification.
+
+2.9 Docker and Containerization
+.NET Core integrates well with Docker and other container technologies, making it easy to containerize applications for consistent deployment across environments. Developers can create containers that package their .NET Core application along with its dependencies, ensuring the app runs the same way in development, testing, and production.
+
+
+
+
+
+
+
+
+
+3. Runtime and Deployment Models
+.NET Core supports different deployment models:
+---- Framework-dependent deployment (FDD): Requires the .NET Core runtime to be installed on the target system. The app is deployed alongside the runtime libraries.
+---- Self-contained deployment (SCD): Bundles the runtime with the application, so it can run on a machine that does not have .NET Core installed.
+
+
+
+
+
+4. Security Features
+NET Core includes several important security features:
+---- Authentication and Authorization: Via ASP.NET Core Identity or other libraries.
+---- Encryption: Through libraries like System.Security.Cryptography.
+---- Data Protection APIs: For protecting sensitive data.
+
+
+
+
+
+5. Performance Optimization
+.NET Core is known for its high performance. Some features that contribute to its performance include:
+---- Just-in-time (JIT) compilation: Optimizes code at runtime.
+---- Ahead-of-time (AOT) compilation: Compiles code ahead of time for faster startup times (in some scenarios).
+---- Garbage collection: .NET Core uses an efficient garbage collector to manage memory and ensure good performance.
+
+
+
+
+
+6. What is Middleware?
+Middleware in .NET Core is a delegated component that handles HTTP request and responses. it can perform various tasks like:
+---- Handling requests before they reach the application logic.
+---- Modifying or inspecting requests (example: logging, authentication)
+---- Modifying or inspecting responses (example: adding headers, compression).
+---- Terminating the request pipelines (example: handling an Exception or returning a response directly).
+Each piece of middleware performs a small task, and the result of one middleware can be passed to the next. If a middleware component does not terminate the request or response, it will pass the request to the next middleware in the pipeline.
+
+
+
+
+7. how middleware works in the request pipeline 
+the request pipeline in ASP.NET core is a series of middleware components that are configured in a specific order. the order in which middleware is added to the pipeline is crucial because each middleware can influence or stop the Execution of the next one.
+when an HTTP request is received, it flows through the request pipeline from the first middleware to the last. similarly when a response is generated it flows back through the pipeline in the reverse order.
+
+Bsic Flow :
+1. Incoming Request
+---- the reuest enters the pipeline
+---- middleware component inspect, modify, or even short-circuit the request.
+
+2. Request Processing:
+---- Middleware Components can process the request, invoke the application and pass data between each other.
+
+3. outgoing Response:
+---- once the application logic generates a response, it travels back through the middleware in reverse order.
+---- Middleware can modify or add headers, perform logging, or handle other post-processing tasks before the response is sent to the client
+
+
+Example of Middleware in Action:
+Imagine the request pipeline has the following middleware components:
+1. Authentication Middleware - Checks if the user is authenticated.
+2. logging Middleware - Logs details about the request (example: URL, method).
+3. Error Handling Middleware - Catches unhandled exceptions and returns a generic error message.
+4. MVC Middleware - Handles the actual application logic
+5. Response Compression Middleware - Compresses the response for faster transmission.
+
+Request Flow :
+1. A request hits the server
+2. it goes through the authentication middleware.
+3. it moves to the logging middleware, which logs the request.
+4. if there are no errors, it reaches the MVC middleware, where the application logic is executed.
+5. if a response is generated, it flows back through the response compression middleware, which compresses it before sending it back to the client.
+
+
+
+
+
+
+
+
+
+8. Types of Middleware in .NET Core
+.NET Core provides a set of built-in middleware components, but developers can also create their own custom middleware. Here are some common types of middleware in .NET Core:
+
+3.1. Built-in Middleware
+1. static file middleware:
+---- server static files directly from the server without hitting the application logic.
+---- Example : app.UseStaticFiles();
+
+2. Authentication Middleware:
+---- Handles user authentication, such as validating JWT tokens, cookies, or OAuth tokens.
+---- Example : app.UseAuthentication();
+
+3. Authorization Middleware:
+---- Checks whether the user has permission to access a specific resource.
+---- Example : app.UserAuthorization();
+
+4. Routing Middleware:
+---- Maps incoming request to the correct route based on the URL pattern and request method 
+---- Example : app.UseRouting();
+
+5. Session Middleware:
+---- Manages user sessions and stores temporary user data.
+---- Example: app.UseSession();
+
+6. CROS Middleware:
+---- Handles Cross-Origin Resource Sharing (CORS), which determines whether resources on the server can be shared with different domains.
+---- Example: app.UseCors("AllowAll");
+
+7. custom error handling middleware:
+---- Handles exceptions that occur during the processing of a request. It can return custom error pages or messages.
+---- Example: app.UseExceptionHandler("/Home/Error");
+
+8. MVC or Razor Pages Middleware:
+---- Routes request to MVC Controllers or Razor Pages.
+---- Example: app.UseEndpoints(endpoints => { endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}"); });
+
+
+
+
+
+
+
+
+9. Dependency Injection (DI) : Dependency Injection (DI) is a core concept in .NET Core that allows you to decouple the creation of objects from their use, making your code more flexible, maintainable, and testable.
+
+Dependency: Any object that a class needs to function.
+Example: If a Car class uses an Engine class, then Engine is a dependency of Car.
+
+Injection: Instead of a class creating its own dependencies, they are provided from the outside (injected).
+
+why use dependency injection ?
+---- loosing coupling: classes depend on abstractions rather than concrete implementations.
+---- testability: Make it easier to unit test by injection mock dependencies.
+---- maintainability: changing a dependency implementation does not require changing the class that uses it.
+---- flexibility: you can swap implementations without changing consuming code.
+---- centralized configuration: dependencies are registered in one place making management easier.
+
+
+
+
+
+
+10. configuration in .NET core - configuration is how an application retrives settings such as connection strings, API keys, logging settings, or feature flags. one of the strengths of .net core is that it provides a flexible, layered configuration system that work across environments and sources.
+
+1. appsetting.json
+---- appsetting.json is the default configuration file in .net core applications.
+---- it is a json file used to store application settings in a structured format.
+---- it is read at runtime by the configuration system and contain settings like connection strings, API keys, logging levels, etc.
+
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.;Database=MyDb;Trusted_Connection=True;"
+  },
+  "AppSettings": {
+    "FeatureXEnabled": true,
+    "MaxItems": 100
+  }
+}
+
+---- This file can be environment-specific, e.g., appsettings.Development.json or appsettings.Production.json.
+---- The system will automatically load the correct file based on the current environment.
+
+
+2. Environments Variables
+---- Environment Variables allow you to externalize configuration from the application code and files.
+---- This is especially useful for sensitive data (like API keys or passwords) or settings that change per environment.
+
+Example of setting environment variables (Windows/Linux):
+# Windows PowerShell
+$Env:ConnectionStrings__DefaultConnection="Server=.;Database=ProdDb;Trusted_Connection=True;"
+
+# Linux/macOS
+export ConnectionStrings__DefaultConnection="Server=.;Database=ProdDb;Trusted_Connection=True;"
+
+
+3. IConfiguration Interface
+---- IConfiguration is the main interface in .NET Core for accessing configuration settings.
+---- It provides a key-value-based way to retrieve settings from multiple sources (files, environment variables, command-line arguments, etc.).
+---- You can inject IConfiguration into your classes (like controllers or services) using Dependency Injection.
+
+
+
+4. Multiple Configuration Sources
+.NET Core allows you to combine multiple configuration sources in a hierarchy.
+The order of loading determines which values take precedence. Typical order:
+
+1. appsettings.json
+2. appsettings.{Environment}.json (overrides appsettings.json for the specific environment)
+3. Environment Variables (override JSON files)
+4. Command-line Arguments (highest precedence)
+Example: If FeatureXEnabled is true in appsettings.json but false in environment variables, the environment variable value will be used.
+
+
+
+5. Entity Framework core (EF Core) - Entity framework core is a modern object-relational mapping framework for .net application it allows developers to interact with databases in an object-oriented way, using c# classes instead of raw SQL queries. EF core simplifies the process of working with databases by enabling developers to work with data as objects while EF core handles the conversion to the underlying database structure.
+
+1. What is object-relational mapping (ORM)?
+object relational mapping is a technique that allows you to map objects in your programming language to database tables and columns. this eliminates the need for developers to write complex SQL queries and allows data to be accessed inserted, updated, or deleted using high-level programming constructs like C# objects.
+
+in traditional SQL, you'd interact with a database using SQL queries. in EF core, you work with C# objects and the framework automatically generates the SQL to excecute on the database.
+
+Example :
+if you have a student class in your application:
+
+public class Student
+{
+    public int Id {get; set;}
+    public string Name {get; set;}
+    public int Age {get; set;}
+}
+
+EF Core maps this to a database table, where each property becomes a column in the table.
+
+2. How EF Core Works?
+EF core provides a DbContext class to interact with the database the DbContext represents the session between the application and the database, and it includes DbSet properties that represent collections of entities 
+
+Example:
+Let's assume you have a Student class and a SchollContext to manage the database connection:
+public class SchoolContext : DbContext
+{
+    public DbSet<Student> Students { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
+        => options.UseSqlServer("YourConnectionString");
+}
+
+DbSet<Student> Students: Represents a collection of Student objects in the database.
+UseSqlServer(): Configures EF Core to use SQL server as the database provider.
+
+You can now perform database operations like inserting, updating, and querying the Student table using the SchoolContext.
+
+
+3. Querying with LINQ (Language Integrated Query)
+EF Core supports LINQ (Language Integrated Query), which allows you to write database queries directly in C# using standard query syntax. LINQ queries are then translated to SQL by EF Core.
+
+Example :
+
+using (var context = new SchoolContext())
+{
+    var students = context.Students
+                          .Where(s => s.Age > 18)
+                          .OrderBy(s => s.Name)
+                          .ToList();
+}
+
+This LINQ query retrieves all students over the age of 18, ordered by name.
+EF Core translates this LINQ expression into a SQL query behind the scenes, like this:
+
+SELECT * FROM Students WHERE Age > 18 ORDER BY Name;
+
+Example (LINQ with Projections):
+
+You can also use LINQ to project data into new objects. For example, to select only certain columns:
+
+var studentNames = context.Students
+                          .Where(s => s.Age > 18)
+                          .Select(s => s.Name)
+                          .ToList();
+
+This generates a query that only retrieves the Name column from the database for students over 18 years old.
+
+4. EF Core Migrations (Database Versioning)
+
+One of the key features of EF Core is Migrations, which helps manage database schema changes over time. Instead of manually writing SQL scripts to update the database schema when you change your model (C# classes), EF Core can generate migration scripts automatically.
+
+Migration Steps:
+
+1. Create the Initial Migration:
+When you first set up your models, you generate a migration that represents the changes in the database schema (like creating tables, adding columns, etc.).
+dotnet ef migrations add InitialCreate
+
+2.Apply Migrations to the Database:
+This applies the migration to the actual database, creating or updating the tables according to your model.
+dotnet ef database update
+
+EF Core will compare the current state of the model with the current database schema and apply any necessary changes (e.g., creating tables, altering columns, etc.).
+
+3. Modify the Model and Add New Migrations:
+Whenever you change your model (add new properties, remove or rename existing ones), you need to create a new migration.
+
+dotnet ef migrations add AddAgeToStudent
+
+4. Rolling Back a Migration:
+If you need to undo a migration (e.g., for testing or fixing issues), you can roll back the database schema to a previous migration.
+
+dotnet ef database update PreviousMigrationName
+
+
+
+
+
+
+
+
+5. Example Workflow Using EF Core
+
+1. Define a Model (Entity):
+public class Student
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+
+2. Create a DbContext:
+public class SchoolContext : DbContext
+{
+    public DbSet<Student> Students { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
+        => options.UseSqlServer("YourConnectionString");
+}
+
+3. Add a New Student (Create):
+using (var context = new SchoolContext())
+{
+    var student = new Student { Name = "John Doe", Age = 20 };
+    context.Students.Add(student);
+    context.SaveChanges();
+}
+
+4. Retrieve Students (Read):
+using (var context = new SchoolContext())
+{
+    var students = context.Students.ToList();
+}
+
+5. Update a Student (Update):
+using (var context = new SchoolContext())
+{
+    var student = context.Students.FirstOrDefault(s => s.Id == 1);
+    if (student != null)
+    {
+        student.Name = "John Updated";
+        context.SaveChanges();
+    }
+}
+
+6. Delete a Student (Delete):
+using (var context = new SchoolContext())
+{
+    var student = context.Students.FirstOrDefault(s => s.Id == 1);
+    if (student != null)
+    {
+        context.Students.Remove(student);
+        context.SaveChanges();
+    }
+}
+
+
+
+
+
+
+
+6. What is Logging ?
+Logging is the process of recording information about the execution of an application. This can include:
+---- Application events (e.g., user login, data saved)
+---- Errors and exceptions
+---- Performance metrics (e.g., request duration)
+---- Warnings or abnormal conditions
+---- Logs help developers and administrators monitor applications and diagnose problems.
+
+7. Logging in .NET Core
+---- .NET Core has a built-in logging API in the Microsoft.Extensions.Logging namespace. It’s:
+---- Cross-platform: Works on Windows, Linux, and macOS.
+---- Flexible: Supports multiple output targets (console, files, external services).
+---- Configurable: Logging levels and providers can be customized per environment.
+
+8. Logging Providers
+Logging providers determine where log messages are written. .NET Core supports several built-in providers:
+| Provider                            | Description                                                   |
+| ----------------------------------- | ------------------------------------------------------------- |
+| **Console**                         | Writes logs to the console (useful for development)           |
+| **Debug**                           | Writes logs to the debug output (Visual Studio Output window) |
+| **EventSource / EventLog**          | Windows-specific event logs                                   |
+| **File** (via third-party packages) | Writes logs to a file                                         |
+| **Third-party providers**           | Examples: Serilog, NLog, Log4Net                              |
+
+Example (Adding Console Logging):
+var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
+
+9. Logging Levels
+Logs can be filtered using severity levels. Common logging levels in .NET Core:
+| Level           | Purpose                                                              |
+| --------------- | -------------------------------------------------------------------- |
+| **Trace**       | Very detailed messages, typically used for diagnosing issues         |
+| **Debug**       | Information useful during development and debugging                  |
+| **Information** | General application flow information (startup, configuration)        |
+| **Warning**     | Something unexpected happened, but the application continues running |
+| **Error**       | A serious issue occurred, an operation failed                        |
+| **Critical**    | Critical errors causing application shutdown or major failures       |
+Example of Logging in a Controller:
+
+

@@ -1,0 +1,56 @@
+1. Solution and Project
+-- Solution (.sln) - this is a container for one or more projects
+-- Project (.csproj) - this contains your code, references, and project-specific settings.
+
+Example:
+
+MyApp.sln
+MyApp/
+    MyApp.csproj
+
+
+2. .Net Core project folders & files
+
+MyApp/
+|
+|- Program.cs
+|- Startup.cs            (for ASP.NET core apps)
+|- appsettings.json      (configuration)
+|- MyApp.csproj          (project file)
+|
+|
+|- Controllers/          (MVC or web API controllers)
+|- Models/               (classes representing data)
+|- Views/                (Razor views for MVC apps)
+|- wwwroot/              (static files like JS, CSS, images)
+|- Services/             (business logic classes)
+|- Data/                 (EF Core DbContext, migrations)
+|_ Properties/
+    |_ launchSettings.json (debugging settings)
+
+
+
+3. Key file Explanation
+| File/Folder                      | Purpose                                                                          |
+| -------------------------------- | -------------------------------------------------------------------------------- |
+| `Program.cs`                     | Entry point of the app. Configures the host and runs the app.                    |
+| `Startup.cs`                     | Configures services (dependency injection) and middleware for ASP.NET Core apps. |
+| `appsettings.json`               | Stores configuration (connection strings, settings).                             |
+| `MyApp.csproj`                   | XML file defining project dependencies, target framework, and build settings.    |
+| `Controllers/`                   | Contains controllers that handle HTTP requests.                                  |
+| `Models/`                        | Contains data classes or entity models.                                          |
+| `Views/`                         | Contains Razor view files (.cshtml) for UI (only in MVC apps).                   |
+| `wwwroot/`                       | Web root folder for static files.                                                |
+| `Services/`                      | Custom classes handling business logic.                                          |
+| `Data/`                          | Database context and migration files.                                            |
+| `Properties/launchSettings.json` | Configures launch profiles (ports, environment) for debugging.                   |
+
+
+4. example of a ConsoleApp - a simple console app has a much simpler structure
+
+MyConsoleApp/
+|- Program.cs
+|- MyConsoleApp.csproj
+|- appsettings.json
+
+

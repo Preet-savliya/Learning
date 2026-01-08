@@ -1,0 +1,58 @@
+Status Codes - Status Codes are standardized numeric codes used in communication system (most commonly HTTP) to indicate the result of a request. they tell the client whether a request was successful, failed, or requires further action.
+
+In HTTP a status code is a three-digit number returned by a server in response to a client's request, explaining the outcome of that request.
+
+In simple terms, status codes help computers (and developers) understand what happened when a request was made.
+
+Example:
+-- 200 --> The request was successful 
+-- 404 --> the requested resources was not found
+-- 500 --> the server encountered an error
+
+Purpose of status codes:
+-- Communicate success or failure of a request
+-- Help debug errors
+-- Enable proper handling of responses in applications
+
+HTTP Status Codes (by category)
+
+1xx - Informational
+---- 100 Continue
+---- 101 Switching Protocols
+
+2xx - Success
+---- 200 Ok
+---- 201 Created 
+---- 202 Accepted
+---- 204 No Content 
+
+3xx - Redirection
+---- 301 Moved Permanently
+---- 302 Found
+---- 304 Not Modified
+---- 307 Temporary Redirect
+---- 308 Permanent Redirect
+
+4xx - Client Errors
+---- 400 Bad Request
+---- 401 Unauthorized
+---- 403 Forbidden
+---- 404 Not Found
+---- 405 Method Not Allowed
+---- 409 Conflict
+---- 422 Unprocessable Entity
+---- 429 Too Many Requests
+
+5xx - Server Errors
+---- 500 Internal Server Error
+---- 502 Bad Gateway
+---- 503 Service Unavailable
+---- 504 Gateway Timeout
+
+Commonly Used in APIs
+---- 200 / 201 ---> Successfull response
+---- 400 / 422 ---> validation or bad input 
+---- 401 / 403 ---> auth / permission issues
+---- 404 ---> resource does not exist
+---- 500 ---> Server-side failure
+

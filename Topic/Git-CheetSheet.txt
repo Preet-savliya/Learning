@@ -1,0 +1,58 @@
+git config --global user.name "SDDev101"
+git config --global user.email "sd.dev25@gmail.com"
+
+
+Creating Snapshots
+
+Initialize a Repository
+1. git init
+
+Stagging files
+1. git add file1.js                    // Stagging a single file 
+2. git add file1.js file2.js           // Stagging multiple files
+3. git add * .js                       // Stagging with a pattern
+4. git add .                           // Stagging the current directory and all its content
+
+
+Viewing the status
+1. git status              // Full status
+2. git status -s           // short status
+
+
+Commiting the staged files
+1. git commit -m "Message"    // Commits with a one line Message
+2. git commit                 // Opens the default editor to type a long Message
+
+
+Skipping the staging area
+1. git commit -am "Message"
+
+Removing files
+1. git rm file1.js             // removes from working directory and staging area
+2. git rm --cached file1.js    // removes from staging area only
+
+
+Renaming or moving files
+1. git mv file1.js file1.txt
+
+
+Viewing the staged/unstaged changes
+1. git diff                  // shows unstaged changes
+2. git diff --staged         // shows staged changes
+3. git diff --cached         // same as the above
+
+
+Viewing the history
+1. git log                 // full history
+2. git log --oneline       // summary
+3. git log --reverse       // lists the commits from the oldest to the newest
+
+
+Viewing a commit
+1. git show 921a2ff          // shows the given commit
+2. git show HEAD             // shows the last commit 
+3. git show HEAD~2           // two steps before the last commit
+4. git show HEAD:file.js     // shows the version of file.js stored in the last commit
+
+
+

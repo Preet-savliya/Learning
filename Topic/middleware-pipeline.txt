@@ -1,0 +1,111 @@
+Middleware Pipeline - middleware Pipeline in .Net is a sequence of software components that process HTTP requests and responses. each component can 
+-- inspect or modify the incoming request
+-- perform specific tasks (like authentication, logging, routung)
+-- Decide whether to pass control to the next middleware or short-circuit the request
+-- modify the outgoing response before it reaches the client
+
+it is the ordered chain of middleware that an HTTP request passes through in an ASP.NET Core application.
+
+
+
+how middleware Pipeline works 
+
+1. request enters the Pipeline --> app.Use...()
+2. middleware can:
+     --- short-circuit the request (e.g., return 401 Unauthorized)
+     --- Modify request/response
+     --- Pass control to the next middleware (next())
+3. Last middleware → sends response back to the client
+
+
+Visual Representation
+
+HTTP Request
+    |
+    v
+Middleware 1 (Logging)  -> next
+    |
+Middleware 2 (Authentication) -> next
+    |
+Middleware 3 (Routing) -> next
+    |
+Middleware 4 (Endpoints / Controllers)
+    |
+Response goes back through the same pipeline
+
+
+
+
+
+Common Middleware
+| Middleware                            | Purpose                                 |
+| ------------------------------------- | --------------------------------------- |
+| `UseDeveloperExceptionPage()`         | Show detailed error page in development |
+| `UseHttpsRedirection()`               | Redirect HTTP → HTTPS                   |
+| `UseStaticFiles()`                    | Serve static files from wwwroot         |
+| `UseRouting()`                        | Enable routing                          |
+| `UseAuthentication()`                 | Check user identity                     |
+| `UseAuthorization()`                  | Check user permissions                  |
+| `UseCors()`                           | Configure cross-origin requests         |
+| `UseEndpoints()` / `MapControllers()` | Map requests to controllers/endpoints   |
+
+
+
+Example: Middleware Pipeline in Program.cs (.NET 10)
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Configure services
+builder.Services.AddControllers();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
+
+var app = builder.Build();
+
+// Configure middleware pipeline
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
+app.UseHttpsRedirection();      // Redirect HTTP -> HTTPS
+app.UseStaticFiles();           // Serve wwwroot files
+app.UseRouting();               // Enable routing
+app.UseCors("AllowAll");        // Apply CORS policy
+app.UseAuthentication();        // Check user identity
+app.UseAuthorization();         // Check permissions
+
+app.MapControllers();           // Map API endpoints
+
+app.Run();
+
+
+
+5. Custom Middleware Example
+
+// Custom Logging Middleware
+public class RequestLoggingMiddleware
+{
+    private readonly RequestDelegate _next;
+
+    public RequestLoggingMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        Console.WriteLine($"Request: {context.Request.Method} {context.Request.Path}");
+        await _next(context); // Call next middleware
+    }
+}
+
+// Register middleware
+app.UseMiddleware<RequestLoggingMiddleware>();
+
+✅ Custom middleware can be inserted anywhere in the pipeline.
+

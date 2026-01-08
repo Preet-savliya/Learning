@@ -1,0 +1,65 @@
+Query Performance - Query Performance refers to how fast a SQL query runs and how efficiently it uses resiurces (CPU, memmory, disk I/O).
+fast queries save time and reduce load on the database.
+
+why query performance matters
+---- large datasets --> slow queries can freeze applications
+---- web and mobile apps require fast response
+---- poor performance ---> high CPU, memmory, or disk usage
+---- can lead to timeouts or deadlocks
+
+Factors affecting query performance
+| Factor           | Explanation                                          |
+| ---------------- | ---------------------------------------------------- |
+| Indexes          | Queries on indexed columns are faster                |
+| Joins            | Large tables joined incorrectly can slow queries     |
+| Filters (WHERE)  | Efficient filtering reduces scanned rows             |
+| Query Complexity | Subqueries, aggregations, or functions may be slower |
+| Data Volume      | More rows → slower without optimization              |
+| Network Latency  | Returning huge result sets can take time             |
+
+
+1. Use Indexes 
+
+CREATE INDEX idx_customer_id ON Orders(CustomerID);
+-- Makes WHERE CustomerID = ? queries faster
+-- Avoid indexing columns that rarely appear in searches (wastes space)
+
+2. Avoid SELECT * 
+-- only fetch needed columns 
+
+SELECT OrderId, Amount FROM Orders WHERE CustomerID = 101;
+
+-- Reduces I/O and memmory usage
+
+3. use WHERE clauses
+-- filter data as early as possible
+
+SELECT * FROM Orders WHERE OrderDate >= '2025-01-01';
+
+-- prevents scanning the entire table
+
+
+4. use JOINs efficiently 
+-- avoid joining unnecessary tables 
+-- ensure join columns are indexed
+-- Example: use INNER JOIN instead of cross joins when possible
+
+
+5. Limit Rows 
+
+SELECT * FROM Orders ORDER BY OrderDate DESC LIMIT 100;
+
+-- fetch only needed rows 
+-- reduces memmory and Network traffic
+
+6. Use Query Execution Plan 
+-- Use EXPLAIN (MySQL / PostgreSQL) or EXPLAIN QUERY PLAN (SQLite)
+-- Check table scans, index usage, join types, and cost
+
+7. Avoid functions in WHERE clauses
+SELECT * FROM Orders WHERE YEAR(OrderDate) = 2025;
+
+Better:
+SELECT * FROM Orders 
+WHERE OrderDate >= '2025-01-01' AND OrderDate < '2026-01-01';
+

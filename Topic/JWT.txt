@@ -1,0 +1,171 @@
+JWT (JSON Web Token) - JWT is a compact, URL-safe token format used to securely transmit Information between a client and server as a JSON object.
+-- Purpose : Authentication & Authorization in web api
+-- why JWT : stateless (server does not need to store session info), secure, and scalable.
+
+key Points:
+-- Encoded, not encrypted by default. sensitive info should be in claims carefully.
+-- Signed with a secret key (HMAC) or public / private key pair (RSA)
+-- Can store user identity and claims (roles, permissions) in the token.
+
+
+2. Strucutre of JWT - a JWT consists of three parts, separated by dots (.):
+HEADER.PAYLOAD.SIGNATURE
+
+1. Header - Metadata about the token:
+{
+    "alg": "HS256",
+    "typ": "JWT"
+}
+
+-- alg ---> algorithm used to sign the token
+-- typ ---> token type
+
+2. Payload - Contains the claims (data about the user or session):
+{
+  "sub": "1234567890",
+  "name": "John Doe",
+  "role": "Admin",
+  "iat": 1670000000
+}
+
+-- sub ---> subject (user ID)
+-- role ---> user role
+-- iat ---> issued at timestamp
+
+
+3. Signature - Ensures token integrity:
+
+HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload), secretKey)
+
+Example JWT:
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNjcwMDAwMDAwfQ.
+dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
+
+
+
+
+
+
+3. How JWT Works (Workflow)
+
+1. user logs in with username / password
+2. Server validates credentials.
+3. Server generates JWT with user info and signs it.
+4. Client stores token (usually in localStroage or memory).
+5. Client sends JWT in the Authorization header with every API request:
+
+Authorization: Bearer <token>
+
+6. Server validates token Signature and reads claims.
+7. Server allows or denies access based on claims (role / permissions).
+
+
+
+
+4. JWT in .NET Core Web API (c# Example)
+
+step 1 : Add NuGet Package
+--- dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+
+step 2: Configuration JWT Authentication (Program.cs / Startup.cs)
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = "MyApi",
+        ValidAudience = "MyApiClient",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SuperSecretKey123"))
+    };
+});
+
+
+step 3: Generate JWT Token 
+
+public string GenerateJwtToken(User user)
+{
+    var tokenHandler = new JwtSecurityTokenHandler();
+    var key = Encoding.ASCII.GetBytes("SuperSecretKey123");
+
+    var tokenDescriptor = new SecurityTokenDescriptor
+    {
+        Subject = new ClaimsIdentity(new[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Role, user.Role)
+        }),
+        Expires = DateTime.UtcNow.AddHours(1),
+        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+        Issuer = "MyApi",
+        Audience = "MyApiClient"
+    };
+
+    var token = tokenHandler.CreateToken(tokenDescriptor);
+    return tokenHandler.WriteToken(token);
+}
+
+
+step 4: Protect API Endpoints with JWT
+
+[Authorize] // Only authenticated users
+[HttpGet("profile")]
+public IActionResult GetProfile()
+{
+    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    return Ok($"User profile for userId={userId}");
+}
+
+[Authorize(Roles = "Admin")] // Only Admins
+[HttpPost("admin/create")]
+public IActionResult CreateUser(UserDto user)
+{
+    return Ok("User created");
+}
+
+
+
+5. Advantages of JWT
+-- Stateless --> No server session required.
+-- Portable --> Works across domains, mobile apps, and APIs
+-- Secure --> Signed token prevents tampering
+-- Flexible --> Can store roles, permissions, and custom claims.
+
+
+
+6. Best Practices
+-- Use strong secret keys.
+-- use short-lived tokens and refresh tokens.
+-- Always use HTTPS for token transmission.
+-- Dont store sensitive info in the payload unless encrypted
+-- validate issuer, audience, expiry, and signature on every request.
+
+
+
+
+
+How JWT Authentication Works in .NET
+The general workflow for JWT authentication involves the following steps: 
+
+1. User Login: A user sends their credentials (username/password) to the authentication server via a login endpoint.
+
+2. Token Generation: If the credentials are valid, the server generates a JWT, signs it with a secret key, and includes relevant user information (claims) and an expiration time in the payload. A refresh token may also be generated and stored securely on the server.
+
+3. Token Return: The server returns the JWT (and possibly a refresh token via an HTTP-only cookie) to the client application.
+
+4. Subsequent Requests: For all protected API requests, the client sends the JWT in the Authorization HTTP header, typically in the format Bearer <token>.
+
+5. Token Validation: The ASP.NET Core API's middleware intercepts the request, validates the token's signature, issuer, audience, and expiration time.
+
+6. Authorization: If the token is valid, the user's identity and claims are attached to the HttpContext, allowing access to authorized resources; otherwise, a 401 Unauthorized or 403 Forbidden response is returned. 

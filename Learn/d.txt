@@ -1,0 +1,78 @@
+Minor Website Updates Checklist
+
+Each minor update is ₹100.
+Package of 10 updates: ₹1,000.
+
+1️⃣ Text Updates
+
+Change page titles or headings
+Edit paragraph content
+Correct typos or grammar
+Update quotes, testimonials, or bios
+Update captions under images or videos
+Update meta descriptions
+
+2️⃣ Images & Media
+
+Replace or add images
+Resize or compress images
+Update logos or icons
+Replace background images
+Add/remove banners or sliders
+Replace embedded videos or media
+Update downloadable files (PDFs, docs, etc.)
+
+3️⃣ Links & Navigation
+
+Update internal page links
+Add/remove external links
+Fix broken links
+Update menu items or navigation labels
+
+4️⃣ Design & Styling (CSS)
+
+Change fonts, colors, or text styles
+Adjust spacing, margins, or padding
+Update button styles or hover effects
+Minor layout tweaks (alignments, columns, images)
+Update background colors or gradients
+
+5️⃣ Contact & Forms
+
+Update email addresses or phone numbers
+Add/remove form fields (minor)
+Change form submission email or URL
+Update embedded maps
+
+6️⃣ Social Media & Integration
+
+Update social media icons/links
+Add/remove share buttons
+Update embedded feeds (Instagram, Twitter, YouTube)
+
+7️⃣ Content Blocks / Sections
+
+Add/remove small sections (text or images)
+Reorder sections on a page
+Update lists, tables, or bullet points
+
+8️⃣ SEO & Metadata
+
+Update page titles and meta descriptions
+Update alt text for images
+Add header tags (H1, H2)
+Fix minor schema markup
+
+9️⃣ Other Minor Fixes
+
+Fix small HTML errors
+Correct broken images or files
+Adjust responsiveness on mobile devices
+Minor animation or hover effect changes
+
+⚡ Notes:
+
+Each minor update = ₹100.
+10 updates package = ₹1,000.
+Updates must fall under the items listed above.
+Anything outside this list (new pages, major redesign, new features) will be quoted separately.

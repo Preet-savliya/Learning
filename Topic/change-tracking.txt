@@ -1,0 +1,115 @@
+Change Tracking in Entity Framework Core - Change Tracking is how EF Core detects changes to entities so it knows what SQL commands to generate when SaveChanges() is called.
+-- EF Core tracks Added, Modified, Deleted, Unchanged states
+
+1. Entity states
+| State     | Meaning                          |
+| --------- | -------------------------------- |
+| Added     | New entity → INSERT              |
+| Modified  | Existing entity changed → UPDATE |
+| Deleted   | Entity removed → DELETE          |
+| Unchanged | No changes                       |
+| Detached  | Not tracked by DbContext         |
+
+
+2. How Change Tracking Works
+
+var student = context.Students.First();
+student.Name = "Ahmed";
+
+context.SaveChanges();
+
+EF Core:
+
+1. Tracks student
+2. Detects Name changed
+3. Generates UPDATE Students SET Name = 'Ahmed'
+
+
+
+
+3. Tracking vs No Tracking
+-- Tracking (Default)
+
+var student = context.Students.First();
+student.Age = 20;
+context.SaveChanges();
+
+✔️ Changes are saved
+❌ Slight performance cost
+
+-- No Tracking (Read-only, Faster)
+
+var students = context.Students
+    .AsNoTracking()
+    .ToList();
+
+❌ Changes are NOT saved
+
+
+
+
+
+4. Explicit State Management
+-- Add 
+context.Entry(student).State = EntityState.Added;
+
+-- Update
+context.Entry(student).State = EntityState.Modified;
+
+-- Delete
+context.Entry(student).State = EntityState.Deleted;
+
+
+
+
+
+5. Attach vs Update
+
+-- Attach (No change assumed)
+context.Attach(student);
+
+-- Update (Marks all properties modified)
+context.Update(student);
+
+⚠️ Update() can cause unnecessary SQL updates
+
+
+
+6. DetectChanges()
+
+-- EF Core automatically calls this, but you can force it:
+context.ChangeTracker.DetectChanges();
+
+-- Disable auto-detection (performance):
+context.ChangeTracker.AutoDetectChangesEnabled = false;
+
+
+
+7. Viewing Tracked Entities 
+
+var entries = context.ChangeTracker.Entries();
+
+foreach (var entry in entries)
+{
+    Console.WriteLine(entry.State);
+}
+
+
+
+
+8. Disconnected Scenarios (Web APIs)
+
+-- Comman in APIs:
+context.Students.Update(student);
+context.SaveChanges();
+
+-- Better (partial update)
+context.Attach(student);
+context.Entry(student).Property(s => s.Name).IsModified = true;
+
+
+9. Best Practices
+-- Use AsNoTracking() for read-only queries
+-- avoid Update() unless necessary
+-- keep DbContext lifetime short
+-- use async methods

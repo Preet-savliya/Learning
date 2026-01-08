@@ -1,0 +1,222 @@
+.Net Core MVC Project --- Migerate to --- .Net Web API 
+
+Recommended Stack for WEB API
+
+1. Backend: .Net Web API Latest
+2. Exception handling: Global Middleware
+3. Database: Entity Framework Core (SQL Server)
+3. Authentication: JWT + ASP.NET Identity (Register and manage users, handle login / logout, manage passwords securely, supports roles and claims, integrate with external login providers)
+4. Frontend: Angular / React
+5. API Docs: Swagger
+6. DTO Mapping: AutoMapper
+7. Validation: FluentValidation or Fluent API (clean and more maintainable than writing long if statements)
+
+
+
+
+
+
+
+
+Migrating .NET Core MVC to Web API – Step by Step
+
+Step 1:
+-- you have a .NET Core MVC app:
+   -- Controllers return views (IActionResult)
+   -- Razor Views handle the Frontend
+-- You want a Web API:
+   -- Controllers returns JSON
+   -- No Views, backend only
+   -- Can be consumed by Angular, Reach or Mobile apps
+
+
+Step 2: Create New Web API Project
+
+dotnet new webapi -n projectname
+cd projectname
+
+
+Step 3: Remove MVC Views
+-- Delete the views folder
+-- Remove _ViewImports.cshtml and _ViewStart.cshtml
+-- Remove UseEndpoints(endpoints => endpoints.MapControllerRoute(.....)) in Startup.cs / Program.cs
+-- Keep the Controllers folder
+
+
+Step 4: Modify Startup / Program
+Old MVC style in Program.cs or Startup.cs:
+
+Example:
+
+Before -
+builder.Services.AddControllersWithViews();
+...
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
+
+After - Web API style
+builder.Services.AddControllers(); // only controllers, no views
+
+app.MapControllers(); // map API endpoints
+
+
+Step 5: Modify Controllers
+MVC Controller (Example)
+
+public class ProductsController : Controller
+{
+    public IActionResult Index()
+    {
+        var products = _dbContext.Products.ToList();
+        return View(products);
+    }
+
+    public IActionResult Details(int id)
+    {
+        var product = _dbContext.Products.Find(id);
+        return View(product);
+    }
+}
+
+Convert to Web API Controller
+
+[Route("api/[controller]")]
+[ApiController]
+public class ProductsController : ControllerBase
+{
+    private readonly AppDbContext _dbContext;
+    public ProductsController(AppDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    // GET: api/products
+    [HttpGet]
+    public IActionResult GetProducts()
+    {
+        var products = _dbContext.Products.ToList();
+        return Ok(products);
+    }
+
+    // GET: api/products/5
+    [HttpGet("{id}")]
+    public IActionResult GetProduct(int id)
+    {
+        var product = _dbContext.Products.Find(id);
+        if (product == null)
+            return NotFound();
+        return Ok(product);
+    }
+
+    // POST: api/products
+    [HttpPost]
+    public IActionResult AddProduct(Product product)
+    {
+        _dbContext.Products.Add(product);
+        _dbContext.SaveChanges();
+        return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+    }
+}
+
+Key Changes:
+-- Controller --> ControllerBase
+-- [ApiController] attribute added
+-- [Route("api/[controller]")] for RESTfull endpoints
+-- return View() --> return ok() / return NotFound() / return CreatedAtAction()
+
+
+
+Step 6: Remove View Dependencies
+-- Delete all Razor files
+-- Remove Microsoft.AspNetCore.Mvc.Razor references if added
+-- Keep services, models, DbContext, etc
+
+
+Step 7: Configure JSON Serialization (Optional)
+By default, Web API uses System.Text.Json, but you can use Newtonsoft.Json:
+
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+    );
+
+
+Step 8: Sample Project Structure
+
+MyWebApiProject/
+│
+├─ Controllers/
+│   └─ ProductsController.cs
+│
+├─ Models/
+│   └─ Product.cs
+│
+├─ Data/
+│   └─ AppDbContext.cs
+│
+├─ Program.cs
+├─ appsettings.json
+└─ MyWebApiProject.csproj
+
+
+Step 9: Test the API
+Run the project:
+
+dotnet run
+
+-- Visit https://localhost:5001/api/products → returns JSON
+-- Use Postman or Swagger (enabled by default in new Web API template)
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+
+-- Navigate to https://localhost:5001/swagger to test endpoints
+
+
+Step 10: Optional - Keep MVC + API together
+Sometimes you want both MVC Views and Web API in the same project:
+
+builder.Services.AddControllersWithViews();
+builder.Services.AddControllers(); // optional
+
+-- Keep your Views folder for MVC pages
+-- Add [ApiController] for API controllers
+-- Use separate routes: api/products for API, /Home/Index for MVC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Initialize: Create a new "ASP.NET Core Web API" project.
+
+DTOs: Copy your MVC Models, rename them to Dtos, and remove any UI-specific logic.
+
+Controllers: Move logic from MVC Controllers to API Controllers, changing return types to Ok(), NotFound(), or Created().
+
+Testing: Use Swagger (built into the API template) to ensure your endpoints return the correct JSON.
+
+Frontend: Run ng new my-app to create the Angular project.
+
+Connect: Create an Angular Service to call your API using HttpClient.

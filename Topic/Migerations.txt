@@ -1,0 +1,106 @@
+Migerations - Migeration in entity Framework helps you create and update the database schema when your C# model changes, without losing data.
+Code Changes ---> Migeration ---> Database update
+
+1. why migerations are needed 
+-- Database does not update automatically when models change
+-- migerations track schema changes
+-- acts like version control for your database 
+
+
+2. Basic migrations commands
+-- Add Migeration
+dotnet ef migerations add InitialCreate
+-- create migeration files based on your models
+
+-- Update Migeration
+dotnet ef database update
+-- Applies migeration to the database
+
+-- Rollback (Revert)
+dotnet ef database update LastMigerationName
+
+-- Remove Last migeration (not applied)
+dotnet ef migeration remove
+
+
+
+3. Migeration files Explained 
+-- A migeration creates three files:
+Migrations/
+ ├── 20240101010101_InitialCreate.cs
+ ├── 20240101010101_InitialCreate.Designer.cs
+ └── AppDbContextModelSnapshot.cs
+
+Main migeration file 
+
+protected override void Up(Migerationbuilder migerationBuilder)
+{
+    migerationBuilder.CreateTable(
+        name: "Students",
+        columns: table => new
+        {
+            Id = table.Column<int>(nullable: false)
+                 .Annotation("SqlServer:Identity", "1, 1"),
+            Name = table.Column<string>(nullable: false)
+        }
+    );
+}
+
+protected override void Down(Migerationbuilder migerationBuilder)
+{
+    migerationBuilder.DropTable("Students");
+}
+
+-- Up() ---> Apply changes
+-- Down() ---> Undo changes
+
+
+
+
+
+4. Example: Change Model ---> Migeration
+Add Property
+
+public string Email {get; set;}
+
+Then:
+
+dotnet ef migrations add AddEmailToStudent
+dotnet ef database update
+
+-- Adds Email column to table
+
+
+
+
+5. Migeration History Table
+EF creates a table:
+
+_EFMigerationsHistory
+
+-- Tracks applied migrations
+-- Prevents duplicate execution
+
+
+
+6. Common migeration Issues
+-- Migeration not detected
+- Rebuild project
+- Check DbContext
+
+-- Database not updating
+- Check connection string
+- Run database update
+
+-- Multiple DbContexts
+- Specify context:
+dotnet ef migerations add Init -c AppDbContext
+
+
+
+
+7. Best Practice
+-- One change = one migeration
+-- Name migeration clearly
+-- Do not edit migeration files unless necessary
+-- Commit migerations to source control

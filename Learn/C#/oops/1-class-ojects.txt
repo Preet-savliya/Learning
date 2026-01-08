@@ -1,0 +1,125 @@
+Basic Concept in Object Oriented Programming in C#
+
+Class - class is a template it tells what data an object will have & what actions an object can do.
+
+For creating a class use keyword class.
+
+class car
+{
+    public string color; // field
+    public int speed; // field
+
+    public void Drive() // method
+    {
+        Console.WriteLine("The car is driving");
+    }
+}
+
+Color and speed are data.
+Drive() is and actions.
+car is and class.
+
+Object is an instance of class or object is a real thing made from a class it uses the class. what data an object will have & what actions an object can do. objects can work and store the values. we can also create multiple objects in one class.
+
+car mycar = new car(); 
+mycar.color = "Red";
+mycar.speed = "200";
+mycar.Drive();
+
+mycar is an object. it has its own color and speed. it can call Drive()
+
+one for example Student Form is a class and student name rahul, address is an object.
+
+Member - members are the parts inside a class that defines what an object has and can do.
+
+types of members in c# - fields(variables), methods(functions), properties, constructors
+
+1. Fields (variables) - they store data.
+
+class Student 
+{
+    public string name;
+    public int age;
+}
+
+name and age are members of the class.
+
+2. Methods - they perform actions or do a specific task.
+
+class Student
+{
+    public void Study()
+    {
+        Console.WriteLine("The Student is Studying.");
+    }
+}
+
+Study() is a member of a class.
+
+3. properties - they are used to get or set values safely. or properties are members of a class that provide a flexible and controlled way to read, write, or compute the value of private fields
+
+class Student
+{
+    public in Age{ get; set; }
+}
+
+Age is a member of a class.
+
+4. constructors - they run automatically when an object is created.
+
+class Student
+{
+    public string name;
+    public int age;
+
+    // Constructor
+    public Student()
+    {
+        name = "Unknown";
+        age = 0;
+    }
+}
+
+Student s1 = new Student();  // constructor is called
+Console.WriteLine(s1.name);
+
+Parameterized Constructor - Used to pass values while creating an object.
+
+class Student
+{
+    public string name;
+    public int age;
+
+    public Student(string n, int a)
+    {
+        name = n;
+        age = a;
+    }
+}
+
+Student s1 = new Student("Amit", 20);
+
+Default Constructor - a constructor with no parameters
+
+class student
+{
+}
+
+Constructor Overloading - multiple constructor with different parameters
+
+class Student 
+{
+    public Student()
+    {
+        Console.WriteLine("Default Constructor");
+    }
+    public Student(string name)
+    {
+        Console.WriteLine("Hello", + name);
+    }
+}
+
+Real life example :- 
+---- when buy a new phone the phone has already a Default language, Default settings. this setup is like a constructor.
+
+in simple words class is a container and objects is thing inside container

@@ -1,0 +1,26 @@
+1. hu jyare project banavu chu .net web api project create kairo ama main folder create kaira like controllers, data, Models, Services to for example k hu ecommerceAPI banavu chu to ama models ma files create thasa like user.cs, product.cs, order.cs to ama aapde EF core use kariya 
+
+public class order
+{
+    public int ID {get; set;}
+}
+
+right to ama mana doubt hato k 
+
+order.cs maa aapde use kariya cha 
+
+public List<CartItem> Items { get; set; } = new List<CartItem>();
+
+because aapde j bhi user a cart ma product add kaira cha aa ana order ma list thai cha right to mana aama dobut aa cha k jyare hu aa   public List<CartItem> Items { get; set; } = new List<CartItem>(); to terminal ma message show kara cha IDE0028 collection initialization can be simplified to ano shu meaning cha ?
+
+
+
+
+
+
+
+2. data folder AppDbContext.cs maa 
+
+public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { } 
+
+jyare aappde constructor create kariya AppDbContext j database na connect karva mate aapde banaviye ana EF core na database setup options aape to jyare aa line lakhyie to terminal ma aa message aava cha k use primary constructor to ano meaning shu cha + aa message shu karva aaivo

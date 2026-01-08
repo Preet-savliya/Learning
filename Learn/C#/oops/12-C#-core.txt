@@ -1,0 +1,412 @@
+1. Static members - Static members belong to the class itself, not to individual objects.
+
+Static members can be:
+---- Static methods
+---- Static variables (fields)
+---- Static properties
+---- static Constructor
+
+key idea
+one copy shared by all objects
+
+public class Student
+{
+    static string schoolname = "Green valley School";
+    string studentName;
+}
+
+Student s1 = new Student();
+Student s2 = new Student();
+
+s1.studentName = "Surat";
+s2.studentName = "Jesar";
+
+System.out.println(s1.schoolname);
+System.out.println(s2.schoolname);
+
+*** only one schoolName exists in memory. ***
+
+1. Static Method is a method that belongs to class itself not to an individual object of the class.
+key ideas:
+you do not need to create an object to call a static method
+it is called using the class name
+it can only access static members (static fields, static methods)
+it cannot use this, because there is no instance.
+
+Static Method Example :
+
+public class Mathhelper 
+{
+    public static int Add(int a, int b)
+    {
+        return a + b;
+    }
+}
+
+public class Program
+{
+    static void Main()
+    {
+        int result = Mathhelper.Add(3,5);
+        Console.WriteLine(result);
+    }
+}
+
+non-static method :
+
+public class Example
+{
+    public static void Staticmethod()
+    {
+        Console.WriteLine("Static Method");
+    }
+
+    public void instanceMethod()
+    {
+        Console.WriteLine("instance Method");
+    }
+}
+
+Example.StaticMethod();
+Example obj = new Example();
+obj.instanceMethod();
+
+
+when static method is used :
+---- the method does not depend on object data
+---- you want a utility / helper method (eg., math calculations)
+---- the method represents a general behavior, not tied to a specific object
+
+Examples :
+
+---- Math.sqrt(25);
+---- Console.WriteLine("Hello");
+
+Static methods cannot access instance variables
+they can access other static members
+Main() method is static because it runs before any objects exists.
+
+
+
+
+
+
+2. Static variables (fields) - static variables is a variables that belongs to the class itself, not to any specific object
+---- only one copy exists for the entire program
+---- Shared by all objects of the class 
+---- created once and stays in memory until the program ends
+---- accessed using the class name.
+
+
+Simple Example :
+
+
+public class Counter
+{
+    public static int count = 0;
+
+    public Counter()
+    {
+        count++;
+    }
+}
+
+public class Program
+{
+    static void Main()
+    {
+        Counter c1 = new Counter();
+        Counter c2 = new Counter();
+        Counter c3 = new Counter();
+
+        Console.WriteLine(Counter.count);
+    }
+}
+
+Count is shared
+all objects update the same variable
+
+
+
+
+
+
+
+3. static properties - static property that belongs to the class itself, not to an object(instance)
+it is used to get or set shared data in a safe and controlled way.
+---- only one copy exists for the whole class
+---- shared by all objects
+---- accessed using the class name
+---- often used instead of public static variable
+
+
+Simple Example :
+
+class School
+{
+    private static int totalStudents;
+
+    public static int TotalStudents
+    {
+        get {return totalStudents;}
+        set {totalStudents = value;}
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        School.TotalStudents = 500;
+        Console.WriteLine(School.TotalStudents);
+    }
+}
+
+---- no object created
+---- property controls access to shared data
+
+
+
+
+
+
+
+4. static Constructor - stays Constructor is a special Constructor used to intialize static members of a class. it runs automatically and only once, before the class is used for the first time.
+---- used to intialize static variables / properties
+---- called only once per class
+---- Runs before: 
+        ---- Any object of the class is created, or 
+        ---- Any static member is accessed
+---- you cannot call it explicitly
+
+
+class Example
+{
+    static int number;
+
+    static Example()
+    {
+        number = 100;
+        Console.WriteLine("Static Constructor called");
+    }
+}
+
+-- no access modifier
+-- same name as class
+-- no parameters
+
+
+Rules of static Constructor
+---- only one static Constructor per class
+---- cannot have parameters
+---- cannot have access modifiers
+---- cannot be called directly
+---- Runs automatically
+
+
+when to use static Constructor:
+---- intialize static fields
+---- load configuration settings
+---- perform one-time setup
+---- intialize shared resources
+
+
+
+
+
+
+
+
+5. Const - const is a keyword used to declare a constant which is a value that cannot change after it is defined.
+---- the value must be known at compile time
+---- it is implicitly static belongs to the class not to an object.
+---- must be intialize when declare
+---- cannot be changed later 
+---- can be primitive types, strings, or enums.
+
+
+class Circle 
+{
+    public const double Pi = 3.14159;
+}
+
+class Program 
+{
+    static void Main()
+    {
+        Console.WriteLine(Circle.Pi);
+    }
+}
+
+---- No Oject needed (Circle.Pi)
+---- value cannot be changed : Circle.Pi = 3.14; --> Error 
+
+
+6. Readonly - Readonly field is a variable value can only be assigned once. unlike const, the value can be assigned at runtime, usually in:
+
+---- Declaration
+---- Constructor (instance Constructor)
+
+it cannot be changed afterwards.
+
+
+class Circle
+{
+    public readonly double radius;
+
+    public Circle(double r)
+    {
+        radius = r;
+    }
+
+    public void ShowRadius()
+    {
+        Console.WriteLine(radius);
+    }
+}
+
+usage :
+
+Circle c1 = new Circle(5.0);
+c1.ShowRadius();
+
+---- you cannot do c1.radius = 10; ----> error
+---- the value is fixed per object, but can differ between objects.
+
+
+
+
+
+
+
+
+
+7. sealed classes - sealed classes are classes that cannot be inherited. essentially when a class is marked as sealed it means that no other class can derive from it. sealed classes can still have Constructors, fields, methods, and properties but they restirct inheritance.
+
+why sealed classes are used ?
+---- performance : sealing a class can slightly improve performance. the runtime doesnt need check for the possibility of subclasses, so method calls can be resolved faster.
+---- Design : Sealed classes are often used when you want to prevent a class from being extended, either for security reasons, to prevent misuse, or to keep control over the implementation.
+---- Control : Sometimes you want to ensure that a class cannot be subclassed to prevent overriding its behavior or to enforce certain behaviors in your program.
+
+
+Simple Example :
+
+public sealed class MySealedClass
+{
+    public void MyMethod()
+    {
+        Console.WriteLine("This is a method in a sealed class.");
+    }
+}
+
+
+Example 2 :
+
+
+//this is sealed class
+
+public sealed class Animal
+{
+    public void Speak()
+    {
+        Console.WriteLine("Animal speaks.");
+    }
+}
+
+//this will cause a compile-time error because animal is sealed
+
+public class Dog : Animal      // Error: Cannot derive from sealed class 'Animal'
+{
+    public void Bark()
+    {
+        Console.WriteLine("Dog Barks");
+    }
+}
+
+in this example we created a class dog that inherits from Animal results in compile-time error because Animal is sealed.
+
+
+
+
+
+
+
+
+8. Dependency Injection - Dependency Injection is a way to give an object its dependencies instead of making it create them itself.
+like if you have a car and inside a car there is an engine (a dependency). without dependency Injection the car would never need to build its own engine, which means the car is tightly connected to the engine and car only work with specific engine.
+
+with Dependency Injection, the engine is given to the car by someone else (the DI system). the car doesn't need to know how to build the engine it just gets it from the outside.
+
+why dependency Injection is useful?
+1. less dependency : the car do not need to know how the engine works or how it is build. it just uses it. this makes it easier to change the engine or use different engines (flexibility).
+2. Easier to Test : when you test the car, you can give it a fake engine to see how it behaves, without needing to use a real engine. this is useful for testing.
+3. More Control : you can easily swap out engines whenever you want without changing the car. this great for changing parts of your program.
+
+
+Example :
+
+1. without DI, a class like UserService might create its own logger
+
+public class UserService
+{
+    public void PerformAction()
+    {
+        // The UserService creates its own logger
+        var logger = new ConsoleLogger();
+        logger.Log("User action performed");
+    }
+}
+
+2. with DI, the UserService would recieve the logger from the outside, instead of creating it. the class doesn't care how logger is created.
+
+public class UserService
+{
+    private readonly ILogger _logger;
+
+    // The logger is passed in from outside
+    public UserService(ILogger logger)
+    {
+        _logger = logger;
+    }
+
+    public void PerformAction()
+    {
+        _logger.Log("User action performed");
+    }
+}
+
+
+in this case, the logger could be anything that implements ILogger (like a ConsoleLogger or FileLogger) and the UserService does not care which one it gets. it just knows how to use it. 
+
+Types of Dependency Injection
+1. Constructor Injection - the most common way. you pass the dependency when creating the object.
+2. property Injection - The dependency is set through a property after the object is created.
+3. Method Injection - The dependency is passed to a method when it's called.
+
+Benefits of DI :
+1. flexibility - You can easily swap out different parts of your system (like using a new type of logger).
+2. Easier to test - you can provide fake or mock versions of dependencies when testing, instead of using the real thing.
+3. Cleaner Code - classes dont need to worry about creating their own dependencies, making the code easier to read and maintain.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9. Generics - Generics allows you to write classes, methods, and data structures that work with any data type while ensuring type safety. this means you can define code that works with different types of data without knowing the exact type in advance. generics provide flexibility and reusability while keeping things type-safe. instead of writing multiple versions of the same class or method for different types, you can use generics to write one class or method that works with many different types.
+
+why use generics ?

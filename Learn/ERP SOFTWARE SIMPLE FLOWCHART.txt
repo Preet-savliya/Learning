@@ -1,0 +1,55 @@
+ERP SOFTWARE SIMPLE FLOWCHART
+
+1. Client Layer (Frontend – Angular)
+↓
+User interacts with forms, dashboards, reports
+↓
+HTTP / HTTPS REST API request sent
+
+
+
+2. API Layer (Backend – ASP.NET Web API)
+↓
+Receives request from frontend
+↓
+Validates request and forwards it
+
+
+
+3. Business Logic Layer (Service Layer – C#)
+↓
+Implements ERP rules and workflows
+↓
+Performs calculations (salary, tax, average, etc.)
+
+ERP Modules (Functional Layer)
+↓
+HR, Finance, Inventory, Payroll modules
+↓
+Processes business data and automation
+
+
+
+4. ORM / Data Access Layer (Entity Framework)
+↓
+Converts objects to database records
+↓
+Prevents SQL Injection using parameterized queries
+
+
+
+5. Database Layer (SQL Server)
+↓
+Stores and retrieves centralized ERP data
+
+Authentication & Security
+↓
+JWT authentication, role-based access, MFA
+
+
+
+6.Deployment & Infrastructure
+↓
+Application hosted on IIS / Cloud
+↓
+Monitoring, scaling, backup, maintenance

@@ -1,0 +1,21 @@
+STEP 2: Folder & File Structure in Visual Studio
+
+Inside the Solution Explorer, create these folders under the project:
+
+Models – for your database models (User, Product, etc.)
+
+Data – for the database context
+
+Services – for business logic (optional but recommended)
+
+Controllers – Web API controllers (default folder created by Visual Studio)
+
+
+ECommerceAPI/
+├── Controllers/
+├── Models/
+├── Data/
+├── Services/
+├── Program.cs
+├── appsettings.json
+└── ECommerceAPI.csproj

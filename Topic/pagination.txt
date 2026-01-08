@@ -1,0 +1,70 @@
+Pagination in Web API - Pagination allows you to split large datasets into smaller chunks when sending data to clients.
+
+Benefits:
+---- Improves performance
+---- Reduces payload size
+---- Makes API more user-friendly
+
+1️⃣ Basic Pagination via Query Parameters
+Use query parameters for page number and page size:
+
+GET /api/students?pageNumber=1&pageSize=10
+
+2️⃣ Controller Example with EF Core
+
+[HttpGet]
+public IActionResult GetAll(int pageNumber = 1, int pageSize = 10)
+{
+    var students = context.Students
+                          .Skip((pageNumber - 1) * pageSize)
+                          .Take(pageSize)
+                          .ToList();
+
+    var studentDtos = _mapper.Map<List<StudentDto>>(students);
+
+    return Ok(studentDtos);
+}
+
+Skip and Take handle the page offset and limit.
+
+3️⃣ Include Total Count (Optional)
+It’s useful to return total items and pages for the client:
+
+[HttpGet]
+public IActionResult GetAll(int pageNumber = 1, int pageSize = 10)
+{
+    var totalCount = context.Students.Count();
+    var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+    var students = context.Students
+                          .Skip((pageNumber - 1) * pageSize)
+                          .Take(pageSize)
+                          .ToList();
+
+    var studentDtos = _mapper.Map<List<StudentDto>>(students);
+
+    var response = new
+    {
+        PageNumber = pageNumber,
+        PageSize = pageSize,
+        TotalPages = totalPages,
+        TotalCount = totalCount,
+        Data = studentDtos
+    };
+
+    return Ok(response);
+}
+
+4️⃣ Response Example
+
+{
+  "PageNumber": 1,
+  "PageSize": 10,
+  "TotalPages": 5,
+  "TotalCount": 50,
+  "Data": [
+    { "Id": 1, "Name": "Alice", "Email": "alice@mail.com" },
+    { "Id": 2, "Name": "Bob", "Email": "bob@mail.com" }
+  ]
+}
+
