@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\MyProjectAPI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{522CF809-9120-70DF-232B-C0C8098DEE5F}|MyProjectAPI\\MyProjectAPI.csproj|d:\\myprojectapi\\myprojectapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{522CF809-9120-70DF-232B-C0C8098DEE5F}|MyProjectAPI\\MyProjectAPI.csproj|solutionrelative:myprojectapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\MyProjectAPI\\MyProjectAPI\\Program.cs",
+              "RelativeDocumentMoniker": "MyProjectAPI\\Program.cs",
+              "ToolTip": "D:\\MyProjectAPI\\MyProjectAPI\\Program.cs",
+              "RelativeToolTip": "MyProjectAPI\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-08T10:29:38.989Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
