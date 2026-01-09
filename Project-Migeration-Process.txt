@@ -2,15 +2,13 @@
 
 Recommended Stack for WEB API
 
-1. Backend: .Net Web API Latest
-2. Exception handling: Global Middleware
-3. Database: Entity Framework Core (SQL Server)
-3. Authentication: JWT + ASP.NET Identity (Register and manage users, handle login / logout, manage passwords securely, supports roles and claims, integrate with external login providers)
-4. Frontend: Angular / React
-5. API Docs: Swagger
-6. DTO Mapping: AutoMapper
-7. Validation: FluentValidation or Fluent API (clean and more maintainable than writing long if statements)
-
+1. Backend framework: ASP.NET Core Web API - the core framework for building high performance, cross-platform APIs
+2. Programming Language: C# - the primary Language with strong community support and modern features.
+3. Architecture: Clean Architecture/Microservices - Promotes separation of concerns and maintainability for scalable applications.
+4. ORM: Entity Framework Core (EF Core) - The standard Microsoft ORM for data access.
+5. Database: SQL Server, PostgreSQL or SQLite - Choose based on application scale and requirements.
+6. Frontend: React / Angular - A separate SPA (Single Page Application) framework will fetch your API data.
+7. API Documentation - Swagger (OpenAPI) - Essential for Documenting your API endpoints for easy consumption and testing.
 
 Migration Steps:
 
