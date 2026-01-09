@@ -221,7 +221,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 
--- Navigate to https://localhost:5001/swagger to test endpoints
+-- Navigate to https://localhost:5112/swagger to test endpoints
 
 
 Step 10: Optional - Keep MVC + API together
