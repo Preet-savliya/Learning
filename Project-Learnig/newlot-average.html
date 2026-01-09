@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+
+        <!-- Header -->
+        <header>
+            <div class="software-name">DERP</div>
+            <div class="user" onclick="toggleDropdown()">
+                <span>🙍🏻‍♂️ Admin ▼</span>
+                <div class="dropdown" id="userDropdown">
+                    <a href="#">My Profile</a>
+                    <a href="#">⏻ Sign Out</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navbar Menu -->
+        <nav>
+            <div class="humburger" id="hamburger"
+                onclick="toggleSidebar()">☰</div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" data-sidebar="dashboard">Dashboard</a>
+                <a href="#" data-sidebar="newlot">New Lot</a>
+                <a href="reassort-list.html" data-sidebar="reassort">ReAssort</a>
+                <a href="purchase.html" data-sidebar>Purchase</a>
+                <a href="repairing.html">Repairing</a>
+                <a href="#" data-sidebar="stock">Stock</a>
+                <a href="#" data-sidebar="inquiry">Inquiry</a>
+                <a href="#" data-sidebar="average">Average Process</a>
+                <a href="#" data-sidebar>Manual Club Average</a>
+                <a href="#" data-sidebar="lotbatch">Lot Batch</a>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+
+        </div>
+
+        <!-- Main Content -->
+        <div class="content" id="mainContent">
+            <h3>New Lot Average</h3><br>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
